@@ -1,4 +1,4 @@
-mix-it-android
+Mix-IT Android
 ==============
 
-This is the android application for the Mix-IT conference @ Lyon
+This is the Android application for the Mix-IT conference @ Lyon
