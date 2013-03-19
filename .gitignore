@@ -47,3 +47,6 @@ local.properties
 dump.txt
 seeds.txt
 usage.txt
+
+#Mac
+.DS_Store
