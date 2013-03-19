@@ -3,20 +3,20 @@
 <!-- Generated with http://android-holo-colors.com -->
 <resources xmlns:android="http://schemas.android.com/apk/res/android">
 
-  <style name="ButtonMix-IT" parent="android:Widget.Holo.Light.Button">
+  <style name="ButtonMixIT" parent="android:Widget.Holo.Light.Button">
 	  <item name="android:background">@drawable/btn_default_holo_light</item>
   </style>
 
-  <style name="ImageButtonMix-IT" parent="android:Widget.Holo.Light.ImageButton">
+  <style name="ImageButtonMixIT" parent="android:Widget.Holo.Light.ImageButton">
 	  <item name="android:background">@drawable/btn_default_holo_light</item>
   </style>
 
-  <style name="ProgressBarMix-IT" parent="android:Widget.Holo.Light.ProgressBar.Horizontal">
+  <style name="ProgressBarMixIT" parent="android:Widget.Holo.Light.ProgressBar.Horizontal">
       <item name="android:progressDrawable">@drawable/progress_horizontal_holo_light</item>
       <item name="android:indeterminateDrawable">@drawable/progress_indeterminate_horizontal_holo_light</item>
   </style>
 
-  <style name="ToggleMix-IT" parent="android:Widget.Holo.Light.Button.Toggle">
+  <style name="ToggleMixIT" parent="android:Widget.Holo.Light.Button.Toggle">
       <item name="android:background">@drawable/btn_toggle_holo_light</item>
   </style>
 
