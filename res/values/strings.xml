@@ -1,5 +1,7 @@
 <resources>
 
+    <!-- Generic -->
     <string name="app_name">Mix-IT 2013</string>
+    <string name="permission_write">Modify Mix-IT schedule data</string>
 
 </resources>

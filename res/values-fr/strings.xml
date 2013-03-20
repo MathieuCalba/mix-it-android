@@ -1,0 +1,6 @@
+<resources>
+
+    <!-- Generic -->
+    <string name="permission_write">Modifier les données de Mix-IT</string>
+
+</resources>
