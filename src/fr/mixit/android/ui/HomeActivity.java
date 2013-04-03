@@ -4,10 +4,33 @@ package fr.mixit.android.ui;
 import android.os.Bundle;
 import android.os.Message;
 import android.os.RemoteException;
+import android.view.View;
+import android.view.View.OnClickListener;
 import fr.mixit.android.services.MixItService;
 import fr.mixit.android_2012.R;
 
 public class HomeActivity extends GenericMixItActivity {
+
+	@Override
+	protected void onCreate(Bundle savedStateInstance) {
+		super.onCreate(savedStateInstance);
+
+		findViewById(R.id.session_bt).setOnClickListener(new OnClickListener() {
+
+			@Override
+			public void onClick(View v) {
+
+			}
+		});
+
+		findViewById(R.id.speaker_bt).setOnClickListener(new OnClickListener() {
+
+			@Override
+			public void onClick(View v) {
+
+			}
+		});
+	}
 
 	@Override
 	protected int getContentLayoutId() {
@@ -29,6 +52,7 @@ public class HomeActivity extends GenericMixItActivity {
 			msg.setData(b);
 			try {
 				mService.send(msg);
+				setRefreshMode(true);
 			} catch (final RemoteException e) {
 				e.printStackTrace();
 			}
@@ -43,16 +67,16 @@ public class HomeActivity extends GenericMixItActivity {
 					break;
 
 				case MixItService.Response.STATUS_ERROR:
-					// Toast.makeText(this, R.string.error_initialization_application, Toast.LENGTH_SHORT).show();
 					break;
 
 				case MixItService.Response.STATUS_NO_CONNECTIVITY:
-					// Toast.makeText(this, R.string.error_initialization_application, Toast.LENGTH_SHORT).show();
 					break;
 
 				default:
 					break;
 			}
+
+			setRefreshMode(false);
 		}
 	}
 

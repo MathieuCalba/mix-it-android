@@ -4,4 +4,16 @@
     android:layout_height="match_parent"
     android:orientation="vertical" >
 
+    <Button
+        android:id="@+id/session_bt"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Sessions" />
+
+    <Button
+        android:id="@+id/speaker_bt"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Speakers" />
+
 </LinearLayout>
