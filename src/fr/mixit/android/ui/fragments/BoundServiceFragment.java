@@ -6,11 +6,14 @@ import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
 import android.content.ServiceConnection;
+import android.database.Cursor;
+import android.os.Bundle;
 import android.os.Handler;
 import android.os.IBinder;
 import android.os.Message;
 import android.os.Messenger;
 import android.os.RemoteException;
+import android.support.v4.app.LoaderManager.LoaderCallbacks;
 import android.util.Log;
 
 import com.actionbarsherlock.app.SherlockFragment;
@@ -191,6 +194,13 @@ public abstract class BoundServiceFragment extends SherlockFragment {
 		if (getActivity() != null && !isDetached()) {
 			((BoundServiceContract) getActivity()).setRefreshMode(state);
 		}
+	}
+
+	protected void restartLoader(int id, Bundle args, LoaderCallbacks<Cursor> callback) {
+		if (getActivity() == null || isDetached()) {
+			return;
+		}
+		getLoaderManager().restartLoader(id, args, callback);
 	}
 
 }
