@@ -26,11 +26,11 @@ import android.os.RemoteException;
 import android.text.TextUtils;
 import android.util.Log;
 import fr.mixit.android.MixItApplication;
-import fr.mixit.android.io.InterestsHandler;
 import fr.mixit.android.io.JsonExecutor;
-import fr.mixit.android.io.JsonHandler;
-import fr.mixit.android.io.MembersHandler;
-import fr.mixit.android.io.SessionsHandler;
+import fr.mixit.android.io.JsonHandlerApplyInterests;
+import fr.mixit.android.io.JsonHandlerApplyMembers;
+import fr.mixit.android.io.JsonHandlerApplyTalks;
+import fr.mixit.android.io.JsonHandlerException;
 import fr.mixit.android.model.OAuth;
 import fr.mixit.android.provider.MixItContract;
 import fr.mixit.android.utils.NetworkUtils;
@@ -89,6 +89,7 @@ public class MixItService extends Service {
 	public static final String EXTRA_STATE_VOTE = "fr.mixit.android.EXTRA_STATE_VOTE";
 	public static final String EXTRA_STATE_STAR = "fr.mixit.android.EXTRA_STATE_STAR";
 	public static final String EXTRA_SESSION_ID = "fr.mixit.android.EXTRA_SESSION_ID";
+	public static final String EXTRA_MEMBER_TYPE = "fr.mixit.android.EXTRA_MEMBER_TYPE";
 
 	// URLs
 	static final String MAIN_URL = "http://www.mix-it.fr/api";
@@ -103,10 +104,14 @@ public class MixItService extends Service {
 	static final String URL_LIGHTNING_TALKS = MAIN_URL + "/lightningtalks";
 	static final String URL_LIGHTNING_TALK = MAIN_URL + "/lightningtalks/%d";
 	static final String URL_LIGHTNING_TALK_VOTE = URL_LIGHTNING_TALK + "/vote";
-	// static final String URL_MEMBERS = MAIN_URL + "/members";
-	// static final String URL_MEMBER = MAIN_URL + "/member/%d";
-	static final String URL_MEMBERS = MAIN_URL + "/members/speakers";
-	static final String URL_MEMBER = MAIN_URL + "/members/speakers/%d";
+	static final String URL_MEMBERS = MAIN_URL + "/members";
+	static final String URL_MEMBER = MAIN_URL + "/members/%d";
+	static final String URL_MEMBERS_SPEAKERS = MAIN_URL + "/members/speakers";
+	static final String URL_MEMBER_SPEAKER = MAIN_URL + "/members/speakers/%d";
+	static final String URL_MEMBERS_STAFF = MAIN_URL + "/members/staff";
+	static final String URL_MEMBER_STAFF = MAIN_URL + "/members/staff/%d";
+	static final String URL_MEMBERS_SPONSORS = MAIN_URL + "/members/sponsors";
+	static final String URL_MEMBER_SPONSOR = MAIN_URL + "/members/sponsors/%d";
 	static final String URL_MEMBER_LINK = URL_MEMBER + "/link";
 	static final String URL_MEMBER_UNLINK = URL_MEMBER + "/unlink";
 	static final String URL_MEMBER_ACTIVITIES = URL_MEMBER + "/activities";
@@ -314,7 +319,7 @@ public class MixItService extends Service {
 
 		// final JsonExecutor executor = new JsonExecutor(getContentResolver());
 
-		// final SharedPreferences syncServicePrefs = getSharedPreferences(PrefUtils.MIXITSCHED_SYNC, Context.MODE_PRIVATE);
+		final SharedPreferences syncServicePrefs = getSharedPreferences(PrefUtils.MIXITSCHED_SYNC, Context.MODE_PRIVATE);
 		// final int localVersion = syncServicePrefs.getInt(PrefUtils.LOCAL_VERSION, PrefUtils.VERSION_NONE);
 
 		// try {
@@ -342,10 +347,21 @@ public class MixItService extends Service {
 		final boolean performRemoteSync = performRemoteSync(/* mResolver, *//* mHttpClient, */b, this);
 		if (performRemoteSync) {
 			getInterests(null);
+			// getMembers(null);
+			Bundle args = new Bundle();
+			args.putInt(EXTRA_MEMBER_TYPE, MixItContract.Members.TYPE_SPEAKER);
+			getMembers(args);
+			args = new Bundle();
+			args.putInt(EXTRA_MEMBER_TYPE, MixItContract.Members.TYPE_STAFF);
+			getMembers(args);
+			args = new Bundle();
+			args.putInt(EXTRA_MEMBER_TYPE, MixItContract.Members.TYPE_SPONSOR);
+			getMembers(args);
 			getMembers(null);
 			getSessions(null);
 			getLightningTalks(null);
-			// TODO : add remote initialization
+
+			syncServicePrefs.edit().putInt(PrefUtils.LOCAL_VERSION, PrefUtils.VERSION_REMOTE_2013).commit();
 		}
 		if (DEBUG_MODE) {
 			Log.d(TAG, "remote sync took " + (System.currentTimeMillis() - startRemote) + "ms");
@@ -392,9 +408,9 @@ public class MixItService extends Service {
 
 		final JsonExecutor executor = new JsonExecutor(getContentResolver());
 		try {
-			executor.execute(json, new InterestsHandler());
+			executor.executeAndInsert(json, new JsonHandlerApplyInterests());
 			r.status = Response.STATUS_OK;
-		} catch (final JsonHandler.JsonHandlerException e) {
+		} catch (final JsonHandlerException e) {
 			Log.e(TAG, "An error occured while processing JSON data from /interests web mService", e);
 			r.bundle.putString(EXTRA_ERROR_MESSAGE, "Error while calling /interests : error while processing JSON");
 			r.status = Response.STATUS_ERROR;
@@ -432,9 +448,9 @@ public class MixItService extends Service {
 
 		final JsonExecutor executor = new JsonExecutor(getContentResolver());
 		try {
-			executor.execute(json, new SessionsHandler(true, true, true));
+			executor.executeAndInsert(json, new JsonHandlerApplyTalks(false, false));
 			r.status = Response.STATUS_OK;
-		} catch (final JsonHandler.JsonHandlerException e) {
+		} catch (final JsonHandlerException e) {
 			Log.e(TAG, "An error occured while processing JSON data from /sessions web mService", e);
 			r.bundle.putString(EXTRA_ERROR_MESSAGE, "Error while calling /sessions : error while processing JSON");
 			r.status = Response.STATUS_ERROR;
@@ -480,9 +496,9 @@ public class MixItService extends Service {
 
 		final JsonExecutor executor = new JsonExecutor(getContentResolver());
 		try {
-			executor.execute(json, new SessionsHandler(true, true, true));
+			executor.executeAndInsert(json, new JsonHandlerApplyTalks(true, false));
 			r.status = Response.STATUS_OK;
-		} catch (final JsonHandler.JsonHandlerException e) {
+		} catch (final JsonHandlerException e) {
 			Log.e(TAG, "An error occured while processing JSON data from /sessions/" + idSession + " web mService", e);
 			r.bundle.putString(EXTRA_ERROR_MESSAGE, "Error while calling /sessions/" + idSession + " : error while processing JSON");
 			r.status = Response.STATUS_ERROR;
@@ -520,9 +536,9 @@ public class MixItService extends Service {
 
 		final JsonExecutor executor = new JsonExecutor(getContentResolver());
 		try {
-			executor.execute(json, new SessionsHandler(false, true, true));
+			executor.executeAndInsert(json, new JsonHandlerApplyTalks(false, true));
 			r.status = Response.STATUS_OK;
-		} catch (final JsonHandler.JsonHandlerException e) {
+		} catch (final JsonHandlerException e) {
 			Log.e(TAG, "An error occured while processing JSON data from /lightnings web mService", e);
 			r.bundle.putString(EXTRA_ERROR_MESSAGE, "Error while calling /lightnings : error while processing JSON");
 			r.status = Response.STATUS_ERROR;
@@ -568,9 +584,9 @@ public class MixItService extends Service {
 
 		final JsonExecutor executor = new JsonExecutor(getContentResolver());
 		try {
-			executor.execute(json, new SessionsHandler(false, true, true));
+			executor.executeAndInsert(json, new JsonHandlerApplyTalks(true, true));
 			r.status = Response.STATUS_OK;
-		} catch (final JsonHandler.JsonHandlerException e) {
+		} catch (final JsonHandlerException e) {
 			Log.e(TAG, "An error occured while processing JSON data from /sessions/" + idLightningTalk + " web mService", e);
 			r.bundle.putString(EXTRA_ERROR_MESSAGE, "Error while calling /sessions/" + idLightningTalk + " : error while processing JSON");
 			r.status = Response.STATUS_ERROR;
@@ -591,7 +607,32 @@ public class MixItService extends Service {
 			return r;
 		}
 
-		final ResponseHttp myMemberResponse = NetworkUtils.sendURL(URL_MEMBERS, false, null);
+		int memberType = MixItContract.Members.TYPE_MEMBER;
+		if (b != null) {
+			memberType = b.getInt(EXTRA_MEMBER_TYPE, MixItContract.Members.TYPE_MEMBER);
+		}
+
+		String url;
+		switch (memberType) {
+			case MixItContract.Members.TYPE_SPEAKER:
+				url = URL_MEMBERS_SPEAKERS;
+				break;
+
+			case MixItContract.Members.TYPE_SPONSOR:
+				url = URL_MEMBERS_SPONSORS;
+				break;
+
+			case MixItContract.Members.TYPE_STAFF:
+				url = URL_MEMBERS_STAFF;
+				break;
+
+			case MixItContract.Members.TYPE_MEMBER:
+			default:
+				url = URL_MEMBERS;
+				break;
+		}
+
+		final ResponseHttp myMemberResponse = NetworkUtils.sendURL(url, false, null);
 		if (myMemberResponse == null || myMemberResponse.status != HttpURLConnection.HTTP_OK) {
 			r.bundle.putString(EXTRA_ERROR_MESSAGE, "Error while calling /members");
 			r.status = Response.STATUS_ERROR;
@@ -608,9 +649,9 @@ public class MixItService extends Service {
 
 		final JsonExecutor executor = new JsonExecutor(getContentResolver());
 		try {
-			executor.execute(json, new MembersHandler(true, true));
+			executor.executeAndInsert(json, new JsonHandlerApplyMembers(false, memberType));
 			r.status = Response.STATUS_OK;
-		} catch (final JsonHandler.JsonHandlerException e) {
+		} catch (final JsonHandlerException e) {
 			Log.e(TAG, "An error occured while processing JSON data from /members web mService", e);
 			r.bundle.putString(EXTRA_ERROR_MESSAGE, "Error while calling /members : error while processing JSON");
 			r.status = Response.STATUS_ERROR;
@@ -637,8 +678,31 @@ public class MixItService extends Service {
 			return r;
 		}
 
-		final int idMember = b.getInt(EXTRA_ID);
-		final ResponseHttp myMemberResponse = NetworkUtils.sendURL(String.format(Locale.getDefault(), URL_MEMBER, idMember), false, null);
+		final int idMember = b.getInt(EXTRA_ID, -1);
+
+		final int memberType = b.getInt(EXTRA_MEMBER_TYPE, MixItContract.Members.TYPE_MEMBER);
+
+		String url;
+		switch (memberType) {
+			case MixItContract.Members.TYPE_SPEAKER:
+				url = URL_MEMBER_SPEAKER;
+				break;
+
+			case MixItContract.Members.TYPE_SPONSOR:
+				url = URL_MEMBER_SPONSOR;
+				break;
+
+			case MixItContract.Members.TYPE_STAFF:
+				url = URL_MEMBER_STAFF;
+				break;
+
+			case MixItContract.Members.TYPE_MEMBER:
+			default:
+				url = URL_MEMBER;
+				break;
+		}
+
+		final ResponseHttp myMemberResponse = NetworkUtils.sendURL(String.format(Locale.getDefault(), url, idMember), false, null);
 		if (myMemberResponse == null || myMemberResponse.status != HttpURLConnection.HTTP_OK) {
 			r.bundle.putString(EXTRA_ERROR_MESSAGE, "Error while calling /members/" + idMember);
 			r.status = Response.STATUS_ERROR;
@@ -655,9 +719,9 @@ public class MixItService extends Service {
 
 		final JsonExecutor executor = new JsonExecutor(getContentResolver());
 		try {
-			executor.execute(json, new MembersHandler(false, false));
+			executor.executeAndInsert(json, new JsonHandlerApplyMembers(true, memberType));
 			r.status = Response.STATUS_OK;
-		} catch (final JsonHandler.JsonHandlerException e) {
+		} catch (final JsonHandlerException e) {
 			Log.e(TAG, "An error occured while processing JSON data from /members/" + idMember + " web mService", e);
 			r.bundle.putString(EXTRA_ERROR_MESSAGE, "Error while calling /members/" + idMember + " : error while processing JSON");
 			r.status = Response.STATUS_ERROR;

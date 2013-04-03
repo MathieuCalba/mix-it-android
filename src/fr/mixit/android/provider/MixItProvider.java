@@ -559,7 +559,8 @@ public class MixItProvider extends ContentProvider {
 			case SESSIONS:
 				return builder//
 						.table(MixItDatabase.Tables.SESSIONS)//
-						.where(MixItContract.Sessions.IS_SESSION + "=?", "1");
+						.where(MixItContract.Sessions.FORMAT + "=? OR " + MixItContract.Sessions.FORMAT + "=?", //
+								MixItContract.Sessions.FORMAT_TALK, MixItContract.Sessions.FORMAT_WORKSHOP);
 			case SESSIONS_ID: {
 				final String sessionsId = MixItContract.Sessions.getSessionId(uri);
 				return builder//
@@ -611,7 +612,7 @@ public class MixItProvider extends ContentProvider {
 			case LIGHTNINGS:
 				return builder//
 						.table(MixItDatabase.Tables.SESSIONS)//
-						.where(MixItContract.Sessions.IS_SESSION + "=?", "0");
+						.where(MixItContract.Sessions.FORMAT + "=?", MixItContract.Sessions.FORMAT_LIGHTNING_TALK);
 				// case LIGHTNINGS_ID: {
 				// final String sessionsId = MixItContract.Sessions.getSessionId(uri);
 				// return builder.table(MixItDatabase.Tables.SESSIONS)
@@ -704,7 +705,8 @@ public class MixItProvider extends ContentProvider {
 						.table(MixItDatabase.Tables.SESSIONS_INTERESTS_JOIN_SESSIONS)//
 						.mapToTable(MixItContract.Sessions._ID, MixItDatabase.Tables.SESSIONS)//
 						.mapToTable(MixItContract.Sessions.SESSION_ID, MixItDatabase.Tables.SESSIONS)//
-						.where(MixItContract.Sessions.IS_SESSION + "=?", "1")//
+						.where(MixItContract.Sessions.FORMAT + "=? OR " + MixItContract.Sessions.FORMAT + "=?", //
+								MixItContract.Sessions.FORMAT_TALK, MixItContract.Sessions.FORMAT_WORKSHOP)//
 						.where(MixItDatabase.SessionsInterests.INTEREST_ID + "=?", interestId);
 			}
 			case INTERESTS_ID_LIGHTNINGS: {
@@ -713,7 +715,7 @@ public class MixItProvider extends ContentProvider {
 						.table(MixItDatabase.Tables.SESSIONS_INTERESTS_JOIN_SESSIONS)//
 						.mapToTable(MixItContract.Sessions._ID, MixItDatabase.Tables.SESSIONS)//
 						.mapToTable(MixItContract.Sessions.SESSION_ID, MixItDatabase.Tables.SESSIONS)//
-						.where(MixItContract.Sessions.IS_SESSION + "=?", "0")//
+						.where(MixItContract.Sessions.FORMAT + "=?", MixItContract.Sessions.FORMAT_LIGHTNING_TALK) //
 						.where(MixItDatabase.SessionsInterests.INTEREST_ID + "=?", interestId);
 			}
 			case INTERESTS_ID_ALL_SESSIONS: {
@@ -797,7 +799,8 @@ public class MixItProvider extends ContentProvider {
 								+ MixItDatabase.Tables.MEMBERS + "." + MixItContract.Members.MEMBER_ID, (String[]) null)//
 						.where(MixItDatabase.Tables.SESSIONS_SPEAKERS + "." + MixItDatabase.SessionsSpeakers.SESSION_ID + "=" //
 								+ MixItDatabase.Tables.SESSIONS + "." + MixItContract.Sessions.SESSION_ID, (String[]) null)//
-						.where(MixItDatabase.Tables.SESSIONS + "." + MixItContract.Sessions.IS_SESSION + "=1", (String[]) null)//
+						.where(MixItContract.Sessions.FORMAT + "=? OR " + MixItContract.Sessions.FORMAT + "=?", //
+								MixItContract.Sessions.FORMAT_TALK, MixItContract.Sessions.FORMAT_WORKSHOP) //
 						.distinct();
 			}
 			case SPEAKERS_ID_SESSIONS: {
@@ -806,7 +809,8 @@ public class MixItProvider extends ContentProvider {
 						.table(MixItDatabase.Tables.SESSIONS_SPEAKERS_JOIN_SESSIONS)//
 						.mapToTable(MixItContract.Sessions._ID, MixItDatabase.Tables.SESSIONS)//
 						.mapToTable(MixItContract.Sessions.SESSION_ID, MixItDatabase.Tables.SESSIONS)//
-						.where(MixItDatabase.Tables.SESSIONS + "." + MixItContract.Sessions.IS_SESSION + "=?", "1")//
+						.where(MixItContract.Sessions.FORMAT + "=? OR " + MixItContract.Sessions.FORMAT + "=?", //
+								MixItContract.Sessions.FORMAT_TALK, MixItContract.Sessions.FORMAT_WORKSHOP) //
 						.where(MixItDatabase.Tables.SESSIONS_SPEAKERS + "." + SessionsSpeakers.SPEAKER_ID + "=?", memberId);
 			}
 			// case SPEAKERS_ID_SESSIONS_ID: {
@@ -825,7 +829,7 @@ public class MixItProvider extends ContentProvider {
 						.table(MixItDatabase.Tables.SESSIONS_SPEAKERS_JOIN_SESSIONS)//
 						.mapToTable(MixItContract.Sessions._ID, MixItDatabase.Tables.SESSIONS)//
 						.mapToTable(MixItContract.Sessions.SESSION_ID, MixItDatabase.Tables.SESSIONS)//
-						.where(MixItDatabase.Tables.SESSIONS + "." + MixItContract.Sessions.IS_SESSION + "=?", "0")//
+						.where(MixItContract.Sessions.FORMAT + "=?", MixItContract.Sessions.FORMAT_LIGHTNING_TALK) //
 						.where(MixItDatabase.Tables.SESSIONS_SPEAKERS + "." + SessionsSpeakers.SPEAKER_ID + "=?", memberId);
 			}
 			// case SPEAKERS_ID_LIGHTNINGS_ID: {
@@ -850,7 +854,8 @@ public class MixItProvider extends ContentProvider {
 			case SESSIONS:
 				return builder//
 						.table(MixItDatabase.Tables.SESSIONS)//
-						.where(MixItContract.Sessions.IS_SESSION + "=?", "1");
+						.where(MixItContract.Sessions.FORMAT + "=? OR " + MixItContract.Sessions.FORMAT + "=?", //
+								MixItContract.Sessions.FORMAT_TALK, MixItContract.Sessions.FORMAT_WORKSHOP);
 			case SESSIONS_ID: {
 				final String sessionsId = MixItContract.Sessions.getSessionId(uri);
 				return builder//
@@ -914,7 +919,7 @@ public class MixItProvider extends ContentProvider {
 			case LIGHTNINGS:
 				return builder//
 						.table(MixItDatabase.Tables.SESSIONS)//
-						.where(MixItContract.Sessions.IS_SESSION + "=?", "0");
+						.where(MixItContract.Sessions.FORMAT + "=?", MixItContract.Sessions.FORMAT_LIGHTNING_TALK);
 				// case LIGHTNINGS_ID: {
 				// final String sessionsId = MixItContract.Sessions.getSessionId(uri);
 				// return builder.table(MixItDatabase.Tables.SESSIONS)

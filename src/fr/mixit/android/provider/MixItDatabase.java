@@ -25,7 +25,9 @@ public class MixItDatabase extends SQLiteOpenHelper {
 	private static final int DATABASE_VERSION_2012_SECOND = 3;
 	private static final int DATABASE_VERSION_2012 = 10;
 	private static final int DATABASE_VERSION_2013 = 11;
-	private static final int DATABASE_VERSION = DATABASE_VERSION_2013;
+	private static final int DATABASE_VERSION_2013_WITH_NEW_TALK_ATTRIBUTES = 12;
+	private static final int DATABASE_VERSION_2013_WITH_NEW_MEMBER_ATTRIBUTES = 13;
+	private static final int DATABASE_VERSION = DATABASE_VERSION_2013_WITH_NEW_MEMBER_ATTRIBUTES;
 
 	static final String LEFT_OUTER_JOIN = " LEFT OUTER JOIN ";
 	static final String ON = " ON ";
@@ -160,6 +162,8 @@ public class MixItDatabase extends SQLiteOpenHelper {
 				MembersColumns.TICKET_REGISTERED + " INTEGER(1) NOT NULL DEFAULT 0," + //
 				MembersColumns.IMAGE_URL + " TEXT," + //
 				MembersColumns.NB_CONSULT + " INTEGER NOT NULL DEFAULT 0," + //
+				MembersColumns.TYPE + " INTEGER NOT NULL DEFAULT 0," + //
+				MembersColumns.LEVEL + " TEXT," + //
 				"UNIQUE (" + MembersColumns.MEMBER_ID + ") ON CONFLICT REPLACE)");
 
 		db.execSQL("CREATE TABLE " + Tables.SHARED_LINKS + //
@@ -178,10 +182,12 @@ public class MixItDatabase extends SQLiteOpenHelper {
 				SessionsColumns.SUMMARY + " TEXT," + //
 				SessionsColumns.DESC + " TEXT," + SessionsColumns.TIME + " INTEGER," + //
 				SessionsColumns.ROOM_ID + " TEXT NOT NULL DEFAULT \'\'," + //
-				SessionsColumns.IS_SESSION + " INTEGER(1) NOT NULL DEFAULT 1," + //
 				SessionsColumns.NB_VOTES + " INTEGER NOT NULL DEFAULT 0," + //
 				SessionsColumns.MY_VOTE + " INTEGER(1) NOT NULL DEFAULT 0," + //
 				SessionsColumns.IS_FAVORITE + " INTEGER(1) NOT NULL DEFAULT 0," + //
+				SessionsColumns.FORMAT + " TEXT NOT NULL DEFAULT \'Talk\'," + //
+				SessionsColumns.LANG + " TEXT NOT NULL DEFAULT \'fr\'," + //
+				SessionsColumns.LEVEL + " TEXT NOT NULL DEFAULT \'Beginner\'," + //
 				"UNIQUE (" + SessionsColumns.SESSION_ID + ") ON CONFLICT REPLACE)");
 
 		db.execSQL("CREATE TABLE " + Tables.COMMENTS + //
@@ -348,6 +354,9 @@ public class MixItDatabase extends SQLiteOpenHelper {
 			case DATABASE_VERSION_2012_FIRST:
 			case DATABASE_VERSION_2012_SECOND:
 			case DATABASE_VERSION_2012:
+			case DATABASE_VERSION_2013:
+			case DATABASE_VERSION_2013_WITH_NEW_TALK_ATTRIBUTES:
+			case DATABASE_VERSION_2013_WITH_NEW_MEMBER_ATTRIBUTES:
 				db.execSQL("DROP TABLE IF EXISTS " + "interests");
 				db.execSQL("DROP TABLE IF EXISTS " + "members");
 				db.execSQL("DROP TABLE IF EXISTS " + "shared_links");
@@ -359,8 +368,7 @@ public class MixItDatabase extends SQLiteOpenHelper {
 				db.execSQL("DROP TABLE IF EXISTS " + "sessions_speakers");
 				db.execSQL("DROP TABLE IF EXISTS " + "sessions_interests");
 				db.execSQL("DROP TABLE IF EXISTS " + "sessions_comments");
-				version = DATABASE_VERSION_2013;
-			case DATABASE_VERSION_2013:
+				version = DATABASE_VERSION_2013_WITH_NEW_MEMBER_ATTRIBUTES;
 		}
 
 		createTables(db);
