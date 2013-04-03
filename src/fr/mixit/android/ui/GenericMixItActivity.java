@@ -17,6 +17,7 @@ import android.util.Log;
 
 import com.actionbarsherlock.app.SherlockFragmentActivity;
 import com.actionbarsherlock.view.MenuItem;
+import com.actionbarsherlock.view.Window;
 
 import fr.mixit.android.MixItApplication;
 import fr.mixit.android.services.MixItService;
@@ -89,6 +90,8 @@ public abstract class GenericMixItActivity extends SherlockFragmentActivity {
 
 	@Override
 	protected void onCreate(Bundle savedStateInstance) {
+		requestWindowFeature(Window.FEATURE_INDETERMINATE_PROGRESS);
+
 		super.onCreate(savedStateInstance);
 
 		initActionBar();
@@ -100,6 +103,11 @@ public abstract class GenericMixItActivity extends SherlockFragmentActivity {
 		final boolean isUpEnabled = getActivityLevel() > 0;
 		getSupportActionBar().setDisplayHomeAsUpEnabled(isUpEnabled);
 		getSupportActionBar().setHomeButtonEnabled(isUpEnabled);
+		setRefreshMode(false);
+	}
+
+	public void setRefreshMode(boolean state) {
+		setSupportProgressBarIndeterminateVisibility(state);
 	}
 
 	protected abstract int getContentLayoutId();
