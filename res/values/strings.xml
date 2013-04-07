@@ -42,5 +42,6 @@
     <string name="member_nb_links">%d link(s)</string>
     <string name="member_nb_linkers">%d linker(s)</string>
     <string name="member_picture">"Member's picture"</string>
+    <string name="member_bio_empty">"No Biography"</string>
 
 </resources>

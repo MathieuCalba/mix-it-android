@@ -434,6 +434,10 @@ public class MemberDetailsFragment extends BoundServiceFragment implements Loade
 		}
 
 		fillHeader(firstName, lastName, company, shortDesc, imageUrl, nbConsults);
+
+		if (TextUtils.isEmpty(bio) && getActivity() != null && !isDetached()) {
+			bio = getActivity().getString(R.string.member_bio_empty);
+		}
 		mBio.setText(bio);
 	}
 
