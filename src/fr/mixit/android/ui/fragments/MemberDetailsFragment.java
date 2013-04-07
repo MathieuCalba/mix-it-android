@@ -30,7 +30,7 @@ import com.nostra13.universalimageloader.core.ImageLoader;
 import fr.mixit.android.provider.MixItContract;
 import fr.mixit.android.services.MixItService;
 import fr.mixit.android.ui.widgets.MemberSharedLinkView;
-import fr.mixit.android.ui.widgets.SpeakerTalkView;
+import fr.mixit.android.ui.widgets.TalkItemView;
 import fr.mixit.android.utils.IntentUtils;
 import fr.mixit.android.utils.UIUtils;
 import fr.mixit.android_2012.R;
@@ -499,7 +499,7 @@ public class MemberDetailsFragment extends BoundServiceFragment implements Loade
 			mTalks.setVisibility(View.VISIBLE);
 			do {
 				final String talkId = c.getString(MixItContract.Sessions.PROJ_LIST.SESSION_ID);
-				final SpeakerTalkView talkView = new SpeakerTalkView(ctx);
+				final TalkItemView talkView = new TalkItemView(ctx);
 				talkView.setContent(c);
 				talkView.setOnClickListener(new OnClickListener() {
 

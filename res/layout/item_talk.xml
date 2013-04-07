@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="utf-8"?>
+<merge xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:padding="@dimen/margin_small" >
+
+    <ImageView
+        android:id="@+id/talk_star_button"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentRight="true"
+        android:layout_gravity="center_vertical"
+        android:layout_marginLeft="@dimen/margin_small"
+        android:contentDescription="@string/star_session_button"
+        android:src="@drawable/ic_starred" />
+
+    <TextView
+        android:id="@+id/talk_title"
+        style="@style/ItemTitle"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentLeft="true"
+        android:layout_toLeftOf="@id/talk_star_button"
+        android:textIsSelectable="false" />
+
+    <TextView
+        android:id="@+id/talk_subtitle"
+        style="@style/ItemSubTitle"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentLeft="true"
+        android:layout_below="@id/talk_title"
+        android:layout_toLeftOf="@id/talk_star_button"
+        android:textIsSelectable="false" />
+
+</merge>

@@ -7,14 +7,14 @@
 
     <TextView
         android:id="@+id/shared_link_title"
-        style="@style/ListItemTitle"
+        style="@style/ItemTitle"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:textIsSelectable="false" />
 
     <TextView
         android:id="@+id/shared_link_subtitle"
-        style="@style/ListItemSubtitle"
+        style="@style/ItemSubTitle"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:textIsSelectable="false" />
