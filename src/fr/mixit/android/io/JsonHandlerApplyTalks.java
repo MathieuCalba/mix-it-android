@@ -58,19 +58,19 @@ public class JsonHandlerApplyTalks extends JsonHandlerApply {
 
 		mIsFullParsing = isFullParsing;
 		mIsLightningTalks = isLightningTalks;
-	}
-
-	@Override
-	public boolean parseList(JSONArray entries, ContentResolver resolver) throws JSONException {
-		mIsParsingList = true;
 
 		mItemIds = new HashSet<String>();
 		mItemInterestsIds = Maps.newHashMap();
 		mItemSpeakersIds = Maps.newHashMap();
+	}
 
+	@Override
+	public boolean parseList(JSONArray entries, ContentResolver resolver) throws JSONException {
 		if (DEBUG_MODE) {
 			Log.d(TAG, "Retrieved " + entries.length() + " more talks entries.");
 		}
+
+		mIsParsingList = true;
 
 		int nbEntries = 0;
 		for (int i = 0; i < entries.length(); i++) {
