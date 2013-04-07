@@ -127,6 +127,8 @@ public class SessionDetailsFragment extends BoundServiceFragment implements Load
 			b.putInt(EXTRA_SESSION_ID, sessionId);
 
 			reload();
+
+			refreshSessionData();
 		}
 	}
 
