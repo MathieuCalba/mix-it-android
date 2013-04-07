@@ -199,9 +199,4 @@ public class SessionsActivity extends GenericMixItActivity implements OnNavigati
 		mSessionsListFrag.reload();
 	}
 
-	@Override
-	public void setRefreshMode(boolean state) {
-		setSupportProgressBarIndeterminateVisibility(state);
-	}
-
 }
