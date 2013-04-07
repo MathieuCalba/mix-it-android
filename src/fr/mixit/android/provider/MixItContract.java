@@ -14,9 +14,11 @@ public class MixItContract {
 	public static final String PATH_BADGES = "badges";
 	public static final String PATH_MEMBERS = "members";
 	public static final String PATH_SPEAKERS = "speakers";
+	public static final String PATH_STAFF = "staff";
 	public static final String PATH_SHARED_LINKS = "shared_links";
 	public static final String PATH_LINKERS = "linkers";
 	public static final String PATH_LINKS = "links";
+	public static final String PATH_TALKS = "talks";
 	public static final String PATH_SESSIONS = "sessions";
 	public static final String PATH_LIGHTNINGS = "lightnings";
 	public static final String PATH_ROOM = "room";
@@ -53,6 +55,20 @@ public class MixItContract {
 			int _ID = 0;
 			int INTEREST_ID = 1;
 			int NAME = 2;
+		}
+
+		public static interface PROJ_WITH_COUNT {
+			String[] PROJECTION = { //
+					Interests._ID, //
+					Interests.INTEREST_ID, //
+					Interests.NAME, //
+					Interests.MEMBERS_COUNT //
+			};
+
+			int _ID = 0;
+			int INTEREST_ID = 1;
+			int NAME = 2;
+			int MEMBER_COUNT = 3;
 		}
 
 		public static Uri buildInterestUri(String interestId) {
@@ -92,6 +108,7 @@ public class MixItContract {
 	public static class Members implements MembersColumns, BaseColumns {
 		public static final Uri CONTENT_URI = BASE_CONTENT_URI.buildUpon().appendPath(PATH_MEMBERS).build();
 		public static final Uri CONTENT_URI_SPEAKERS = BASE_CONTENT_URI.buildUpon().appendPath(PATH_SPEAKERS).build();
+		public static final Uri CONTENT_URI_STAFF = BASE_CONTENT_URI.buildUpon().appendPath(PATH_STAFF).build();
 
 		public static final String CONTENT_TYPE = CONTENT_TYPE_START + CONTENT_TYPE_DIR + VENDOR + PATH_MEMBERS;
 		public static final String CONTENT_ITEM_TYPE = CONTENT_TYPE_START + CONTENT_TYPE_ITEM + VENDOR + PATH_MEMBERS;
@@ -111,7 +128,8 @@ public class MixItContract {
 					Members.FIRSTNAME, //
 					Members.LASTNAME, //
 					Members.IMAGE_URL, //
-					Members.TYPE //
+					Members.TYPE, //
+					Members.COMPANY //
 			};
 
 			int _ID = 0;
@@ -120,6 +138,7 @@ public class MixItContract {
 			int LASTNAME = 3;
 			int IMAGE_URL = 4;
 			int TYPE = 5;
+			int COMPANY = 6;
 		}
 
 		public static interface PROJ_DETAIL {
@@ -215,8 +234,16 @@ public class MixItContract {
 			return CONTENT_URI.buildUpon().appendPath(memberId).appendPath(PATH_COMMENTS).appendPath(commentId).build();
 		}
 
-		public static Uri buildSessionsDirUri(String speakerId, boolean isSession) {
-			return CONTENT_URI.buildUpon().appendPath(speakerId).appendPath(isSession ? PATH_SESSIONS : PATH_LIGHTNINGS).build();
+		public static Uri buildSessionsDirUri(String speakerId, Boolean isSession) {
+			String pathToAppend = null;
+			if (isSession == null) {
+				pathToAppend = PATH_TALKS;
+			} else if (isSession) {
+				pathToAppend = PATH_SESSIONS;
+			} else {
+				pathToAppend = PATH_LIGHTNINGS;
+			}
+			return CONTENT_URI.buildUpon().appendPath(speakerId).appendPath(pathToAppend).build();
 		}
 
 		public static Uri buildSpeakerSessionUri(String speakerId, String sessionId) {

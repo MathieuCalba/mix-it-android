@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    style="@style/ListItemContainer"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:paddingBottom="@dimen/margin_very_small"
+    android:paddingLeft="@dimen/margin_small"
+    android:paddingRight="@dimen/margin_small"
+    android:paddingTop="@dimen/margin_very_small" >
+
+    <ImageView
+        android:id="@+id/member_image"
+        android:layout_width="@dimen/member_image_width"
+        android:layout_height="@dimen/member_image_height"
+        android:layout_marginRight="@dimen/margin_small"
+        android:scaleType="fitCenter" />
+    <!-- android:adjustViewBounds="true" -->
+
+    <TextView
+        android:id="@+id/member_name"
+        style="@style/ListItemTitle"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentRight="true"
+        android:layout_alignParentTop="true"
+        android:layout_toRightOf="@id/member_image"
+        android:ellipsize="end"
+        android:singleLine="true" />
+
+    <TextView
+        android:id="@+id/member_company"
+        style="@style/ListItemSubtitle"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignLeft="@id/member_name"
+        android:layout_below="@id/member_name" />
+
+</RelativeLayout>

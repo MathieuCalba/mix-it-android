@@ -1,6 +1,7 @@
 
 package fr.mixit.android.ui;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.os.Message;
 import android.os.RemoteException;
@@ -19,7 +20,8 @@ public class HomeActivity extends GenericMixItActivity {
 
 			@Override
 			public void onClick(View v) {
-
+				final Intent i = new Intent(HomeActivity.this, SessionsActivity.class);
+				startActivity(i);
 			}
 		});
 
@@ -27,7 +29,8 @@ public class HomeActivity extends GenericMixItActivity {
 
 			@Override
 			public void onClick(View v) {
-
+				final Intent i = new Intent(HomeActivity.this, MembersActivity.class);
+				startActivity(i);
 			}
 		});
 	}

@@ -3,5 +3,44 @@
     <!-- Generic -->
     <string name="app_name">Mix-IT 2013</string>
     <string name="permission_write">Modify Mix-IT schedule data</string>
+    <string name="functionnality_need_connectivity">This functionnality need a connection</string>
+    <!-- Sessions -->
+    <string name="all_sessions">Sessions</string>
+    <string name="all_lightning_talks">Lightning Talks</string>
+    <string name="empty_sessions">No Session</string>
+    <string name="star_session_button">Star Session</string>
+    <string name="session_summary">Summary</string>
+    <string name="session_speakers">Speakers</string>
+    <string name="session_comments">Comments</string>
+    <string name="session_in_parallel">In Parallels</string>
+    <string name="session_activities">Activities</string>
+    <string name="session_interests">Interests</string>
+    <string name="no_session_summary">No Summary for this Sessions</string>
+    <string name="no_session_speakers">No Speaker for this Session</string>
+    <string name="action_bar_share_with">Share with...</string>
+    <string name="share_session_subject">Discover this talk at Mix-IT</string>
+    <string name="share_session_text">Discover the talk \"%1$s\" at Mix-IT : %2$s</string>
+    <string name="action_bar_vote_add">+1</string>
+    <string name="action_bar_vote_delete">-1</string>
+    <string name="action_bar_favorite_add">Add to favorite</string>
+    <string name="action_bar_favorite_delete">Remove from favorite</string>
+    <string name="error_vote_lightning_talk">Error while sending your vote/unvote request</string>
+    <string name="error_star_session">Error while sending your star/unstar request</string>
+    <string name="no_session">No Session Selected</string>
+    <string name="sessions_empty_speakers">No Speakers for this Session</string>
+    <!-- Members -->
+    <string name="all_staff">Staff</string>
+    <string name="all_members">Members</string>
+    <string name="all_speakers">Speakers</string>
+    <string name="no_member">No Member Selected</string>
+    <string name="empty_members">No Members</string>
+    <string name="nb_consult">%d view(s)</string>
+    <string name="member_bio">Biography</string>
+    <string name="member_shared_links">Shared Links</string>
+    <string name="member_talks">Talks</string>
+    <string name="member_interests">Interests</string>
+    <string name="member_nb_links">%d link(s)</string>
+    <string name="member_nb_linkers">%d linker(s)</string>
+    <string name="member_picture">"Member's picture"</string>
 
 </resources>

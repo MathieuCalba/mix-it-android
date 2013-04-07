@@ -1,20 +1,11 @@
 package fr.mixit.android.utils;
 
-import android.annotation.TargetApi;
 import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.content.res.Configuration;
-import android.graphics.Point;
 import android.net.Uri;
-import android.os.Build;
 import android.os.Bundle;
-import android.view.Display;
-import android.view.LayoutInflater;
-import android.view.View;
-import android.view.WindowManager;
-import android.widget.TextView;
-import fr.mixit.android_2012.R;
 
 public class UIUtils {
 
@@ -61,31 +52,6 @@ public class UIUtils {
 		intent.putExtras(arguments);
 		intent.removeExtra("_uri");
 		return intent;
-	}
-
-	public static View createTabView(final Context ctx, final String text) {
-		final View view = LayoutInflater.from(ctx).inflate(R.layout.tab_indicator_holo, null);
-		final TextView tv = (TextView) view.findViewById(android.R.id.title);
-		tv.setText(text);
-		return view;
-	}
-
-	@TargetApi(Build.VERSION_CODES.HONEYCOMB_MR2)
-	@SuppressWarnings("deprecation")
-	public static int getScreenWidth(Context ctx) {
-		int width = 0;
-
-		final WindowManager wm = (WindowManager) ctx.getSystemService(Context.WINDOW_SERVICE);
-		final Display display = wm.getDefaultDisplay();
-		if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.HONEYCOMB_MR2) {
-			final Point size = new Point();
-			display.getSize(size);
-			width = size.x;
-		} else {
-			width = display.getWidth();
-		}
-
-		return width;
 	}
 
 	/**

@@ -34,7 +34,7 @@ public class JsonHandlerApplyMembers extends JsonHandlerApply {
 	protected static final String TAG_SHORT_DESC = "shortdesc";
 	protected static final String TAG_LONG_DESC = "longdesc";
 	protected static final String TAG_IMAGE_URL = "urlimage";
-	protected static final String TAG_NB_CONSULT = "nbConsult";
+	protected static final String TAG_NB_CONSULTS = "nbConsults";
 	protected static final String TAG_LOGO = "logo";
 	protected static final String TAG_LEVEL = "level";
 	// protected static final String TAG_TICKETING_REGISTERED = "ticketingRegistered";
@@ -63,6 +63,7 @@ public class JsonHandlerApplyMembers extends JsonHandlerApply {
 
 	protected int mMemberType = MixItContract.Members.TYPE_MEMBER;
 	protected boolean mIsFullParsing = false;
+	protected boolean mIsParsingList = false;
 
 	protected HashSet<String> mItemIds = null;
 	protected HashMap<String, HashSet<String>> mItemLinksIds;
@@ -92,6 +93,8 @@ public class JsonHandlerApplyMembers extends JsonHandlerApply {
 		if (DEBUG_MODE) {
 			Log.d(TAG, "Retrieved " + entries.length() + " more members entries.");
 		}
+
+		mIsParsingList = true;
 
 		int nbEntries = 0;
 		for (int i = 0; i < entries.length(); i++) {
@@ -157,8 +160,8 @@ public class JsonHandlerApplyMembers extends JsonHandlerApply {
 			} else if (item.has(TAG_IMAGE_URL) && mMemberType != MixItContract.Members.TYPE_SPONSOR) {
 				builder.withValue(MixItContract.Members.IMAGE_URL, item.getString(TAG_IMAGE_URL));
 			}
-			if (item.has(TAG_NB_CONSULT)) {
-				builder.withValue(MixItContract.Members.NB_CONSULT, item.getString(TAG_NB_CONSULT));
+			if (item.has(TAG_NB_CONSULTS)) {
+				builder.withValue(MixItContract.Members.NB_CONSULT, item.getString(TAG_NB_CONSULTS));
 			}
 			if (item.has(TAG_LEVEL)) {
 				builder.withValue(MixItContract.Members.LEVEL, item.getString(TAG_LEVEL));
@@ -187,6 +190,12 @@ public class JsonHandlerApplyMembers extends JsonHandlerApply {
 				final JSONArray interests = item.getJSONArray(TAG_SHARED_LINKS);
 				parseSharedLinks(id, interests, resolver);
 			}
+		}
+
+		if (!mIsParsingList) {
+			deleteItemsDataNotFound(resolver);
+
+			return ProviderParsingUtils.applyBatch(mAuthority, resolver, mBatch, true);
 		}
 
 		return true;
@@ -250,7 +259,7 @@ public class JsonHandlerApplyMembers extends JsonHandlerApply {
 			final String newLongDesc = item.has(TAG_LONG_DESC) ? item.getString(TAG_LONG_DESC).trim() : curLongDesc;
 			final String newImageUrl = item.has(TAG_LOGO) ? item.getString(TAG_LOGO).trim() : item.has(TAG_IMAGE_URL) ? item.getString(TAG_IMAGE_URL).trim()
 					: curImageUrl;
-			final int newNbConsults = item.has(TAG_NB_CONSULT) ? item.getInt(TAG_NB_CONSULT) : curNbConsults;
+			final int newNbConsults = item.has(TAG_NB_CONSULTS) ? item.getInt(TAG_NB_CONSULTS) : curNbConsults;
 			final String newLevel = item.has(TAG_LEVEL) ? item.getString(TAG_LEVEL).trim() : curLevel;
 
 			return !curFirstName.equals(newFirstName) || //

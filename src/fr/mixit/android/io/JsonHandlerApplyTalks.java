@@ -43,6 +43,7 @@ public class JsonHandlerApplyTalks extends JsonHandlerApply {
 
 	protected boolean mIsLightningTalks = false;
 	protected boolean mIsFullParsing = false;
+	protected boolean mIsParsingList = false;
 
 	protected HashSet<String> mItemIds = null;
 	protected HashMap<String, HashSet<String>> mItemInterestsIds;
@@ -61,6 +62,8 @@ public class JsonHandlerApplyTalks extends JsonHandlerApply {
 
 	@Override
 	public boolean parseList(JSONArray entries, ContentResolver resolver) throws JSONException {
+		mIsParsingList = true;
+
 		mItemIds = new HashSet<String>();
 		mItemInterestsIds = Maps.newHashMap();
 		mItemSpeakersIds = Maps.newHashMap();
@@ -149,6 +152,12 @@ public class JsonHandlerApplyTalks extends JsonHandlerApply {
 		if (item.has(TAG_SPEAKERS)) {
 			final JSONArray speakers = item.getJSONArray(TAG_SPEAKERS);
 			parseLinkedSpeakers(id, speakers, resolver);
+		}
+
+		if (!mIsParsingList) {
+			deleteItemsDataNotFound(resolver);
+
+			return ProviderParsingUtils.applyBatch(mAuthority, resolver, mBatch, true);
 		}
 
 		return true;

@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/session_content"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_margin="@dimen/margin_small"
+    android:orientation="vertical" >
+
+    <fr.mixit.android.ui.widgets.UnderlinedTextView
+        android:id="@+id/session_summary_title"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="@string/session_summary"
+        android:textColor="@color/blue_mixit"
+        android:textIsSelectable="false" />
+
+    <TextView
+        android:id="@+id/session_summary_value"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/margin_small"
+        android:textIsSelectable="false" />
+
+    <fr.mixit.android.ui.widgets.UnderlinedTextView
+        android:id="@+id/session_speakers_title"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/margin_normal"
+        android:text="@string/session_speakers"
+        android:textColor="@color/blue_mixit"
+        android:textIsSelectable="false" />
+
+    <LinearLayout
+        android:id="@+id/session_speakers_value"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="@dimen/margin_normal"
+        android:orientation="vertical" >
+    </LinearLayout>
+
+    <!-- <fr.mixit.android.ui.widgets.UnderlinedTextView -->
+    <!-- android:id="@+id/session_interests_title" -->
+    <!-- android:layout_width="match_parent" -->
+    <!-- android:layout_height="wrap_content" -->
+    <!-- android:layout_marginTop="@dimen/margin_normal" -->
+    <!-- android:text="@string/session_interests" -->
+    <!-- android:textColor="@color/blue_mixit" -->
+    <!-- android:textIsSelectable="false" /> -->
+
+
+    <!-- <LinearLayout -->
+    <!-- android:id="@+id/session_interests_value" -->
+    <!-- android:layout_width="match_parent" -->
+    <!-- android:layout_height="wrap_content" -->
+    <!-- android:layout_marginBottom="@dimen/margin_normal" -->
+    <!-- android:orientation="vertical" > -->
+    <!-- </LinearLayout> -->
+
+</LinearLayout>

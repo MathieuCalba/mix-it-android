@@ -52,10 +52,12 @@ public class MixItProvider extends ContentProvider {
 	private static final int MEMBERS_ID_COMMENTS = 212;
 	private static final int MEMBERS_ID_COMMENTS_ID = 213;
 	private static final int SPEAKERS = 214;
-	private static final int SPEAKERS_ID_SESSIONS = 215;
-	private static final int SPEAKERS_ID_SESSIONS_ID = 216;
-	private static final int SPEAKERS_ID_LIGHTNINGS = 217;
-	private static final int SPEAKERS_ID_LIGHTNINGS_ID = 218;
+	private static final int STAFF = 215;
+	private static final int SPEAKERS_ID_SESSIONS = 216;
+	private static final int SPEAKERS_ID_SESSIONS_ID = 217;
+	private static final int SPEAKERS_ID_LIGHTNINGS = 218;
+	private static final int SPEAKERS_ID_LIGHTNINGS_ID = 219;
+	private static final int SPEAKERS_ID_TALKS = 220;
 
 	private static final int SHARED_LINKS = 300;
 	private static final int SHARED_LINKS_ID = 301;
@@ -124,10 +126,12 @@ public class MixItProvider extends ContentProvider {
 		matcher.addURI(authority, MixItContract.PATH_MEMBERS + SLASH + STAR + SLASH + MixItContract.PATH_COMMENTS, MEMBERS_ID_COMMENTS);
 		matcher.addURI(authority, MixItContract.PATH_MEMBERS + SLASH + STAR + SLASH + MixItContract.PATH_COMMENTS + SLASH + STAR, MEMBERS_ID_COMMENTS_ID);
 		matcher.addURI(authority, MixItContract.PATH_SPEAKERS, SPEAKERS);
+		matcher.addURI(authority, MixItContract.PATH_STAFF, STAFF);
 		matcher.addURI(authority, MixItContract.PATH_MEMBERS + SLASH + STAR + SLASH + MixItContract.PATH_SESSIONS, SPEAKERS_ID_SESSIONS);
 		matcher.addURI(authority, MixItContract.PATH_MEMBERS + SLASH + STAR + SLASH + MixItContract.PATH_SESSIONS + SLASH + STAR, SPEAKERS_ID_SESSIONS_ID);
 		matcher.addURI(authority, MixItContract.PATH_MEMBERS + SLASH + STAR + SLASH + MixItContract.PATH_LIGHTNINGS, SPEAKERS_ID_LIGHTNINGS);
 		matcher.addURI(authority, MixItContract.PATH_MEMBERS + SLASH + STAR + SLASH + MixItContract.PATH_LIGHTNINGS + SLASH + STAR, SPEAKERS_ID_LIGHTNINGS_ID);
+		matcher.addURI(authority, MixItContract.PATH_MEMBERS + SLASH + STAR + SLASH + MixItContract.PATH_TALKS, SPEAKERS_ID_TALKS);
 
 		matcher.addURI(authority, MixItContract.PATH_SHARED_LINKS, SHARED_LINKS);
 		matcher.addURI(authority, MixItContract.PATH_SHARED_LINKS + SLASH + STAR, SHARED_LINKS_ID);
@@ -204,9 +208,11 @@ public class MixItProvider extends ContentProvider {
 			case MEMBERS_ID_COMMENTS_ID:
 				return MixItContract.Comments.CONTENT_ITEM_TYPE;
 			case SPEAKERS:
+			case STAFF:
 				return MixItContract.Members.CONTENT_TYPE;
 			case SPEAKERS_ID_LIGHTNINGS:
 			case SPEAKERS_ID_SESSIONS:
+			case SPEAKERS_ID_TALKS:
 				return MixItContract.Sessions.CONTENT_TYPE;
 			case SPEAKERS_ID_LIGHTNINGS_ID:
 			case SPEAKERS_ID_SESSIONS_ID:
@@ -284,6 +290,7 @@ public class MixItProvider extends ContentProvider {
 				getContext().getContentResolver().notifyChange(uri, null);
 				return MixItContract.Interests.buildInterestUri(values.getAsString(MixItContract.Interests.INTEREST_ID));
 			case SPEAKERS:
+			case STAFF:
 			case MEMBERS:
 			case MEMBERS_ID:
 				db.insertOrThrow(MixItDatabase.Tables.MEMBERS, null, values);
@@ -316,6 +323,7 @@ public class MixItProvider extends ContentProvider {
 				db.insertOrThrow(MixItDatabase.Tables.COMMENTS, null, values);
 				getContext().getContentResolver().notifyChange(uri, null);
 				return MixItContract.Comments.buildCommentUri(values.getAsString(MixItContract.Comments.COMMENT_ID));
+			case SPEAKERS_ID_TALKS:
 			case SPEAKERS_ID_SESSIONS:
 			case SPEAKERS_ID_SESSIONS_ID:
 				db.insertOrThrow(MixItDatabase.Tables.SESSIONS_SPEAKERS, null, values);
@@ -527,12 +535,19 @@ public class MixItProvider extends ContentProvider {
 						.where(MixItContract.Comments.AUTHOR_ID + "=?", memberId)//
 						.where(MixItContract.Comments.COMMENT_ID + "=?", commentId);
 			}
-			case SPEAKERS: {
+			case SPEAKERS:
+			case STAFF: {
 				return builder//
 						.table(MixItDatabase.Tables.MEMBERS);
 			}
 			case SPEAKERS_ID_LIGHTNINGS:
 			case SPEAKERS_ID_SESSIONS: {
+				final String memberId = MixItContract.Members.getMemberId(uri);
+				return builder//
+						.table(MixItDatabase.Tables.SESSIONS_SPEAKERS)//
+						.where(SessionsSpeakers.SPEAKER_ID + "=?", memberId);
+			}
+			case SPEAKERS_ID_TALKS: {
 				final String memberId = MixItContract.Members.getMemberId(uri);
 				return builder//
 						.table(MixItDatabase.Tables.SESSIONS_SPEAKERS)//
@@ -707,7 +722,7 @@ public class MixItProvider extends ContentProvider {
 						.mapToTable(MixItContract.Sessions.SESSION_ID, MixItDatabase.Tables.SESSIONS)//
 						.where(MixItContract.Sessions.FORMAT + "=? OR " + MixItContract.Sessions.FORMAT + "=?", //
 								MixItContract.Sessions.FORMAT_TALK, MixItContract.Sessions.FORMAT_WORKSHOP)//
-						.where(MixItDatabase.SessionsInterests.INTEREST_ID + "=?", interestId);
+								.where(MixItDatabase.SessionsInterests.INTEREST_ID + "=?", interestId);
 			}
 			case INTERESTS_ID_LIGHTNINGS: {
 				final String interestId = MixItContract.Sessions.getInterestIdFromInterestSessions(uri);
@@ -749,7 +764,7 @@ public class MixItProvider extends ContentProvider {
 						.table(MixItDatabase.Tables.MEMBERS_INTERESTS_JOIN_INTERESTS)//
 						.mapToTable(MixItContract.Interests._ID, MixItDatabase.Tables.INTERESTS)//
 						.mapToTable(MixItContract.Interests.INTEREST_ID, MixItDatabase.Tables.INTERESTS)//
-						.map(MixItContract.Interests.MEMBERS_COUNT, Subquery.TAG_MEMBERS_COUNT)//
+						// .map(MixItContract.Interests.MEMBERS_COUNT, Subquery.TAG_MEMBERS_COUNT)//
 						.where(MixItDatabase.Tables.MEMBERS_INTERESTS + "." + MixItDatabase.MembersInterests.MEMBER_ID + "=?", memberId);
 			}
 			case MEMBERS_ID_BADGES: {
@@ -791,17 +806,23 @@ public class MixItProvider extends ContentProvider {
 						.where(MixItContract.Comments.AUTHOR_ID + "=?", memberId);
 			}
 			case SPEAKERS: {
-				return builder.table(MixItDatabase.Tables.MEMBERS + ", " + MixItDatabase.Tables.SESSIONS + ", " + MixItDatabase.Tables.SESSIONS_SPEAKERS)//
-						.mapToTable(MixItContract.Members._ID, MixItDatabase.Tables.MEMBERS)//
-						.mapToTable(MixItContract.Members.MEMBER_ID, MixItDatabase.Tables.MEMBERS)//
-						.mapToTable(MixItContract.Sessions.SESSION_ID, MixItDatabase.Tables.SESSIONS)//
-						.where(MixItDatabase.Tables.SESSIONS_SPEAKERS + "." + MixItDatabase.SessionsSpeakers.SPEAKER_ID + "=" //
-								+ MixItDatabase.Tables.MEMBERS + "." + MixItContract.Members.MEMBER_ID, (String[]) null)//
-						.where(MixItDatabase.Tables.SESSIONS_SPEAKERS + "." + MixItDatabase.SessionsSpeakers.SESSION_ID + "=" //
-								+ MixItDatabase.Tables.SESSIONS + "." + MixItContract.Sessions.SESSION_ID, (String[]) null)//
-						.where(MixItContract.Sessions.FORMAT + "=? OR " + MixItContract.Sessions.FORMAT + "=?", //
-								MixItContract.Sessions.FORMAT_TALK, MixItContract.Sessions.FORMAT_WORKSHOP) //
-						.distinct();
+				return builder.table(MixItDatabase.Tables.MEMBERS) //
+						.where(MixItContract.Members.TYPE + "=?", String.valueOf(MixItContract.Members.TYPE_SPEAKER));
+				// return builder.table(MixItDatabase.Tables.MEMBERS + ", " + MixItDatabase.Tables.SESSIONS + ", " + MixItDatabase.Tables.SESSIONS_SPEAKERS)//
+				// .mapToTable(MixItContract.Members._ID, MixItDatabase.Tables.MEMBERS)//
+				// .mapToTable(MixItContract.Members.MEMBER_ID, MixItDatabase.Tables.MEMBERS)//
+				// .mapToTable(MixItContract.Sessions.SESSION_ID, MixItDatabase.Tables.SESSIONS)//
+				// .where(MixItDatabase.Tables.SESSIONS_SPEAKERS + "." + MixItDatabase.SessionsSpeakers.SPEAKER_ID + "=" //
+				// + MixItDatabase.Tables.MEMBERS + "." + MixItContract.Members.MEMBER_ID, (String[]) null)//
+				// .where(MixItDatabase.Tables.SESSIONS_SPEAKERS + "." + MixItDatabase.SessionsSpeakers.SESSION_ID + "=" //
+				// + MixItDatabase.Tables.SESSIONS + "." + MixItContract.Sessions.SESSION_ID, (String[]) null)//
+				// .where(MixItContract.Sessions.FORMAT + "=? OR " + MixItContract.Sessions.FORMAT + "=?", //
+				// MixItContract.Sessions.FORMAT_TALK, MixItContract.Sessions.FORMAT_WORKSHOP) //
+				// .distinct();
+			}
+			case STAFF: {
+				return builder.table(MixItDatabase.Tables.MEMBERS) //
+						.where(MixItContract.Members.TYPE + "=?", String.valueOf(MixItContract.Members.TYPE_STAFF));
 			}
 			case SPEAKERS_ID_SESSIONS: {
 				final String memberId = MixItContract.Members.getMemberId(uri);
@@ -811,7 +832,7 @@ public class MixItProvider extends ContentProvider {
 						.mapToTable(MixItContract.Sessions.SESSION_ID, MixItDatabase.Tables.SESSIONS)//
 						.where(MixItContract.Sessions.FORMAT + "=? OR " + MixItContract.Sessions.FORMAT + "=?", //
 								MixItContract.Sessions.FORMAT_TALK, MixItContract.Sessions.FORMAT_WORKSHOP) //
-						.where(MixItDatabase.Tables.SESSIONS_SPEAKERS + "." + SessionsSpeakers.SPEAKER_ID + "=?", memberId);
+								.where(MixItDatabase.Tables.SESSIONS_SPEAKERS + "." + SessionsSpeakers.SPEAKER_ID + "=?", memberId);
 			}
 			// case SPEAKERS_ID_SESSIONS_ID: {
 			// final String memberId = MixItContract.Members.getMemberId(uri);
@@ -842,6 +863,13 @@ public class MixItProvider extends ContentProvider {
 			// .where(MixItDatabase.Tables.SESSIONS_SPEAKERS + "." + SessionsSpeakers.SPEAKER_ID + "=?", memberId)
 			// .where(MixItDatabase.Tables.SESSIONS_SPEAKERS + "." + SessionsSpeakers.SESSION_ID + "=?", sessionId);
 			// }
+			case SPEAKERS_ID_TALKS:
+				final String memberId = MixItContract.Members.getMemberId(uri);
+				return builder//
+						.table(MixItDatabase.Tables.SESSIONS_SPEAKERS_JOIN_SESSIONS)//
+						.mapToTable(MixItContract.Sessions._ID, MixItDatabase.Tables.SESSIONS)//
+						.mapToTable(MixItContract.Sessions.SESSION_ID, MixItDatabase.Tables.SESSIONS)//
+						.where(MixItDatabase.Tables.SESSIONS_SPEAKERS + "." + SessionsSpeakers.SPEAKER_ID + "=?", memberId);
 			case SHARED_LINKS:
 				return builder//
 						.table(MixItDatabase.Tables.SHARED_LINKS);

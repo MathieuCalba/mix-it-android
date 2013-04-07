@@ -28,6 +28,8 @@ public abstract class GenericMixItActivity extends SherlockFragmentActivity {
 	protected static final boolean DEBUG_MODE = MixItApplication.DEBUG_MODE;
 	private static final String TAG = GenericMixItActivity.class.getSimpleName();
 
+	protected static final char SLASH = '/';
+
 	/** Flag indicating whether we have called bind on the mService. */
 	protected boolean mIsBound = false;
 	/** Flag indicating whether the mService is bound and we have registered to it. */
