@@ -35,11 +35,13 @@ public class SessionDetailsFragment extends BoundServiceFragment implements Load
 
 	protected static final int CURSOR_SESSION = 1006;
 	protected static final int CURSOR_SPEAKERS = 1007;
-	// protected static final int CURSOR_INTERESTS = 1008;
+	protected static final int CURSOR_INTERESTS = 1008;
 
 	protected static final String EXTRA_SESSION_ID = "fr.mixit.android.EXTRA_SESSION_ID";
 
-	boolean mIsFirstLoad = true;
+	protected static final String STATE_FIRST_LOAD = "fr.mixit.android.STATE_FIRST_LOAD";
+
+	protected boolean mIsFirstLoad = true;
 
 	protected int mSessionId;
 	protected boolean mIsVoted = false;
@@ -52,7 +54,7 @@ public class SessionDetailsFragment extends BoundServiceFragment implements Load
 	protected LinearLayout mSessionContent;
 	protected TextView mSummary;
 	protected LinearLayout mSpeakers;
-	// protected LinearLayout mInterests;
+	protected LinearLayout mInterests;
 
 	// protected ImageLoader mImageLoader = ImageLoader.getInstance();
 
@@ -94,9 +96,18 @@ public class SessionDetailsFragment extends BoundServiceFragment implements Load
 		mSessionContent = (LinearLayout) root.findViewById(R.id.session_content);
 		mSummary = (TextView) root.findViewById(R.id.session_summary_value);
 		mSpeakers = (LinearLayout) root.findViewById(R.id.session_speakers_value);
-		// mInterests = (LinearLayout) root.findViewById(R.id.session_interests_value);
+		mInterests = (LinearLayout) root.findViewById(R.id.session_interests_value);
 
 		return root;
+	}
+
+	@Override
+	public void onActivityCreated(Bundle savedInstanceState) {
+		super.onActivityCreated(savedInstanceState);
+
+		if (savedInstanceState != null) {
+			mIsFirstLoad = savedInstanceState.getBoolean(STATE_FIRST_LOAD, true);
+		}
 	}
 
 	@Override
@@ -105,9 +116,15 @@ public class SessionDetailsFragment extends BoundServiceFragment implements Load
 
 		reload();
 
-		if (mIsFirstLoad) {
+		if (mIsFirstLoad && mSessionId != 0) {
 			refreshSessionData();
 		}
+	}
+
+	@Override
+	public void onSaveInstanceState(Bundle outState) {
+		super.onSaveInstanceState(outState);
+		outState.putBoolean(STATE_FIRST_LOAD, mIsFirstLoad);
 	}
 
 	// @Override
@@ -145,14 +162,14 @@ public class SessionDetailsFragment extends BoundServiceFragment implements Load
 
 		restartLoader(CURSOR_SESSION, args, this);
 		restartLoader(CURSOR_SPEAKERS, args, this);
-		// restartLoader(CURSOR_INTERESTS, args, this);
+		restartLoader(CURSOR_INTERESTS, args, this);
 	}
 
 	protected void clear() {
 		displayNoSessionSelected();
 		displaySession(null);
 		displaySpeakers(null);
-		// displayInterests(null);
+		displayInterests(null);
 	}
 
 	protected int fetchIdSession(Uri uriSession, Bundle b) {
@@ -193,18 +210,17 @@ public class SessionDetailsFragment extends BoundServiceFragment implements Load
 				final Uri speakersUri = MixItContract.Sessions.buildSpeakersDirUri(String.valueOf(mSessionId));
 				return new CursorLoader(getActivity(), speakersUri, MixItContract.Members.PROJ_LIST.PROJECTION, null, null, null);
 			}
-			// } else if (id == CURSOR_INTERESTS) {
-			// final Intent i = UIUtils.fragmentArgumentsToIntent(args);
-			// mSessionId = fetchIdSession(i.getData(), args);
-			// if (mSessionId == -1) {
-			// Log.e(TAG, "this case should have been detected before in reload() method");
-			// displayInterests(null);
-			// return null;
-			// } else {
-			// final Uri interestsUri = MixItContract.Sessions.buildInterestsDirUri(String.valueOf(mSessionId));
-			// return new CursorLoader(getActivity(), interestsUri, InterestsAdapter.InterestsQuery.PROJECTION_WITH_SESSIONS_COUNT,
-			// MixItContract.Interests.SESSIONS_COUNT + ">0", null, MixItContract.Interests.DEFAULT_SORT);
-			// }
+		} else if (id == CURSOR_INTERESTS) {
+			final Intent i = UIUtils.fragmentArgumentsToIntent(args);
+			mSessionId = fetchIdSession(i.getData(), args);
+			if (mSessionId == -1) {
+				Log.e(TAG, "this case should have been detected before in reload() method");
+				displayInterests(null);
+				return null;
+			} else {
+				final Uri interestsUri = MixItContract.Sessions.buildInterestsDirUri(String.valueOf(mSessionId));
+				return new CursorLoader(getActivity(), interestsUri, MixItContract.Interests.PROJ.PROJECTION, null, null, MixItContract.Interests.DEFAULT_SORT);
+			}
 		}
 		return null;
 	}
@@ -216,8 +232,8 @@ public class SessionDetailsFragment extends BoundServiceFragment implements Load
 			displaySession(data);
 		} else if (id == CURSOR_SPEAKERS) {
 			displaySpeakers(data);
-			// } else if (id == CURSOR_INTERESTS) {
-			// displayInterests(data);
+		} else if (id == CURSOR_INTERESTS) {
+			displayInterests(data);
 		}
 	}
 
@@ -228,8 +244,8 @@ public class SessionDetailsFragment extends BoundServiceFragment implements Load
 			displaySession(null);
 		} else if (id == CURSOR_SPEAKERS) {
 			displaySpeakers(null);
-			// } else if (id == CURSOR_INTERESTS) {
-			// displayInterests(null);
+		} else if (id == CURSOR_INTERESTS) {
+			displayInterests(null);
 		}
 	}
 
@@ -285,8 +301,20 @@ public class SessionDetailsFragment extends BoundServiceFragment implements Load
 	// return super.onOptionsItemSelected(item);
 	// }
 
+	protected void displaySession() {
+		final int displayedChild = mViewAnimator.getDisplayedChild();
+		if (displayedChild == 0) {
+			mViewAnimator.showNext();
+		} else if (displayedChild == 2) {
+			mViewAnimator.showPrevious();
+		}
+	}
+
 	protected void displayNoSessionSelected() {
-		if (mViewAnimator.getDisplayedChild() == 1) {
+		final int displayedChild = mViewAnimator.getDisplayedChild();
+		if (displayedChild == 1) {
+			mViewAnimator.showNext();
+		} else if (displayedChild == 0) {
 			mViewAnimator.showPrevious();
 		}
 	}
@@ -297,9 +325,8 @@ public class SessionDetailsFragment extends BoundServiceFragment implements Load
 		String room = null;
 
 		if (c != null && c.moveToFirst()) {
-			if (mViewAnimator.getDisplayedChild() == 0) {
-				mViewAnimator.showNext();
-			}
+			displaySession();
+
 			mTitleStr = c.getString(MixItContract.Sessions.PROJ_DETAIL.TITLE);
 			time = c.getString(MixItContract.Sessions.PROJ_DETAIL.TIME);
 			summary = c.getString(MixItContract.Sessions.PROJ_DETAIL.DESC);
@@ -311,7 +338,7 @@ public class SessionDetailsFragment extends BoundServiceFragment implements Load
 			displayNoSessionSelected();
 		}
 		fillHeader(mTitleStr, mSessionFormat, time, room);
-		fillSummary(summary);
+		mSummary.setText(summary);
 
 		if (getActivity() != null && !isDetached()) {
 			((SessionDetailsContract) getActivity()).refreshMenu();
@@ -320,11 +347,7 @@ public class SessionDetailsFragment extends BoundServiceFragment implements Load
 
 	protected void fillHeader(String title, String format, String time, String room) {
 		mTitle.setText(title + " [" + format + "]");
-		mSubTitle.setText(time + " @ " + room);
-	}
-
-	protected void fillSummary(String summary) {
-		mSummary.setText(summary);
+		mSubTitle.setText(time + " @ " + room); // TODO : change time, room display in session details
 	}
 
 	@TargetApi(Build.VERSION_CODES.FROYO)
@@ -362,18 +385,8 @@ public class SessionDetailsFragment extends BoundServiceFragment implements Load
 		}
 	}
 
-	// protected void displayInterests(Cursor c) {
-	// try {
-	// final TabInterests tabContainer = (TabInterests) mTabsAdapter.getTabContainer(TAB_INTERESTS);
-	// if (tabContainer != null) {
-	// tabContainer.setCursor(c);
-	// } else {
-	// Log.e(TAG, "The TabContainer requested with tag TAB_INTERESTS does not exist");
-	// }
-	// } catch (final ClassCastException e) {
-	// Log.e(TAG, "The TabContainer requested with tag TAB_INTERESTS is not a TabInterests object", e);
-	// }
-	// }
+	protected void displayInterests(Cursor c) {
+	}
 
 	protected void onSpeakerItemClick(String memberId) {
 		final Uri memberUri = MixItContract.Members.buildMemberUri(memberId);
@@ -403,7 +416,7 @@ public class SessionDetailsFragment extends BoundServiceFragment implements Load
 	protected void onServiceReady() {
 		super.onServiceReady();
 
-		if (mIsFirstLoad) {
+		if (mIsFirstLoad && mSessionId != 0) {
 			refreshSessionData();
 		}
 	}
@@ -429,41 +442,41 @@ public class SessionDetailsFragment extends BoundServiceFragment implements Load
 		}
 	}
 
-	protected void voteForLightning(boolean addVote) {
-		if (mIsBound && mServiceReady) {
-			setRefreshMode(true);
+	// protected void voteForLightning(boolean addVote) {
+	// if (mIsBound && mServiceReady) {
+	// setRefreshMode(true);
+	//
+	// final Message msg = Message.obtain(null, MixItService.MSG_VOTE_LIGHTNING_TALK, 0, 0);
+	// msg.replyTo = mMessenger;
+	// final Bundle b = new Bundle();
+	// b.putBoolean(MixItService.EXTRA_STATE_VOTE, addVote);
+	// b.putInt(MixItService.EXTRA_SESSION_ID, mSessionId);
+	// msg.setData(b);
+	// try {
+	// mService.send(msg);
+	// } catch (final RemoteException e) {
+	// e.printStackTrace();
+	// }
+	// }
+	// }
 
-			final Message msg = Message.obtain(null, MixItService.MSG_VOTE_LIGHTNING_TALK, 0, 0);
-			msg.replyTo = mMessenger;
-			final Bundle b = new Bundle();
-			b.putBoolean(MixItService.EXTRA_STATE_VOTE, addVote);
-			b.putInt(MixItService.EXTRA_SESSION_ID, mSessionId);
-			msg.setData(b);
-			try {
-				mService.send(msg);
-			} catch (final RemoteException e) {
-				e.printStackTrace();
-			}
-		}
-	}
-
-	protected void favoriteSession(boolean addFavorite) {
-		if (mIsBound && mServiceReady) {
-			setRefreshMode(true);
-
-			final Message msg = Message.obtain(null, MixItService.MSG_STAR_SESSION, 0, 0);
-			msg.replyTo = mMessenger;
-			final Bundle b = new Bundle();
-			b.putBoolean(MixItService.EXTRA_STATE_STAR, addFavorite);
-			b.putInt(MixItService.EXTRA_SESSION_ID, mSessionId);
-			msg.setData(b);
-			try {
-				mService.send(msg);
-			} catch (final RemoteException e) {
-				e.printStackTrace();
-			}
-		}
-	}
+	// protected void favoriteSession(boolean addFavorite) {
+	// if (mIsBound && mServiceReady) {
+	// setRefreshMode(true);
+	//
+	// final Message msg = Message.obtain(null, MixItService.MSG_STAR_SESSION, 0, 0);
+	// msg.replyTo = mMessenger;
+	// final Bundle b = new Bundle();
+	// b.putBoolean(MixItService.EXTRA_STATE_STAR, addFavorite);
+	// b.putInt(MixItService.EXTRA_SESSION_ID, mSessionId);
+	// msg.setData(b);
+	// try {
+	// mService.send(msg);
+	// } catch (final RemoteException e) {
+	// e.printStackTrace();
+	// }
+	// }
+	// }
 
 	@Override
 	protected void onMessageReceivedFromService(Message msg) {

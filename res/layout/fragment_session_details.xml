@@ -7,13 +7,12 @@
     android:inAnimation="@android:anim/fade_in"
     android:outAnimation="@android:anim/fade_out" >
 
-    <TextView
-        android:id="@+id/session_no_session"
+    <ProgressBar
+        android:id="@+id/list_progress"
+        style="?android:attr/progressBarStyleLarge"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_gravity="center"
-        android:gravity="center"
-        android:text="@string/no_session" />
+        android:layout_gravity="center" />
 
     <LinearLayout
         android:id="@+id/session"
@@ -39,5 +38,13 @@
                 layout="@layout/session_content" />
         </ScrollView>
     </LinearLayout>
+
+    <TextView
+        android:id="@+id/session_no_session"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:gravity="center"
+        android:text="@string/no_session" />
 
 </ViewAnimator>

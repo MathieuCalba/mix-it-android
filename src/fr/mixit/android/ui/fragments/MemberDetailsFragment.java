@@ -51,6 +51,8 @@ public class MemberDetailsFragment extends BoundServiceFragment implements Loade
 
 	protected static final String EXTRA_MEMBER_ID = "fr.mixit.android.EXTRA_MEMBER_ID";
 
+	protected static final String STATE_FIRST_LOAD = "fr.mixit.android.STATE_FIRST_LOAD";
+
 	boolean mIsFirstLoad = true;
 
 	protected int mMemberId;
@@ -126,14 +128,29 @@ public class MemberDetailsFragment extends BoundServiceFragment implements Loade
 	}
 
 	@Override
+	public void onActivityCreated(Bundle savedInstanceState) {
+		super.onActivityCreated(savedInstanceState);
+
+		if (savedInstanceState != null) {
+			mIsFirstLoad = savedInstanceState.getBoolean(STATE_FIRST_LOAD, true);
+		}
+	}
+
+	@Override
 	public void onStart() {
 		super.onStart();
 
 		reload();
 
-		if (mIsFirstLoad) {
+		if (mIsFirstLoad && mMemberId != 0) {
 			refreshMemberData();
 		}
+	}
+
+	@Override
+	public void onSaveInstanceState(Bundle outState) {
+		super.onSaveInstanceState(outState);
+		outState.putBoolean(STATE_FIRST_LOAD, mIsFirstLoad);
 	}
 
 	@Override
@@ -153,6 +170,7 @@ public class MemberDetailsFragment extends BoundServiceFragment implements Loade
 			b.putInt(EXTRA_MEMBER_ID, memberId);
 
 			reload();
+
 			refreshMemberData();
 		}
 	}
@@ -370,8 +388,20 @@ public class MemberDetailsFragment extends BoundServiceFragment implements Loade
 		}
 	}
 
+	protected void displayMember() {
+		final int displayedChild = mViewAnimator.getDisplayedChild();
+		if (displayedChild == 0) {
+			mViewAnimator.showNext();
+		} else if (displayedChild == 2) {
+			mViewAnimator.showPrevious();
+		}
+	}
+
 	protected void displayNoMemberSelected() {
-		if (mViewAnimator.getDisplayedChild() == 1) {
+		final int displayedChild = mViewAnimator.getDisplayedChild();
+		if (displayedChild == 1) {
+			mViewAnimator.showNext();
+		} else if (displayedChild == 0) {
 			mViewAnimator.showPrevious();
 		}
 	}
@@ -386,9 +416,7 @@ public class MemberDetailsFragment extends BoundServiceFragment implements Loade
 		String bio = null;
 
 		if (c != null && c.moveToFirst()) {
-			if (mViewAnimator.getDisplayedChild() == 0) {
-				mViewAnimator.showNext();
-			}
+			displayMember();
 
 			firstName = c.getString(MixItContract.Members.PROJ_DETAIL.FIRSTNAME);
 			lastName = c.getString(MixItContract.Members.PROJ_DETAIL.LASTNAME);
@@ -548,7 +576,7 @@ public class MemberDetailsFragment extends BoundServiceFragment implements Loade
 	protected void onServiceReady() {
 		super.onServiceReady();
 
-		if (mIsFirstLoad) {
+		if (mIsFirstLoad && mMemberId != 0) {
 			refreshMemberData();
 		}
 	}

@@ -7,13 +7,12 @@
     android:inAnimation="@android:anim/fade_in"
     android:outAnimation="@android:anim/fade_out" >
 
-    <TextView
-        android:id="@+id/member_no_member"
+    <ProgressBar
+        android:id="@+id/list_progress"
+        style="?android:attr/progressBarStyleLarge"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_gravity="center"
-        android:gravity="center"
-        android:text="@string/no_member" />
+        android:layout_gravity="center" />
 
     <ScrollView
         android:layout_width="match_parent"
@@ -42,5 +41,13 @@
                 layout="@layout/member_content" />
         </LinearLayout>
     </ScrollView>
+
+    <TextView
+        android:id="@+id/member_no_member"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:gravity="center"
+        android:text="@string/no_member" />
 
 </ViewAnimator>
