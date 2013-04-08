@@ -1,0 +1,93 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/member_content"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_margin="@dimen/margin_small" >
+
+    <fr.mixit.android.ui.widgets.UnderlinedTextView
+        android:id="@+id/member_interests_title"
+        android:layout_width="@dimen/detail_second_column_width"
+        android:layout_height="wrap_content"
+        android:layout_alignParentRight="true"
+        android:layout_marginLeft="@dimen/margin_normal"
+        android:text="@string/member_interests"
+        android:textColor="@color/blue_mixit"
+        android:textIsSelectable="false" />
+
+    <LinearLayout
+        android:id="@+id/member_interests_value"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignLeft="@id/member_interests_title"
+        android:layout_alignRight="@id/member_interests_title"
+        android:layout_below="@id/member_interests_title"
+        android:layout_marginLeft="@dimen/margin_normal"
+        android:orientation="vertical" >
+    </LinearLayout>
+
+    <fr.mixit.android.ui.widgets.UnderlinedTextView
+        android:id="@+id/member_bio_title"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentLeft="true"
+        android:layout_toLeftOf="@id/member_interests_title"
+        android:text="@string/member_bio"
+        android:textColor="@color/blue_mixit"
+        android:textIsSelectable="false" />
+
+    <TextView
+        android:id="@+id/member_bio_value"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentLeft="true"
+        android:layout_below="@id/member_bio_title"
+        android:layout_marginTop="@dimen/margin_small"
+        android:layout_toLeftOf="@id/member_interests_title"
+        android:textIsSelectable="false" />
+
+    <fr.mixit.android.ui.widgets.UnderlinedTextView
+        android:id="@+id/member_shared_links_title"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentLeft="true"
+        android:layout_below="@id/member_bio_value"
+        android:layout_marginTop="@dimen/margin_normal"
+        android:layout_toLeftOf="@id/member_interests_title"
+        android:text="@string/member_shared_links"
+        android:textColor="@color/blue_mixit"
+        android:textIsSelectable="false" />
+
+    <LinearLayout
+        android:id="@+id/member_shared_links_value"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentLeft="true"
+        android:layout_below="@id/member_shared_links_title"
+        android:layout_toLeftOf="@id/member_interests_title"
+        android:orientation="vertical" >
+    </LinearLayout>
+
+    <fr.mixit.android.ui.widgets.UnderlinedTextView
+        android:id="@+id/member_talks_title"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentLeft="true"
+        android:layout_below="@id/member_shared_links_value"
+        android:layout_marginTop="@dimen/margin_normal"
+        android:layout_toLeftOf="@id/member_interests_title"
+        android:text="@string/member_talks"
+        android:textColor="@color/blue_mixit"
+        android:textIsSelectable="false" />
+
+    <LinearLayout
+        android:id="@+id/member_talks_value"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentLeft="true"
+        android:layout_below="@id/member_talks_title"
+        android:layout_toLeftOf="@id/member_interests_title"
+        android:orientation="vertical" >
+    </LinearLayout>
+
+</RelativeLayout>

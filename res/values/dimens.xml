@@ -10,6 +10,7 @@
     <!-- Generic sizes -->
     <dimen name="normal_touchable_height">48dp</dimen>
     <dimen name="small_touchable_height">32dp</dimen>
+    <dimen name="detail_second_column_width">200dp</dimen>
     <!-- Generic text sizes -->
     <dimen name="text_size_very_small">12sp</dimen>
     <dimen name="text_size_small">14sp</dimen>
