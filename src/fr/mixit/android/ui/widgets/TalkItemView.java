@@ -11,6 +11,7 @@ import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 import fr.mixit.android.provider.MixItContract;
+import fr.mixit.android.utils.DateUtils;
 import fr.mixit.android_2012.R;
 
 
@@ -68,19 +69,13 @@ public class TalkItemView extends RelativeLayout {
 		final String title = c.getString(MixItContract.Sessions.PROJ_LIST.TITLE);
 		final String format = c.getString(MixItContract.Sessions.PROJ_LIST.FORMAT);
 		final String room = c.getString(MixItContract.Sessions.PROJ_LIST.ROOM_ID);
-		// final long start = c.getLong(MixItContract.Sessions.PROJ_LIST.TIME_START);
-		// final long end = c.getLong(MixItContract.Sessions.PROJ_LIST.TIME_END);
+		final long start = c.getLong(MixItContract.Sessions.PROJ_LIST.START);
+		final long end = c.getLong(MixItContract.Sessions.PROJ_LIST.END);
 
 		mTitle.setText(title + " [" + format + "]");
-		mSubTitle.setText("On DDD, from HH:MM to HH:MM, in " + room);
+		mSubTitle.setText(DateUtils.formatSessionTime(getContext(), start, end, room));// "On DDD, from HH:MM to HH:MM, in " + room
 		// final Drawable drawable = holder.starred.getDrawable();
 		// drawable.setColorFilter(new LightingColorFilter(mContext.getResources().getColor(R.color.star_color), 1));
-		// TODO : add time, room information
-		// final long blockStart = cursor.getLong(SessionsQuery.BLOCK_START);
-		// final long blockEnd = cursor.getLong(SessionsQuery.BLOCK_END);
-		// final String roomName = cursor.getString(SessionsQuery.ROOM_NAME);
-		// final String company = formatSessionSubtitle(blockStart, blockEnd, roomName, mContext);
-		// holder.subtitle.setText(company);
 
 		final boolean starred = c.getInt(MixItContract.Sessions.PROJ_LIST.IS_FAVORITE) != 0;
 		mStar.setVisibility(mDisplayStar && starred ? View.VISIBLE : View.INVISIBLE);

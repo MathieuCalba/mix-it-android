@@ -12,6 +12,8 @@ import android.os.RemoteException;
 import android.support.v4.app.LoaderManager;
 import android.support.v4.content.CursorLoader;
 import android.support.v4.content.Loader;
+import android.text.Html;
+import android.text.Spanned;
 import android.text.TextUtils;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -26,6 +28,7 @@ import android.widget.ViewAnimator;
 
 import com.nostra13.universalimageloader.core.DisplayImageOptions;
 import com.nostra13.universalimageloader.core.ImageLoader;
+import com.petebevin.markdown.MarkdownProcessor;
 
 import fr.mixit.android.provider.MixItContract;
 import fr.mixit.android.services.MixItService;
@@ -410,10 +413,11 @@ public class MemberDetailsFragment extends BoundServiceFragment implements Loade
 		String firstName = null;
 		String lastName = null;
 		String company = null;
-		String shortDesc = null;
+		Spanned shortDesc = null;
 		String imageUrl = null;
 		int nbConsults = 0;
 		String bio = null;
+		Spanned bioSpanned = null;
 
 		if (c != null && c.moveToFirst()) {
 			showMember();
@@ -422,9 +426,9 @@ public class MemberDetailsFragment extends BoundServiceFragment implements Loade
 			lastName = c.getString(MixItContract.Members.PROJ_DETAIL.LASTNAME);
 
 			company = c.getString(MixItContract.Members.PROJ_DETAIL.COMPANY);
-			// final MarkdownProcessor m = new MarkdownProcessor();
-			// final String shortDescHTML = m.markdown(c.getString(MixItContract.Members.PROJ_DETAIL.SHORT_DESC));
-			shortDesc = c.getString(MixItContract.Members.PROJ_DETAIL.SHORT_DESC);
+			final MarkdownProcessor m = new MarkdownProcessor();
+			final String shortDescHTML = m.markdown(c.getString(MixItContract.Members.PROJ_DETAIL.SHORT_DESC));
+			shortDesc = Html.fromHtml(shortDescHTML);
 			nbConsults = c.getInt(MixItContract.Members.PROJ_DETAIL.NB_CONSULT);
 			bio = c.getString(MixItContract.Members.PROJ_DETAIL.LONG_DESC);
 			imageUrl = c.getString(MixItContract.Members.PROJ_DETAIL.IMAGE_URL);
@@ -437,11 +441,16 @@ public class MemberDetailsFragment extends BoundServiceFragment implements Loade
 
 		if (TextUtils.isEmpty(bio) && getActivity() != null && !isDetached()) {
 			bio = getActivity().getString(R.string.member_bio_empty);
+			mBio.setText(bio);
+		} else {
+			final MarkdownProcessor m = new MarkdownProcessor();
+			final String longDescHTML = m.markdown(bio);
+			bioSpanned = Html.fromHtml(longDescHTML);
+			mBio.setText(bioSpanned);
 		}
-		mBio.setText(bio);
 	}
 
-	protected void fillHeader(String firstName, String lastName, String company, String shortDesc, String imageUrl, int nbConsults) {
+	protected void fillHeader(String firstName, String lastName, String company, Spanned shortDesc, String imageUrl, int nbConsults) {
 		final StringBuilder nameStr = new StringBuilder();
 		if (!TextUtils.isEmpty(firstName)) {
 			nameStr.append(firstName);

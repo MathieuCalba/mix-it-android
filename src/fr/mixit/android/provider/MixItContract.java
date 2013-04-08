@@ -331,7 +331,8 @@ public class MixItContract {
 		String TITLE = "title";
 		String SUMMARY = "summary";
 		String DESC = "desc";
-		String TIME = "time";
+		String START = "start";
+		String END = "end";
 		String ROOM_ID = "room_id";
 		String NB_VOTES = "nb_vote";
 		String MY_VOTE = "my_vote";
@@ -359,7 +360,8 @@ public class MixItContract {
 					Sessions._ID, //
 					Sessions.SESSION_ID, //
 					Sessions.TITLE, //
-					Sessions.TIME, //
+					Sessions.START, //
+					Sessions.END, //
 					Sessions.ROOM_ID, //
 					Sessions.IS_FAVORITE, //
 					Sessions.FORMAT, //
@@ -370,12 +372,13 @@ public class MixItContract {
 			int _ID = 0;
 			int SESSION_ID = 1;
 			int TITLE = 2;
-			int TIME = 3;
-			int ROOM_ID = 4;
-			int IS_FAVORITE = 5;
-			int FORMAT = 6;
-			int LEVEL = 7;
-			int LANG = 8;
+			int START = 3;
+			int END = 4;
+			int ROOM_ID = 5;
+			int IS_FAVORITE = 6;
+			int FORMAT = 7;
+			int LEVEL = 8;
+			int LANG = 9;
 		}
 
 		public static interface PROJ_DETAIL {
@@ -383,7 +386,8 @@ public class MixItContract {
 					Sessions._ID, //
 					Sessions.SESSION_ID, //
 					Sessions.TITLE, //
-					Sessions.TIME, //
+					Sessions.START, //
+					Sessions.END, //
 					Sessions.ROOM_ID, //
 					Sessions.IS_FAVORITE, //
 					Sessions.FORMAT, //
@@ -398,16 +402,17 @@ public class MixItContract {
 			int _ID = 0;
 			int SESSION_ID = 1;
 			int TITLE = 2;
-			int TIME = 3;
-			int ROOM_ID = 4;
-			int IS_FAVORITE = 5;
-			int FORMAT = 6;
-			int LEVEL = 7;
-			int LANG = 8;
-			int SUMMARY = 9;
-			int DESC = 10;
-			int NB_VOTES = 11;
-			int MY_VOTE = 12;
+			int START = 3;
+			int END = 4;
+			int ROOM_ID = 5;
+			int IS_FAVORITE = 6;
+			int FORMAT = 7;
+			int LEVEL = 8;
+			int LANG = 9;
+			int SUMMARY = 10;
+			int DESC = 11;
+			int NB_VOTES = 12;
+			int MY_VOTE = 13;
 		}
 
 		public static Uri buildSessionUri(String sessionId) {

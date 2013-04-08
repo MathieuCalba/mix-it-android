@@ -13,6 +13,8 @@ import android.os.RemoteException;
 import android.support.v4.app.LoaderManager;
 import android.support.v4.content.CursorLoader;
 import android.support.v4.content.Loader;
+import android.text.Html;
+import android.text.Spanned;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -21,9 +23,13 @@ import android.view.ViewGroup;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.ViewAnimator;
+
+import com.petebevin.markdown.MarkdownProcessor;
+
 import fr.mixit.android.provider.MixItContract;
 import fr.mixit.android.services.MixItService;
 import fr.mixit.android.ui.widgets.MemberItemView;
+import fr.mixit.android.utils.DateUtils;
 import fr.mixit.android.utils.IntentUtils;
 import fr.mixit.android.utils.UIUtils;
 import fr.mixit.android_2012.R;
@@ -318,16 +324,20 @@ public class SessionDetailsFragment extends BoundServiceFragment implements Load
 	}
 
 	protected void displaySession(Cursor c) {
-		String time = null;
-		String summary = null;
+		long start = 0;
+		long end = 0;
+		Spanned summary = null;
 		String room = null;
 
 		if (c != null && c.moveToFirst()) {
 			showSession();
 
 			mTitleStr = c.getString(MixItContract.Sessions.PROJ_DETAIL.TITLE);
-			time = c.getString(MixItContract.Sessions.PROJ_DETAIL.TIME);
-			summary = c.getString(MixItContract.Sessions.PROJ_DETAIL.DESC);
+			start = c.getLong(MixItContract.Sessions.PROJ_DETAIL.START);
+			end = c.getLong(MixItContract.Sessions.PROJ_DETAIL.END);
+			final MarkdownProcessor m = new MarkdownProcessor();
+			final String summaryHTML = m.markdown(c.getString(MixItContract.Sessions.PROJ_DETAIL.DESC));
+			summary = Html.fromHtml(summaryHTML);
 			room = c.getString(MixItContract.Sessions.PROJ_DETAIL.ROOM_ID);
 			mSessionFormat = c.getString(MixItContract.Sessions.PROJ_DETAIL.FORMAT);
 			mIsVoted = c.getInt(MixItContract.Sessions.FORMAT_LIGHTNING_TALK.equalsIgnoreCase(mSessionFormat) ? MixItContract.Sessions.PROJ_DETAIL.MY_VOTE
@@ -335,7 +345,7 @@ public class SessionDetailsFragment extends BoundServiceFragment implements Load
 		} else {
 			showNoSessionSelected();
 		}
-		fillHeader(mTitleStr, mSessionFormat, time, room);
+		fillHeader(mTitleStr, mSessionFormat, start, end, room);
 		mSummary.setText(summary);
 
 		if (getActivity() != null && !isDetached()) {
@@ -343,9 +353,10 @@ public class SessionDetailsFragment extends BoundServiceFragment implements Load
 		}
 	}
 
-	protected void fillHeader(String title, String format, String time, String room) {
+	protected void fillHeader(String title, String format, long start, long end, String room) {
 		mTitle.setText(title + " [" + format + "]");
-		mSubTitle.setText(time + " @ " + room); // TODO : change time, room display in session details
+		mSubTitle.setText(DateUtils.formatSessionTime(getActivity(), start, end, room));// "On DDD, from HH:MM to HH:MM, in " + room
+		// mSubTitle.setText(time + " @ " + room); // TODO : change time, room display in session details
 	}
 
 	@TargetApi(Build.VERSION_CODES.FROYO)

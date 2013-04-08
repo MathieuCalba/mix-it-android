@@ -16,6 +16,7 @@ import android.text.TextUtils;
 import android.util.Log;
 import fr.mixit.android.provider.MixItContract;
 import fr.mixit.android.provider.MixItDatabase;
+import fr.mixit.android.utils.DateUtils;
 import fr.mixit.android.utils.Maps;
 import fr.mixit.android.utils.Sets;
 
@@ -31,9 +32,11 @@ public class JsonHandlerApplyTalks extends JsonHandlerApply {
 	protected static final String TAG_FORMAT = "format";
 	protected static final String TAG_LEVEL = "level";
 	protected static final String TAG_LANG = "lang";
+	protected static final String TAG_START = "start";
+	protected static final String TAG_END = "end";
+	protected static final String TAG_ROOM = "room";
 	protected static final String TAG_NB_VOTES = "nbVotes";
 	// protected static final String TAG_MY_VOTE = "myVote";
-	// protected static final String TAG_ROOM = "room";
 	// protected static final String TAG_IS_FAVORITE = "isFavorite";
 
 	protected static final String TAG_SPEAKERS = "speakers";
@@ -134,6 +137,17 @@ public class JsonHandlerApplyTalks extends JsonHandlerApply {
 			if (item.has(TAG_LANG)) {
 				builder.withValue(MixItContract.Sessions.LANG, item.getString(TAG_LANG));
 			}
+			if (item.has(TAG_START)) {
+				final String start = item.getString(TAG_START);
+				builder.withValue(MixItContract.Sessions.START, DateUtils.parseISO8601(start));
+			}
+			if (item.has(TAG_END)) {
+				final String end = item.getString(TAG_END);
+				builder.withValue(MixItContract.Sessions.END, DateUtils.parseISO8601(end));
+			}
+			if (item.has(TAG_ROOM)) {
+				builder.withValue(MixItContract.Sessions.ROOM_ID, item.getString(TAG_ROOM));
+			}
 			if (item.has(TAG_NB_VOTES)) {
 				builder.withValue(MixItContract.Sessions.NB_VOTES, item.getString(TAG_NB_VOTES));
 			}
@@ -170,55 +184,85 @@ public class JsonHandlerApplyTalks extends JsonHandlerApply {
 				return false;
 			}
 
-			final String curTitle = !TextUtils.isEmpty(cursor.getString(MixItContract.Sessions.PROJ_DETAIL.TITLE)) ? //
-					cursor.getString(MixItContract.Sessions.PROJ_DETAIL.TITLE).trim()
-					: EMPTY;
-					final String curSummary = !TextUtils.isEmpty(cursor.getString(MixItContract.Sessions.PROJ_DETAIL.SUMMARY)) ? //
-							cursor.getString(MixItContract.Sessions.PROJ_DETAIL.SUMMARY).trim()
-							: EMPTY;
-							final String curDesc = !TextUtils.isEmpty(cursor.getString(MixItContract.Sessions.PROJ_DETAIL.DESC)) ? //
-									cursor.getString(MixItContract.Sessions.PROJ_DETAIL.DESC).trim()
-									: EMPTY;
-									// final String curTime = !TextUtils.isEmpty(cursor.getString(MixItContract.Sessions.PROJ_DETAIL.TIME)) ?
-									// cursor.getString(MixItContract.Sessions.PROJ_DETAIL.TIME).toLowerCase(Locale.getDefault()).trim() : EMPTY;
-									// final String curRoomId = !TextUtils.isEmpty(cursor.getString(MixItContract.Sessions.PROJ_DETAIL.ROOM_ID)) ? //
-									// cursor.getString(MixItContract.Sessions.PROJ_DETAIL.ROOM_ID).trim() : EMPTY;
-									final int curNbVotes = cursor.getInt(MixItContract.Sessions.PROJ_DETAIL.NB_VOTES);
-									// final int curMyVote = cursor.getInt(MixItContract.Sessions.PROJ_DETAIL.MY_VOTE);
-									// final int curIsFavorite = cursor.getInt(MixItContract.Sessions.PROJ_DETAIL.IS_FAVORITE);
-									final String curFormat = !TextUtils.isEmpty(cursor.getString(MixItContract.Sessions.PROJ_DETAIL.FORMAT)) ? //
-											cursor.getString(MixItContract.Sessions.PROJ_DETAIL.FORMAT).trim()
-											: EMPTY;
-											final String curLevel = !TextUtils.isEmpty(cursor.getString(MixItContract.Sessions.PROJ_DETAIL.LEVEL)) ? //
-													cursor.getString(MixItContract.Sessions.PROJ_DETAIL.LEVEL).trim()
-													: EMPTY;
-													final String curLang = !TextUtils.isEmpty(cursor.getString(MixItContract.Sessions.PROJ_DETAIL.LANG)) ? //
-															cursor.getString(MixItContract.Sessions.PROJ_DETAIL.LANG).trim()
-															: EMPTY;
+			String curTitle = cursor.getString(MixItContract.Sessions.PROJ_DETAIL.TITLE);
+			if (TextUtils.isEmpty(curTitle)) {
+				curTitle = EMPTY;
+			}
 
-															final String newTitle = item.has(TAG_TITLE) ? item.getString(TAG_TITLE).trim() : curTitle;
-															final String newSummary = item.has(TAG_SUMMARY) ? item.getString(TAG_SUMMARY).trim() : curSummary;
-															final String newDesc = item.has(TAG_DESC) ? item.getString(TAG_DESC).trim() : curDesc;
-															// final String newTime = session.has(TAG_TIME) ? session.getString(TAG_TIME).trim() : curTime;
-															// final String newRoomId = item.has(TAG_ROOM) ? item.getString(TAG_ROOM).trim() : curRoomId;
-															final int newNbVotes = item.has(TAG_NB_VOTES) ? item.getInt(TAG_NB_VOTES) : curNbVotes;
-															// final int newMyVote = session.has(TAG_MY_VOTE) ? session.getBoolean(TAG_MY_VOTE) ? 1 : 0 : curMyVote;
-															// final int newIsFavorite = session.has(TAG_IS_FAVORITE) ? session.getInt(TAG_IS_FAVORITE) : curIsFavorite;
-															final String newFormat = item.has(TAG_FORMAT) ? item.getString(TAG_FORMAT).trim() : curFormat;
-															final String newLevel = item.has(TAG_LEVEL) ? item.getString(TAG_LEVEL).trim() : curLevel;
-															final String newLang = item.has(TAG_LANG) ? item.getString(TAG_LANG).trim() : curLang;
+			String curSummary = cursor.getString(MixItContract.Sessions.PROJ_DETAIL.SUMMARY);
+			if (TextUtils.isEmpty(curSummary)) {
+				curSummary = EMPTY;
+			}
 
-															return !curTitle.equals(newTitle) || //
-																	!curSummary.equals(newSummary) || //
-																	!curDesc.equals(newDesc) || //
-																	// !curTime.equals(newTime) || //
-																	// !curRoomId.equals(newRoomId) || //
-																	curNbVotes != newNbVotes || //
-																	// curMyVote != newMyVote ||
-																	// curIsFavorite != newIsFavorite || //
-																	!curFormat.equals(newFormat) || //
-																	!curLevel.equals(newLevel) || //
-																	!curLang.equals(newLang);
+			String curDesc = cursor.getString(MixItContract.Sessions.PROJ_DETAIL.DESC);
+			if (TextUtils.isEmpty(curDesc)) {
+				curDesc = EMPTY;
+			}
+
+			final long curStart = cursor.getLong(MixItContract.Sessions.PROJ_DETAIL.START);
+			final long curEnd = cursor.getLong(MixItContract.Sessions.PROJ_DETAIL.END);
+
+			String curRoomId = cursor.getString(MixItContract.Sessions.PROJ_DETAIL.ROOM_ID);
+			if (TextUtils.isEmpty(curRoomId)) {
+				curRoomId = EMPTY;
+			}
+
+			final int curNbVotes = cursor.getInt(MixItContract.Sessions.PROJ_DETAIL.NB_VOTES);
+			// final int curMyVote = cursor.getInt(MixItContract.Sessions.PROJ_DETAIL.MY_VOTE);
+			// final int curIsFavorite = cursor.getInt(MixItContract.Sessions.PROJ_DETAIL.IS_FAVORITE);
+
+			String curFormat = cursor.getString(MixItContract.Sessions.PROJ_DETAIL.FORMAT);
+			if (TextUtils.isEmpty(curFormat)) {
+				curFormat = EMPTY;
+			}
+
+			String curLevel = cursor.getString(MixItContract.Sessions.PROJ_DETAIL.LEVEL);
+			if (TextUtils.isEmpty(curLevel)) {
+				curLevel = EMPTY;
+			}
+
+			String curLang = cursor.getString(MixItContract.Sessions.PROJ_DETAIL.LANG);
+			if (TextUtils.isEmpty(curLang)) {
+				curLang = EMPTY;
+			}
+
+			final String newTitle = item.has(TAG_TITLE) ? item.getString(TAG_TITLE).trim() : curTitle;
+			final String newSummary = item.has(TAG_SUMMARY) ? item.getString(TAG_SUMMARY).trim() : curSummary;
+			final String newDesc = item.has(TAG_DESC) ? item.getString(TAG_DESC).trim() : curDesc;
+			long newStart = 0;
+			if (item.has(TAG_START)) {
+				final String start = item.getString(TAG_START);
+				newStart = DateUtils.parseISO8601(start);
+			} else {
+				newStart = curStart;
+			}
+			long newEnd = 0;
+			if (item.has(TAG_END)) {
+				final String end = item.getString(TAG_END);
+				newEnd = DateUtils.parseISO8601(end);
+			} else {
+				newEnd = curEnd;
+			}
+			final String newRoomId = item.has(TAG_ROOM) ? item.getString(TAG_ROOM).trim() : curRoomId;
+			final int newNbVotes = item.has(TAG_NB_VOTES) ? item.getInt(TAG_NB_VOTES) : curNbVotes;
+			// final int newMyVote = session.has(TAG_MY_VOTE) ? session.getBoolean(TAG_MY_VOTE) ? 1 : 0 : curMyVote;
+			// final int newIsFavorite = session.has(TAG_IS_FAVORITE) ? session.getInt(TAG_IS_FAVORITE) : curIsFavorite;
+			final String newFormat = item.has(TAG_FORMAT) ? item.getString(TAG_FORMAT).trim() : curFormat;
+			final String newLevel = item.has(TAG_LEVEL) ? item.getString(TAG_LEVEL).trim() : curLevel;
+			final String newLang = item.has(TAG_LANG) ? item.getString(TAG_LANG).trim() : curLang;
+
+			return !curTitle.equals(newTitle) || //
+					!curSummary.equals(newSummary) || //
+					!curDesc.equals(newDesc) || //
+					curStart != newStart || //
+					curEnd != newEnd || //
+					!curRoomId.equals(newRoomId) || //
+					curNbVotes != newNbVotes || //
+					// curMyVote != newMyVote ||
+					// curIsFavorite != newIsFavorite || //
+					!curFormat.equals(newFormat) || //
+					!curLevel.equals(newLevel) || //
+					!curLang.equals(newLang);
 		} finally {
 			if (cursor != null) {
 				cursor.close();
