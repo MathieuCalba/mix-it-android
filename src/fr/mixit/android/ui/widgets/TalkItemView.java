@@ -1,11 +1,9 @@
 package fr.mixit.android.ui.widgets;
 
-import android.annotation.TargetApi;
 import android.content.Context;
 import android.database.Cursor;
 import android.graphics.LightingColorFilter;
 import android.graphics.drawable.Drawable;
-import android.os.Build;
 import android.util.AttributeSet;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -36,7 +34,6 @@ public class TalkItemView extends RelativeLayout {
 		init(context);
 	}
 
-	@TargetApi(Build.VERSION_CODES.HONEYCOMB)
 	public TalkItemView(Context context, AttributeSet attrs, int defStyle) {
 		super(context, attrs, defStyle);
 

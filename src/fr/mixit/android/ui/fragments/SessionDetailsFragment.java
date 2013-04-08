@@ -23,7 +23,7 @@ import android.widget.TextView;
 import android.widget.ViewAnimator;
 import fr.mixit.android.provider.MixItContract;
 import fr.mixit.android.services.MixItService;
-import fr.mixit.android.ui.widgets.SessionSpeakerView;
+import fr.mixit.android.ui.widgets.MemberItemView;
 import fr.mixit.android.utils.IntentUtils;
 import fr.mixit.android.utils.UIUtils;
 import fr.mixit.android_2012.R;
@@ -364,7 +364,7 @@ public class SessionDetailsFragment extends BoundServiceFragment implements Load
 		if (c != null && c.moveToFirst()) {
 			do {
 				final String speakerId = c.getString(MixItContract.Members.PROJ_LIST.MEMBER_ID);
-				final SessionSpeakerView speakerView = new SessionSpeakerView(ctx);
+				final MemberItemView speakerView = new MemberItemView(ctx);
 				speakerView.setContent(c);
 				speakerView.setOnClickListener(new OnClickListener() {
 

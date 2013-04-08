@@ -7,8 +7,8 @@
 
     <ImageView
         android:id="@+id/member_picture"
-        android:layout_width="@dimen/picture_speaker_big_size"
-        android:layout_height="@dimen/picture_speaker_big_size"
+        android:layout_width="@dimen/member_image_size_detail"
+        android:layout_height="@dimen/member_image_size_detail"
         android:layout_alignParentRight="true"
         android:layout_alignParentTop="true"
         android:layout_marginBottom="@dimen/margin_very_small"
