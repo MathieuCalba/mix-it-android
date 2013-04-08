@@ -138,10 +138,20 @@ public class JsonHandlerApplyMembers extends JsonHandlerApply {
 
 		if (newItem || tagUpdated) {
 			if (item.has(TAG_FIRSTNAME)) {
-				builder.withValue(MixItContract.Members.FIRSTNAME, item.getString(TAG_FIRSTNAME));
+				String firstName = item.getString(TAG_FIRSTNAME);
+				if (!TextUtils.isEmpty(firstName)) {
+					firstName = firstName.toLowerCase(Locale.getDefault());
+					firstName = firstName.substring(0, 1).toUpperCase(Locale.getDefault()) + firstName.substring(1);
+				}
+				builder.withValue(MixItContract.Members.FIRSTNAME, firstName);
 			}
 			if (item.has(TAG_LASTNAME)) {
-				builder.withValue(MixItContract.Members.LASTNAME, item.getString(TAG_LASTNAME));
+				String lastName = item.getString(TAG_LASTNAME);
+				if (!TextUtils.isEmpty(lastName)) {
+					lastName = lastName.toLowerCase(Locale.getDefault());
+					lastName = lastName.substring(0, 1).toUpperCase(Locale.getDefault()) + lastName.substring(1);
+				}
+				builder.withValue(MixItContract.Members.LASTNAME, lastName);
 			}
 			if (item.has(TAG_LOGIN)) {
 				builder.withValue(MixItContract.Members.LOGIN, item.getString(TAG_LOGIN));
@@ -262,8 +272,8 @@ public class JsonHandlerApplyMembers extends JsonHandlerApply {
 			final int newNbConsults = item.has(TAG_NB_CONSULTS) ? item.getInt(TAG_NB_CONSULTS) : curNbConsults;
 			final String newLevel = item.has(TAG_LEVEL) ? item.getString(TAG_LEVEL).trim() : curLevel;
 
-			return !curFirstName.equals(newFirstName) || //
-					!curLastName.equals(newLastName) || //
+			return !curFirstName.equalsIgnoreCase(newFirstName) || //
+					!curLastName.equalsIgnoreCase(newLastName) || //
 					!curLogin.equals(newLogin) || //
 					!curCompany.equals(newCompany) || //
 					!curShortDesc.equals(newShortDesc) || //
