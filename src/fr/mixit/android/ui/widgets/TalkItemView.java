@@ -47,9 +47,6 @@ public class TalkItemView extends RelativeLayout {
 		final LayoutInflater inflater = LayoutInflater.from(context);
 		inflater.inflate(R.layout.item_talk, this, true);
 
-		final LayoutParams lp = new LayoutParams(LayoutParams.MATCH_PARENT, LayoutParams.WRAP_CONTENT);
-		setLayoutParams(lp);
-
 		final int padding = context.getResources().getDimensionPixelSize(R.dimen.margin_small);
 		setPadding(padding, padding, padding, padding);
 
