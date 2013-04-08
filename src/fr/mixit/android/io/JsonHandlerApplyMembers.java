@@ -138,19 +138,28 @@ public class JsonHandlerApplyMembers extends JsonHandlerApply {
 
 		if (newItem || tagUpdated) {
 			if (item.has(TAG_FIRSTNAME)) {
-				String firstName = item.getString(TAG_FIRSTNAME);
-				if (!TextUtils.isEmpty(firstName)) {
-					firstName = firstName.toLowerCase(Locale.getDefault());
-					firstName = firstName.substring(0, 1).toUpperCase(Locale.getDefault()) + firstName.substring(1);
-				}
+				final String firstName = item.getString(TAG_FIRSTNAME);
+				// if (!TextUtils.isEmpty(firstName)) {
+				// firstName = firstName.toLowerCase(Locale.getDefault());
+				// final String[] firstNames = firstName.split(" ");
+				// if (firstNames.length > 1) {
+				// firstName = null;
+				// for (int i = 0; i < firstNames.length; i++) {
+				// firstName += firstNames[i].substring(0, 1).toUpperCase(Locale.getDefault()) + firstNames[i].substring(1);
+				// }
+				//
+				// } else {
+				// firstName = firstName.substring(0, 1).toUpperCase(Locale.getDefault()) + firstName.substring(1);
+				// }
+				// }
 				builder.withValue(MixItContract.Members.FIRSTNAME, firstName);
 			}
 			if (item.has(TAG_LASTNAME)) {
-				String lastName = item.getString(TAG_LASTNAME);
-				if (!TextUtils.isEmpty(lastName)) {
-					lastName = lastName.toLowerCase(Locale.getDefault());
-					lastName = lastName.substring(0, 1).toUpperCase(Locale.getDefault()) + lastName.substring(1);
-				}
+				final String lastName = item.getString(TAG_LASTNAME);
+				// if (!TextUtils.isEmpty(lastName)) {
+				// lastName = lastName.toLowerCase(Locale.getDefault());
+				// lastName = lastName.substring(0, 1).toUpperCase(Locale.getDefault()) + lastName.substring(1);
+				// }
 				builder.withValue(MixItContract.Members.LASTNAME, lastName);
 			}
 			if (item.has(TAG_LOGIN)) {
