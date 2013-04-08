@@ -8,7 +8,8 @@
     <dimen name="margin_big">24dp</dimen>
     <dimen name="margin_very_big">32dp</dimen>
     <!-- Generic sizes -->
-    <dimen name="min_touchable_height">48dp</dimen>
+    <dimen name="normal_touchable_height">48dp</dimen>
+    <dimen name="small_touchable_height">32dp</dimen>
     <!-- Generic text sizes -->
     <dimen name="text_size_very_small">12sp</dimen>
     <dimen name="text_size_small">14sp</dimen>
