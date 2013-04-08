@@ -40,7 +40,7 @@ BoundServiceContract {
 
 	protected int mTopFragCommitId = -1;
 
-	protected int mMode = DISPLAY_MODE_ALL_MEMBERS;
+	protected int mMode = DISPLAY_MODE_SPEAKERS;
 
 	@Override
 	protected void onCreate(Bundle savedStateInstance) {
@@ -54,7 +54,7 @@ BoundServiceContract {
 		getSupportActionBar().setNavigationMode(ActionBar.NAVIGATION_MODE_LIST);
 
 		if (savedStateInstance != null) {
-			mMode = savedStateInstance.getInt(STATE_DISPLAY_MODE, DISPLAY_MODE_ALL_MEMBERS);
+			mMode = savedStateInstance.getInt(STATE_DISPLAY_MODE, DISPLAY_MODE_SPEAKERS);
 		}
 
 		final FragmentManager fm = getSupportFragmentManager();
