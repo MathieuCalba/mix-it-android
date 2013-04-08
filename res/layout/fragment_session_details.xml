@@ -30,12 +30,15 @@
             android:layout_height="0dp"
             android:layout_weight="1"
             android:fillViewport="true"
-            android:padding="@dimen/margin_small" >
+            android:paddingLeft="@dimen/margin_small"
+            android:paddingRight="@dimen/margin_small" >
 
             <include
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                layout="@layout/session_content" />
+                layout="@layout/session_content"
+                android:paddingBottom="@dimen/margin_small"
+                android:paddingTop="@dimen/margin_small" />
         </ScrollView>
     </LinearLayout>
 
