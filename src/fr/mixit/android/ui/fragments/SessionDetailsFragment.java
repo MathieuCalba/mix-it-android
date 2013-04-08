@@ -51,7 +51,6 @@ public class SessionDetailsFragment extends BoundServiceFragment implements Load
 	protected ViewAnimator mViewAnimator;
 	protected TextView mTitle;
 	protected TextView mSubTitle;
-	protected LinearLayout mSessionContent;
 	protected TextView mSummary;
 	protected LinearLayout mSpeakers;
 	protected LinearLayout mInterests;
@@ -93,7 +92,6 @@ public class SessionDetailsFragment extends BoundServiceFragment implements Load
 		mViewAnimator = (ViewAnimator) root.findViewById(R.id.session_detail_animator);
 		mTitle = (TextView) root.findViewById(R.id.session_title);
 		mSubTitle = (TextView) root.findViewById(R.id.session_subtitle);
-		mSessionContent = (LinearLayout) root.findViewById(R.id.session_content);
 		mSummary = (TextView) root.findViewById(R.id.session_summary_value);
 		mSpeakers = (LinearLayout) root.findViewById(R.id.session_speakers_value);
 		mInterests = (LinearLayout) root.findViewById(R.id.session_interests_value);
