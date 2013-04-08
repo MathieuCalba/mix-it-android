@@ -166,7 +166,7 @@ public class SessionDetailsFragment extends BoundServiceFragment implements Load
 	}
 
 	protected void clear() {
-		displayNoSessionSelected();
+		showNoSessionSelected();
 		displaySession(null);
 		displaySpeakers(null);
 		displayInterests(null);
@@ -301,7 +301,7 @@ public class SessionDetailsFragment extends BoundServiceFragment implements Load
 	// return super.onOptionsItemSelected(item);
 	// }
 
-	protected void displaySession() {
+	protected void showSession() {
 		final int displayedChild = mViewAnimator.getDisplayedChild();
 		if (displayedChild == 0) {
 			mViewAnimator.showNext();
@@ -310,7 +310,7 @@ public class SessionDetailsFragment extends BoundServiceFragment implements Load
 		}
 	}
 
-	protected void displayNoSessionSelected() {
+	protected void showNoSessionSelected() {
 		final int displayedChild = mViewAnimator.getDisplayedChild();
 		if (displayedChild == 1) {
 			mViewAnimator.showNext();
@@ -325,7 +325,7 @@ public class SessionDetailsFragment extends BoundServiceFragment implements Load
 		String room = null;
 
 		if (c != null && c.moveToFirst()) {
-			displaySession();
+			showSession();
 
 			mTitleStr = c.getString(MixItContract.Sessions.PROJ_DETAIL.TITLE);
 			time = c.getString(MixItContract.Sessions.PROJ_DETAIL.TIME);
@@ -335,7 +335,7 @@ public class SessionDetailsFragment extends BoundServiceFragment implements Load
 			mIsVoted = c.getInt(MixItContract.Sessions.FORMAT_LIGHTNING_TALK.equalsIgnoreCase(mSessionFormat) ? MixItContract.Sessions.PROJ_DETAIL.MY_VOTE
 					: MixItContract.Sessions.PROJ_DETAIL.IS_FAVORITE) == 1 ? true : false;
 		} else {
-			displayNoSessionSelected();
+			showNoSessionSelected();
 		}
 		fillHeader(mTitleStr, mSessionFormat, time, room);
 		mSummary.setText(summary);
@@ -385,7 +385,42 @@ public class SessionDetailsFragment extends BoundServiceFragment implements Load
 		}
 	}
 
+	@TargetApi(Build.VERSION_CODES.FROYO)
 	protected void displayInterests(Cursor c) {
+		mInterests.removeAllViews();
+
+		final Context ctx = getActivity();
+		if (ctx == null) {
+			return;
+		}
+
+		final LinearLayout.LayoutParams lp = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT);
+		final int margin = ctx.getResources().getDimensionPixelSize(R.dimen.margin_small);
+		lp.setMargins(0, margin, 0, 0);
+
+		final LayoutInflater inflater = LayoutInflater.from(ctx);
+
+		if (c != null && c.moveToFirst()) {
+			do {
+				final String interestId = c.getString(MixItContract.Interests.PROJ.INTEREST_ID);
+				final String interestName = c.getString(MixItContract.Interests.PROJ.NAME);
+
+				final TextView interestView = (TextView) inflater.inflate(R.layout.item_interest, mInterests, false);
+				interestView.setText(interestName);
+				interestView.setOnClickListener(new OnClickListener() {
+
+					@Override
+					public void onClick(View v) {
+						onInterestItemClick(interestId, interestName);
+					}
+				});
+				mInterests.addView(interestView, lp);
+			} while (c.moveToNext());
+		} else {
+			inflater.inflate(R.layout.empty_text_view, mInterests, true);
+			final TextView emptyView = (TextView) mInterests.findViewById(R.id.empty_text_view);
+			emptyView.setText(R.string.sessions_empty_interests);
+		}
 	}
 
 	protected void onSpeakerItemClick(String memberId) {
@@ -395,13 +430,13 @@ public class SessionDetailsFragment extends BoundServiceFragment implements Load
 		startActivity(intent);
 	}
 
-	// public void onInterestItemClick(String interestId, String name) {
-	// final Uri interestUri = MixItContract.Interests.buildInterestUri(interestId);
-	// final Intent intent = new Intent(Intent.ACTION_VIEW, interestUri);
-	// intent.putExtra(InterestsActivity.EXTRA_INTEREST_NAME, name);
-	// intent.putExtra(InterestsActivity.EXTRA_IS_FROM_SESSION, true);
-	// startActivity(intent);
-	// }
+	protected void onInterestItemClick(String interestId, String name) {
+		// final Uri interestUri = MixItContract.Interests.buildInterestUri(interestId);
+		// final Intent intent = new Intent(Intent.ACTION_VIEW, interestUri);
+		// intent.putExtra(InterestsActivity.EXTRA_INTEREST_NAME, name);
+		// intent.putExtra(InterestsActivity.EXTRA_IS_FROM_SESSION, true);
+		// startActivity(intent);
+	}
 
 	protected Intent createShareIntent() {
 		final Intent shareIntent = new Intent(Intent.ACTION_SEND);

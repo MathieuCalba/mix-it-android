@@ -195,7 +195,7 @@ public class MemberDetailsFragment extends BoundServiceFragment implements Loade
 	}
 
 	protected void clear() {
-		displayNoMemberSelected();
+		showNoMemberSelected();
 		displayMember(null);
 		displayLinks(null);
 		displayLinkers(null);
@@ -388,7 +388,7 @@ public class MemberDetailsFragment extends BoundServiceFragment implements Loade
 		}
 	}
 
-	protected void displayMember() {
+	protected void showMember() {
 		final int displayedChild = mViewAnimator.getDisplayedChild();
 		if (displayedChild == 0) {
 			mViewAnimator.showNext();
@@ -397,7 +397,7 @@ public class MemberDetailsFragment extends BoundServiceFragment implements Loade
 		}
 	}
 
-	protected void displayNoMemberSelected() {
+	protected void showNoMemberSelected() {
 		final int displayedChild = mViewAnimator.getDisplayedChild();
 		if (displayedChild == 1) {
 			mViewAnimator.showNext();
@@ -416,7 +416,7 @@ public class MemberDetailsFragment extends BoundServiceFragment implements Loade
 		String bio = null;
 
 		if (c != null && c.moveToFirst()) {
-			displayMember();
+			showMember();
 
 			firstName = c.getString(MixItContract.Members.PROJ_DETAIL.FIRSTNAME);
 			lastName = c.getString(MixItContract.Members.PROJ_DETAIL.LASTNAME);
@@ -429,7 +429,7 @@ public class MemberDetailsFragment extends BoundServiceFragment implements Loade
 			bio = c.getString(MixItContract.Members.PROJ_DETAIL.LONG_DESC);
 			imageUrl = c.getString(MixItContract.Members.PROJ_DETAIL.IMAGE_URL);
 		} else {
-			displayNoMemberSelected();
+			showNoMemberSelected();
 			mImage.setImageDrawable(null);
 		}
 
@@ -548,7 +548,42 @@ public class MemberDetailsFragment extends BoundServiceFragment implements Loade
 		}
 	}
 
+	@TargetApi(Build.VERSION_CODES.FROYO)
 	protected void displayInterests(Cursor c) {
+		mInterests.removeAllViews();
+
+		final Context ctx = getActivity();
+		if (ctx == null) {
+			return;
+		}
+
+		final LinearLayout.LayoutParams lp = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT);
+		final int margin = ctx.getResources().getDimensionPixelSize(R.dimen.margin_small);
+		lp.setMargins(0, margin, 0, 0);
+
+		final LayoutInflater inflater = LayoutInflater.from(ctx);
+
+		if (c != null && c.moveToFirst()) {
+			do {
+				final String interestId = c.getString(MixItContract.Interests.PROJ.INTEREST_ID);
+				final String interestName = c.getString(MixItContract.Interests.PROJ.NAME);
+
+				final TextView interestView = (TextView) inflater.inflate(R.layout.item_interest, mInterests, false);
+				interestView.setText(interestName);
+				interestView.setOnClickListener(new OnClickListener() {
+
+					@Override
+					public void onClick(View v) {
+						onInterestItemClick(interestId, interestName);
+					}
+				});
+				mInterests.addView(interestView, lp);
+			} while (c.moveToNext());
+		} else {
+			inflater.inflate(R.layout.empty_text_view, mInterests, true);
+			final TextView emptyView = (TextView) mInterests.findViewById(R.id.empty_text_view);
+			emptyView.setText(R.string.member_empty_interests);
+		}
 	}
 
 	protected static final String HTTP = "http://";
@@ -568,13 +603,13 @@ public class MemberDetailsFragment extends BoundServiceFragment implements Loade
 		startActivity(intent);
 	}
 
-	// public void onInterestItemClick(String interestId, String name) {
-	// final Uri interestUri = MixItContract.Interests.buildInterestUri(interestId);
-	// final Intent intent = new Intent(Intent.ACTION_VIEW, interestUri);
-	// intent.putExtra(InterestsActivity.EXTRA_INTEREST_NAME, name);
-	// intent.putExtra(InterestsActivity.EXTRA_IS_FROM_SESSION, false);
-	// startActivity(intent);
-	// }
+	public void onInterestItemClick(String interestId, String name) {
+		// final Uri interestUri = MixItContract.Interests.buildInterestUri(interestId);
+		// final Intent intent = new Intent(Intent.ACTION_VIEW, interestUri);
+		// intent.putExtra(InterestsActivity.EXTRA_INTEREST_NAME, name);
+		// intent.putExtra(InterestsActivity.EXTRA_IS_FROM_SESSION, false);
+		// startActivity(intent);
+	}
 
 	@Override
 	protected void onServiceReady() {
