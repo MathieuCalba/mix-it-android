@@ -1,43 +1,61 @@
-
 package fr.mixit.android.ui;
 
-import android.content.Intent;
 import android.os.Bundle;
 import android.os.Message;
 import android.os.RemoteException;
-import android.view.View;
-import android.view.View.OnClickListener;
+import android.support.v4.view.ViewPager;
+import android.widget.TabHost;
 import fr.mixit.android.services.MixItService;
+import fr.mixit.android.ui.adapters.TabsAdapter;
+import fr.mixit.android.ui.fragments.BoundServiceFragment;
+import fr.mixit.android.ui.fragments.ExploreFragment;
+import fr.mixit.android.ui.fragments.MyPlanningFragment;
 import fr.mixit.android_2012.R;
 
-public class HomeActivity extends GenericMixItActivity {
+
+public class HomeActivity extends GenericMixItActivity implements BoundServiceFragment.BoundServiceContract {
+
+	protected static final String TAB_MY_PLANNING = "TAB_MY_PLANNING";
+	protected static final String TAB_EXPLORE = "TAB_EXPLORE";
+
+	protected static final String STATE_CURRENT_TAB = "fr.mixit.android.STATE_CURRENT_TAB";
+
+	protected TabHost mTabHost;
+	protected ViewPager mViewPager;
+	protected TabsAdapter mTabsAdapter;
 
 	@Override
 	protected void onCreate(Bundle savedStateInstance) {
 		super.onCreate(savedStateInstance);
 
-		findViewById(R.id.session_bt).setOnClickListener(new OnClickListener() {
+		mTabHost = (TabHost) findViewById(android.R.id.tabhost);
+		mTabHost.setup();
 
-			@Override
-			public void onClick(View v) {
-				final Intent i = new Intent(HomeActivity.this, SessionsActivity.class);
-				startActivity(i);
-			}
-		});
+		mViewPager = (ViewPager) findViewById(R.id.pager);
 
-		findViewById(R.id.speaker_bt).setOnClickListener(new OnClickListener() {
+		mTabsAdapter = new TabsAdapter(this, mTabHost, mViewPager);
 
-			@Override
-			public void onClick(View v) {
-				final Intent i = new Intent(HomeActivity.this, MembersActivity.class);
-				startActivity(i);
-			}
-		});
+		initTabs();
+
+		if (savedStateInstance != null) {
+			mTabHost.setCurrentTabByTag(savedStateInstance.getString(STATE_CURRENT_TAB));
+		}
 	}
 
 	@Override
 	protected int getContentLayoutId() {
 		return R.layout.activity_home;
+	}
+
+	protected void initTabs() {
+		mTabsAdapter.addTab(mTabHost.newTabSpec(TAB_MY_PLANNING).setIndicator(getString(R.string.my_planning_tab)), MyPlanningFragment.class, null);
+		mTabsAdapter.addTab(mTabHost.newTabSpec(TAB_EXPLORE).setIndicator(getString(R.string.my_planning_tab)), ExploreFragment.class, null);
+	}
+
+	@Override
+	protected void onSaveInstanceState(Bundle outState) {
+		super.onSaveInstanceState(outState);
+		outState.putString(STATE_CURRENT_TAB, mTabHost.getCurrentTabTag());
 	}
 
 	@Override

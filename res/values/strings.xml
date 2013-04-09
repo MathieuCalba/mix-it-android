@@ -4,6 +4,14 @@
     <string name="app_name">Mix-IT 2013</string>
     <string name="permission_write">Modify Mix-IT schedule data</string>
     <string name="functionnality_need_connectivity">This functionnality need a connection</string>
+    <!-- Home -->
+    <string name="my_planning_tab">My Planning</string>
+    <string name="explore_tab">Explore</string>
+    <!-- Explore -->
+    <string name="map_bt">Map</string>
+    <string name="planning_bt">Planning</string>
+    <string name="sessions_bt">Sessions</string>
+    <string name="speakers_bt">Speakers</string>
     <!-- Sessions -->
     <string name="all_sessions">Sessions</string>
     <string name="all_lightning_talks">Lightning Talks</string>
