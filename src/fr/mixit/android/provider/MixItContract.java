@@ -350,6 +350,8 @@ public class MixItContract {
 		public static final String CONTENT_ITEM_TYPE = CONTENT_TYPE_START + CONTENT_TYPE_ITEM + VENDOR + PATH_SESSIONS;
 
 		public static final String DEFAULT_SORT = MixItDatabase.Tables.SESSIONS + "." + SessionsColumns.SESSION_ID + " ASC";
+		public static final String ROOM_SORT = MixItDatabase.Tables.SESSIONS + "." + SessionsColumns.ROOM_ID + " ASC";
+		public static final String PLANNING_SORT = MixItDatabase.Tables.SESSIONS + "." + SessionsColumns.START + " ASC";
 
 		public static final String FORMAT_TALK = "Talk";
 		public static final String FORMAT_LIGHTNING_TALK = "Lightning Talk";
@@ -415,6 +417,16 @@ public class MixItContract {
 			int MY_VOTE = 13;
 		}
 
+		public static interface PROJ_ROOM {
+			public String[] PROJECTION = { //
+					Sessions._ID, //
+					Sessions.ROOM_ID, //
+			};
+
+			int _ID = 0;
+			int ROOM_ID = 1;
+		}
+
 		public static Uri buildSessionUri(String sessionId) {
 			return CONTENT_URI.buildUpon().appendPath(sessionId).build();
 		}
@@ -450,6 +462,10 @@ public class MixItContract {
 		public static Uri buildSessionsUri(String interestId, boolean isSession) {
 			return BASE_CONTENT_URI.buildUpon().appendPath(PATH_INTERESTS).appendPath(interestId).appendPath(isSession ? PATH_SESSIONS : PATH_LIGHTNINGS)
 					.build();
+		}
+
+		public static Uri buildRoomsDirUri() {
+			return BASE_CONTENT_URI.buildUpon().appendPath(PATH_ROOM).build();
 		}
 
 		public static String getSessionId(Uri uri) {

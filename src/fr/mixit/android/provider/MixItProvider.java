@@ -78,6 +78,7 @@ public class MixItProvider extends ContentProvider {
 	private static final int COMMENTS_ID = 601;
 
 	private static final int ROOM_ID_SESSIONS = 700;
+	private static final int ROOMS = 701;
 
 	protected static final String UNDERSCORE = "_";
 	protected static final String SLASH = "/";
@@ -160,6 +161,7 @@ public class MixItProvider extends ContentProvider {
 		matcher.addURI(authority, MixItContract.PATH_COMMENTS, COMMENTS);
 		matcher.addURI(authority, MixItContract.PATH_COMMENTS + SLASH + STAR, COMMENTS_ID);
 
+		matcher.addURI(authority, MixItContract.PATH_ROOM, ROOMS);
 		matcher.addURI(authority, MixItContract.PATH_ROOM + SLASH + STAR + SLASH + MixItContract.PATH_SESSIONS, ROOM_ID_SESSIONS);
 
 		return matcher;
@@ -250,6 +252,7 @@ public class MixItProvider extends ContentProvider {
 			case COMMENTS_ID:
 				return MixItContract.Comments.CONTENT_ITEM_TYPE;
 			case ROOM_ID_SESSIONS:
+			case ROOMS:
 				return MixItContract.Sessions.CONTENT_TYPE;
 			default:
 				throw new UnsupportedOperationException("Unknown uri: " + uri);
@@ -691,6 +694,11 @@ public class MixItProvider extends ContentProvider {
 						.table(MixItDatabase.Tables.SESSIONS)//
 						.where(Sessions.ROOM_ID + "=?", roomId);
 			}
+			case ROOMS: {
+				return builder //
+						.table(MixItDatabase.Tables.SESSIONS)//
+						.groupBy(MixItContract.Sessions.ROOM_ID);
+			}
 			default:
 				throw new UnsupportedOperationException("Unknown uri: " + uri);
 		}
@@ -1023,7 +1031,12 @@ public class MixItProvider extends ContentProvider {
 				final String roomId = MixItContract.Sessions.getRoomId(uri);
 				return builder//
 						.table(MixItDatabase.Tables.SESSIONS)//
-						.where(Sessions.ROOM_ID + "=?", roomId);
+						.where(MixItContract.Sessions.ROOM_ID + "=?", roomId);
+			}
+			case ROOMS: {
+				return builder //
+						.table(MixItDatabase.Tables.SESSIONS)//
+						.groupBy(MixItContract.Sessions.ROOM_ID);
 			}
 			default:
 				throw new UnsupportedOperationException("Unknown uri: " + uri);
