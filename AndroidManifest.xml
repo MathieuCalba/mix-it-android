@@ -89,6 +89,11 @@
                 <data android:mimeType="vnd.android.cursor.item/vnd.mixit.members" />
             </intent-filter>
         </activity>
+        <activity
+            android:name="fr.mixit.android.ui.PlanningActivity"
+            android:icon="@drawable/ic_action_bar"
+            android:label="" >
+        </activity>
 
         <service
             android:name="fr.mixit.android.services.MixItService"

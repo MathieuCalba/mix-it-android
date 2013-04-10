@@ -49,7 +49,7 @@ public class HomeActivity extends GenericMixItActivity implements BoundServiceFr
 
 	protected void initTabs() {
 		mTabsAdapter.addTab(mTabHost.newTabSpec(TAB_MY_PLANNING).setIndicator(getString(R.string.my_planning_tab)), MyPlanningFragment.class, null);
-		mTabsAdapter.addTab(mTabHost.newTabSpec(TAB_EXPLORE).setIndicator(getString(R.string.my_planning_tab)), ExploreFragment.class, null);
+		mTabsAdapter.addTab(mTabHost.newTabSpec(TAB_EXPLORE).setIndicator(getString(R.string.explore_tab)), ExploreFragment.class, null);
 	}
 
 	@Override

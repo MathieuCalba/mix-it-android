@@ -8,6 +8,7 @@ import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.ViewGroup;
 import fr.mixit.android.ui.MembersActivity;
+import fr.mixit.android.ui.PlanningActivity;
 import fr.mixit.android.ui.SessionsActivity;
 import fr.mixit.android.utils.UIUtils;
 import fr.mixit.android_2012.R;
@@ -51,6 +52,8 @@ public class ExploreFragment extends BoundServiceFragment implements OnClickList
 			}
 		} else if (id == R.id.planning_bt) {
 			if (getActivity() != null && !isDetached()) {
+				final Intent i = new Intent(getActivity(), PlanningActivity.class);
+				startActivity(i);
 			}
 
 		}

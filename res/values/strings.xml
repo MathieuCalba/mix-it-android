@@ -7,6 +7,9 @@
     <!-- Home -->
     <string name="my_planning_tab">My Planning</string>
     <string name="explore_tab">Explore</string>
+    <!-- Planning -->
+    <string name="first_day">Thursday</string>
+    <string name="second_day">Friday</string>
     <!-- Explore -->
     <string name="map_bt">Map</string>
     <string name="planning_bt">Planning</string>
