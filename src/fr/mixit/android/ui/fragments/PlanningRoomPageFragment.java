@@ -33,6 +33,7 @@ public class PlanningRoomPageFragment extends BoundServiceFragment implements Lo
 	protected String mRoom;
 	protected int mDay;
 	protected int mPosition;
+	protected boolean mShouldRetain = true;
 
 	public static PlanningRoomPageFragment newInstance(String room, int day, int position) {
 		final PlanningRoomPageFragment f = new PlanningRoomPageFragment();
@@ -87,6 +88,24 @@ public class PlanningRoomPageFragment extends BoundServiceFragment implements Lo
 	@Override
 	public void onStart() {
 		super.onStart();
+
+		loadSession(mDay, mRoom);
+	}
+
+	@Override
+	public void onSaveInstanceState(Bundle outState) {
+		super.onSaveInstanceState(outState);
+		if (mShouldRetain) {
+			outState.putLong(EXTRA_DAY, mDay);
+		}
+	}
+
+	public void setShouldRetainSlots(boolean shouldRetain) {
+		mShouldRetain = shouldRetain;
+	}
+
+	public void updateDay(int day) {
+		mDay = day;
 
 		loadSession(mDay, mRoom);
 	}
@@ -178,14 +197,10 @@ public class PlanningRoomPageFragment extends BoundServiceFragment implements Lo
 
 	@Override
 	protected void onMessageReceivedFromService(Message msg) {
-		// TODO Auto-generated method stub
-
 	}
 
 	@Override
-	public void onItemClick(AdapterView<?> arg0, View arg1, int arg2, long arg3) {
-		// TODO Auto-generated method stub
-
+	public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
 	}
 
 }
