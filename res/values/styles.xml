@@ -14,7 +14,9 @@
 
     <!-- Application theme. -->
     <style name="AppTheme" parent="AppBaseTheme">
+
         <!-- All customizations that are NOT specific to a particular API-level can go here. -->
+        <item name="vpiTitlePageIndicatorStyle">@style/PlanningTitlePageIndicator</item>
     </style>
 
     <style name="ItemTitle">
@@ -73,5 +75,17 @@
     <style name="Widget.MixIt.TabText" parent="Widget.Sherlock.ActionBar.TabText">
         <item name="android:maxWidth">180dip</item>
     </style>
+
+    <style name="PlanningTitlePageIndicator">
+        <item name="android:background">@drawable/ab_stacked_solid_mixit</item>
+        <item name="footerColor">@color/pressed_mixit</item>
+        <item name="footerLineHeight">1dp</item>
+        <item name="footerIndicatorHeight">3dp</item>
+        <item name="footerIndicatorStyle">underline</item>
+        <item name="android:textColor">#FFFFFF</item>
+        <item name="selectedColor">@color/pressed_mixit</item>
+        <item name="selectedBold">true</item>
+    </style>
+    <!-- @color/blue_mixit -->
 
 </resources>
