@@ -55,4 +55,15 @@ public class DateUtils {
 		}
 	}
 
+	public static String formatSlotTime(Context ctx, long start, long end) {
+		if (start == 0 && end == 0) {
+			return ctx.getResources().getString(R.string.planning_slot_pager_header_default);
+		} else {
+			final String timeStart = sTimeFormatSdf.format(new Date(start));
+			final String timeEnd = sTimeFormatSdf.format(new Date(end));
+
+			return ctx.getResources().getString(R.string.planning_slot_pager_header, timeStart, timeEnd);
+		}
+	}
+
 }

@@ -22,7 +22,7 @@ public abstract class FragmentStatePagerCursorAdapter extends FragmentStatePager
 		init(c, b);
 	}
 
-	void init(Cursor c, Bundle b) {
+	protected void init(Cursor c, Bundle b) {
 		final boolean cursorPresent = c != null;
 		mCursor = c;
 		mDataValid = cursorPresent;

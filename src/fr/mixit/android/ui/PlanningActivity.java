@@ -1,5 +1,7 @@
 package fr.mixit.android.ui;
 
+import java.util.Date;
+
 import android.content.Context;
 import android.database.Cursor;
 import android.os.Bundle;
@@ -17,27 +19,33 @@ import com.viewpagerindicator.PageIndicator;
 
 import fr.mixit.android.provider.MixItContract;
 import fr.mixit.android.ui.adapters.PlanningRoomPagerAdapter;
+import fr.mixit.android.ui.adapters.PlanningSlotPagerAdapter;
 import fr.mixit.android.ui.fragments.BoundServiceFragment;
 import fr.mixit.android_2012.R;
 
 
 public class PlanningActivity extends GenericMixItActivity implements LoaderManager.LoaderCallbacks<Cursor>, OnNavigationListener, OnPageChangeListener,
-		BoundServiceFragment.BoundServiceContract {
+BoundServiceFragment.BoundServiceContract {
 
 	public static final int FILTER_DAY_ONE = 1304092314;
 	public static final int FILTER_DAY_TWO = 1304092315;
 
 	protected static final String STATE_FILTER = "fr.mixit.android.STATE_FILTER";
 	protected static final String STATE_ROOM = "fr.mixit.android.STATE_ROOM";
+	protected static final String STATE_SLOT = "fr.mixit.android.STATE_SLOT";
 
 	protected static final int LOADER_ID_ROOMS = 1304092308;
 
 	protected ViewPager mViewPager;
 	protected PageIndicator mViewPagerIndicator;
-	protected PlanningRoomPagerAdapter mAdapter;
+	protected PlanningRoomPagerAdapter mRoomAdapter;
+	protected PlanningSlotPagerAdapter mSlotAdapter;
+
+	protected boolean mIsPlanningDisplayedBySlot = true;
 
 	protected int mFilter = FILTER_DAY_ONE;
 	protected int mCurrentRoomPosition;
+	protected int mCurrentSlotPosition;
 
 	@Override
 	protected void onCreate(Bundle savedStateInstance) {
@@ -53,6 +61,11 @@ public class PlanningActivity extends GenericMixItActivity implements LoaderMana
 		if (savedStateInstance != null) {
 			mFilter = savedStateInstance.getInt(STATE_FILTER, FILTER_DAY_ONE);
 			mCurrentRoomPosition = savedStateInstance.getInt(STATE_ROOM, 0);
+			mCurrentSlotPosition = savedStateInstance.getInt(STATE_SLOT, 0);
+		}
+
+		if (mCurrentSlotPosition == 0) {
+			mCurrentSlotPosition = PlanningSlotPagerAdapter.getPositionForTimestamp(new Date().getTime());
 		}
 
 		int itemSelected = 0;
@@ -71,11 +84,16 @@ public class PlanningActivity extends GenericMixItActivity implements LoaderMana
 		}
 		getSupportActionBar().setSelectedNavigationItem(itemSelected);
 
-		final FragmentManager fm = getSupportFragmentManager();
-		mAdapter = new PlanningRoomPagerAdapter(fm);
-
 		mViewPager = (ViewPager) findViewById(R.id.pager);
-		mViewPager.setAdapter(mAdapter);
+
+		final FragmentManager fm = getSupportFragmentManager();
+		if (mIsPlanningDisplayedBySlot) {
+			mSlotAdapter = new PlanningSlotPagerAdapter(context, mFilter, fm, null);
+			mViewPager.setAdapter(mSlotAdapter);
+		} else {
+			mRoomAdapter = new PlanningRoomPagerAdapter(fm);
+			mViewPager.setAdapter(mRoomAdapter);
+		}
 
 		mViewPagerIndicator = (PageIndicator) findViewById(R.id.indicator);
 		mViewPagerIndicator.setViewPager(mViewPager);
@@ -110,13 +128,23 @@ public class PlanningActivity extends GenericMixItActivity implements LoaderMana
 	public void onSaveInstanceState(Bundle outState) {
 		super.onSaveInstanceState(outState);
 		outState.putInt(STATE_FILTER, mFilter);
-		outState.putInt(STATE_ROOM, mCurrentRoomPosition);
+		if (mIsPlanningDisplayedBySlot) {
+			outState.putInt(STATE_SLOT, mCurrentSlotPosition);
+		} else {
+			outState.putInt(STATE_ROOM, mCurrentRoomPosition);
+		}
 	}
 
 	protected void loadForDay(int day) {
-		final Bundle b = new Bundle();
-		b.putInt(STATE_FILTER, day);
-		getSupportLoaderManager().restartLoader(LOADER_ID_ROOMS, b, this);
+		if (mIsPlanningDisplayedBySlot) {
+			if (mSlotAdapter != null) {
+				mSlotAdapter.setDay(day);
+			}
+		} else {
+			final Bundle b = new Bundle();
+			b.putInt(STATE_FILTER, day);
+			getSupportLoaderManager().restartLoader(LOADER_ID_ROOMS, b, this);
+		}
 	}
 
 	@Override
@@ -166,8 +194,10 @@ public class PlanningActivity extends GenericMixItActivity implements LoaderMana
 
 		switch (id) {
 			case LOADER_ID_ROOMS:
-				mAdapter.swapCursor(mFilter, cursor);
-				mViewPager.setCurrentItem(mCurrentRoomPosition);
+				if (!mIsPlanningDisplayedBySlot) {
+					mRoomAdapter.swapCursor(mFilter, cursor);
+					mViewPager.setCurrentItem(mCurrentRoomPosition);
+				}
 
 			default:
 				break;
@@ -180,7 +210,9 @@ public class PlanningActivity extends GenericMixItActivity implements LoaderMana
 
 		switch (id) {
 			case LOADER_ID_ROOMS:
-				mAdapter.swapCursor(null);
+				if (!mIsPlanningDisplayedBySlot) {
+					mRoomAdapter.swapCursor(null);
+				}
 
 			default:
 				break;
@@ -198,6 +230,7 @@ public class PlanningActivity extends GenericMixItActivity implements LoaderMana
 	@Override
 	public void onPageSelected(int position) {
 		mCurrentRoomPosition = position;
+		mCurrentSlotPosition = position;
 	}
 
 }

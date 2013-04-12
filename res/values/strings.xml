@@ -10,6 +10,8 @@
     <!-- Planning -->
     <string name="first_day">Thursday</string>
     <string name="second_day">Friday</string>
+    <string name="planning_slot_pager_header">From %1$s to %2$s</string>
+    <string name="planning_slot_pager_header_default">From 9am to 7pm</string>
     <!-- Explore -->
     <string name="map_bt">Map</string>
     <string name="planning_bt">Planning</string>
