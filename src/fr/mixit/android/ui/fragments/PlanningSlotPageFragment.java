@@ -103,6 +103,10 @@ public class PlanningSlotPageFragment extends BoundServiceFragment implements Lo
 		}
 	}
 
+	public void setShouldRetainSlots(boolean shouldRetain) {
+		mShouldRetain = shouldRetain;
+	}
+
 	public void updateSlots(long slotStart, long slotEnd) {
 		mSlotStart = slotStart;
 		mSlotEnd = slotEnd;
@@ -183,10 +187,6 @@ public class PlanningSlotPageFragment extends BoundServiceFragment implements Lo
 
 	@Override
 	public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-	}
-
-	public void setShouldRetainSlots(boolean shouldRetain) {
-		mShouldRetain = shouldRetain;
 	}
 
 }
