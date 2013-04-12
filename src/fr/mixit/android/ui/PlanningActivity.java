@@ -41,7 +41,7 @@ BoundServiceFragment.BoundServiceContract {
 	protected PlanningRoomPagerAdapter mRoomAdapter;
 	protected PlanningSlotPagerAdapter mSlotAdapter;
 
-	protected boolean mIsPlanningDisplayedBySlot = true;
+	protected boolean mIsPlanningDisplayedBySlot = false;
 
 	protected int mFilter = FILTER_DAY_ONE;
 	protected int mCurrentRoomPosition;
@@ -156,8 +156,6 @@ BoundServiceFragment.BoundServiceContract {
 					day = b.getInt(STATE_FILTER, FILTER_DAY_ONE);
 				}
 
-				final StringBuilder selection = new StringBuilder(MixItContract.Sessions.START);
-				selection.append(">=");
 				long startTimestamp;
 				long endTimestamp;
 				switch (day) {
@@ -172,7 +170,9 @@ BoundServiceFragment.BoundServiceContract {
 						endTimestamp = 1366920000000L;
 						break;
 				}
-				;
+
+				final StringBuilder selection = new StringBuilder(MixItContract.Sessions.START);
+				selection.append(">=");
 				selection.append(startTimestamp);
 				selection.append(" AND \"");
 				selection.append(MixItContract.Sessions.END);
