@@ -58,7 +58,9 @@ public class PlanningSlotPagerAdapter extends FragmentStatePagerAdapter {
 
 	@Override
 	public void destroyItem(ViewGroup container, int position, Object object) {
-		((PlanningSlotPageFragment) mFragments[position]).setShouldRetainSlots(false);
+		if (mFragments != null && mFragments[position] != null) {
+			((PlanningSlotPageFragment) mFragments[position]).setShouldRetainSlots(false);
+		}
 		super.destroyItem(container, position, object);
 
 		mFragments[position] = null;
@@ -97,10 +99,12 @@ public class PlanningSlotPagerAdapter extends FragmentStatePagerAdapter {
 	}
 
 	protected void notifyFragments() {
-		for (int i = 0; i < mFragments.length/* && i < mNbSlot */; i++) {
-			final PlanningSlotPageFragment fragment = (PlanningSlotPageFragment) mFragments[i];
-			if (fragment != null) {
-				fragment.updateSlots(mTimestampOffset + SLOTS_START[i], mTimestampOffset + SLOTS_END[i]);
+		if (mFragments != null) {
+			for (int i = 0; i < mFragments.length/* && i < mNbSlot */; i++) {
+				final PlanningSlotPageFragment fragment = (PlanningSlotPageFragment) mFragments[i];
+				if (fragment != null) {
+					fragment.updateSlots(mTimestampOffset + SLOTS_START[i], mTimestampOffset + SLOTS_END[i]);
+				}
 			}
 		}
 	}

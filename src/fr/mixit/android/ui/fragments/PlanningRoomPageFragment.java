@@ -83,6 +83,10 @@ public class PlanningRoomPageFragment extends BoundServiceFragment implements Lo
 		mAdapter = new SessionsAdapter(getActivity(), true);
 		mListView.setAdapter(mAdapter);
 		mListView.setOnItemClickListener(this);
+
+		if (savedInstanceState != null) {
+			mDay = savedInstanceState.getInt(EXTRA_DAY, mDay);
+		}
 	}
 
 	@Override
@@ -96,7 +100,7 @@ public class PlanningRoomPageFragment extends BoundServiceFragment implements Lo
 	public void onSaveInstanceState(Bundle outState) {
 		super.onSaveInstanceState(outState);
 		if (mShouldRetain) {
-			outState.putLong(EXTRA_DAY, mDay);
+			outState.putInt(EXTRA_DAY, mDay);
 		}
 	}
 

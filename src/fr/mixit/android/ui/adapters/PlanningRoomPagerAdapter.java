@@ -19,7 +19,9 @@ public class PlanningRoomPagerAdapter extends FragmentStatePagerCursorAdapter {
 
 	@Override
 	public void destroyItem(ViewGroup container, int position, Object object) {
-		((PlanningRoomPageFragment) mFragments[position]).setShouldRetainSlots(false);
+		if (mFragments != null && mFragments[position] != null) {
+			((PlanningRoomPageFragment) mFragments[position]).setShouldRetainSlots(false);
+		}
 		super.destroyItem(container, position, object);
 	}
 
