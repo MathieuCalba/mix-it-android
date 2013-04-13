@@ -137,11 +137,6 @@ public class PlanningRoomPageFragment extends BoundServiceFragment implements Lo
 				if (TextUtils.isEmpty(room)) {
 					room = "";
 				}
-				final StringBuilder selection = new StringBuilder(MixItContract.Sessions.ROOM_ID);
-				selection.append("=?");
-				selection.append(" AND ");
-				selection.append(MixItContract.Sessions.START);
-				selection.append(">=?");
 				long startTimestamp;
 				long endTimestamp;
 				switch (day) {
@@ -156,7 +151,12 @@ public class PlanningRoomPageFragment extends BoundServiceFragment implements Lo
 						endTimestamp = 1366920000000L;
 						break;
 				}
-				;
+
+				final StringBuilder selection = new StringBuilder(MixItContract.Sessions.ROOM_ID);
+				selection.append("=?");
+				selection.append(" AND ");
+				selection.append(MixItContract.Sessions.START);
+				selection.append(">=?");
 				selection.append(" AND \"");
 				selection.append(MixItContract.Sessions.END);
 				selection.append("\"<=?");
