@@ -32,6 +32,11 @@ BoundServiceContract {
 	public static final int DISPLAY_MODE_ALL_MEMBERS = 1204101929;
 	public static final int DISPLAY_MODE_SPEAKERS = 1204101930;
 	public static final int DISPLAY_MODE_STAFF = 1204101931;
+	public static final int DISPLAY_MODE_LINKS = 1204101932;
+	public static final int DISPLAY_MODE_LINKERS = 1204101933;
+
+	public static final String EXTRA_DISPLAY_MODE = "fr.mixit.android.EXTRA_DISPLAY_MODE";
+	public static final String EXTRA_MEMBER_ID = "fr.mixit.android.EXTRA_MEMBER_ID";
 
 	protected static final String STATE_DISPLAY_MODE = "fr.mixit.android.STATE_DISPLAY_MODE";
 
@@ -46,15 +51,19 @@ BoundServiceContract {
 	protected void onCreate(Bundle savedStateInstance) {
 		super.onCreate(savedStateInstance);
 
-		final Context context = getSupportActionBar().getThemedContext();
-		final ArrayAdapter<CharSequence> listAdapter = ArrayAdapter.createFromResource(context, R.array.members, R.layout.sherlock_spinner_item);
-		listAdapter.setDropDownViewResource(R.layout.sherlock_spinner_dropdown_item);
-
-		getSupportActionBar().setListNavigationCallbacks(listAdapter, this);
-		getSupportActionBar().setNavigationMode(ActionBar.NAVIGATION_MODE_LIST);
+		mMode = getIntent().getIntExtra(EXTRA_DISPLAY_MODE, DISPLAY_MODE_SPEAKERS);
 
 		if (savedStateInstance != null) {
 			mMode = savedStateInstance.getInt(STATE_DISPLAY_MODE, DISPLAY_MODE_SPEAKERS);
+		}
+
+		if (mMode != DISPLAY_MODE_LINKS && mMode != DISPLAY_MODE_LINKERS) {
+			final Context context = getSupportActionBar().getThemedContext();
+			final ArrayAdapter<CharSequence> listAdapter = ArrayAdapter.createFromResource(context, R.array.members, R.layout.sherlock_spinner_item);
+			listAdapter.setDropDownViewResource(R.layout.sherlock_spinner_dropdown_item);
+
+			getSupportActionBar().setListNavigationCallbacks(listAdapter, this);
+			getSupportActionBar().setNavigationMode(ActionBar.NAVIGATION_MODE_LIST);
 		}
 
 		final FragmentManager fm = getSupportFragmentManager();
@@ -64,21 +73,24 @@ BoundServiceContract {
 			fm.beginTransaction().add(R.id.content_members_list, mMembersListFrag, MembersListFragment.TAG).commit();
 		}
 
-		int itemSelected = 0;
-		switch (mMode) {
-			case DISPLAY_MODE_ALL_MEMBERS:
-				itemSelected = 0;
-				break;
+		if (mMode != DISPLAY_MODE_LINKS && mMode != DISPLAY_MODE_LINKERS) {
+			int itemSelected = 0;
+			switch (mMode) {
+				case DISPLAY_MODE_ALL_MEMBERS:
+					itemSelected = 0;
+					break;
 
-			case DISPLAY_MODE_SPEAKERS:
-				itemSelected = 1;
-				break;
+				case DISPLAY_MODE_SPEAKERS:
+					itemSelected = 1;
+					break;
 
-			default:
-				itemSelected = 0;
-				break;
+				default:
+					itemSelected = 0;
+					break;
+			}
+			getSupportActionBar().setSelectedNavigationItem(itemSelected);
 		}
-		getSupportActionBar().setSelectedNavigationItem(itemSelected);
+
 		mMembersListFrag.setDisplayMode(mMode);
 
 		if (UIUtils.isTablet(this)) {

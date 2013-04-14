@@ -9,6 +9,7 @@ import android.os.RemoteException;
 import android.support.v4.app.LoaderManager;
 import android.support.v4.content.CursorLoader;
 import android.support.v4.content.Loader;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -53,16 +54,13 @@ public class MembersListFragment extends BoundServiceFragment implements LoaderM
 	}
 
 	@Override
-	public void onCreate(Bundle savedInstanceState) {
-		super.onCreate(savedInstanceState);
-	}
-
-	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
 		final View root = inflater.inflate(R.layout.list_content, container, false);
+
 		mAnimator = (ViewAnimator) root.findViewById(R.id.list_animator);
 		mListView = (ListView) root.findViewById(android.R.id.list);
 		((TextView) root.findViewById(android.R.id.empty)).setText(R.string.empty_members);
+
 		return root;
 	}
 
@@ -127,6 +125,32 @@ public class MembersListFragment extends BoundServiceFragment implements LoaderM
 					case MembersActivity.DISPLAY_MODE_STAFF:
 						membersUri = MixItContract.Members.CONTENT_URI_STAFF;
 						break;
+
+					case MembersActivity.DISPLAY_MODE_LINKERS: {
+						final int memberId = i.getIntExtra(MembersActivity.EXTRA_MEMBER_ID, -1);
+						if (memberId == -1) {
+							if (DEBUG_MODE) {
+								Log.e(TAG, "Member Linkers without member id...");
+							}
+							return null;
+						}
+
+						membersUri = MixItContract.Members.buildLinkersDirUri(String.valueOf(memberId));
+						break;
+					}
+
+					case MembersActivity.DISPLAY_MODE_LINKS: {
+						final int memberId = i.getIntExtra(MembersActivity.EXTRA_MEMBER_ID, -1);
+						if (memberId == -1) {
+							if (DEBUG_MODE) {
+								Log.e(TAG, "Member Linkers without member id...");
+							}
+							return null;
+						}
+
+						membersUri = MixItContract.Members.buildLinksDirUri(String.valueOf(memberId));
+						break;
+					}
 
 					default:
 						break;
