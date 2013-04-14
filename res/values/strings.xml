@@ -10,6 +10,7 @@
     <!-- Planning -->
     <string name="first_day">Thursday</string>
     <string name="second_day">Friday</string>
+    <string name="planning_duplicate_session_title">On %1$s, from %2$s to %3$s</string>
     <string name="planning_slot_pager_header">From %1$s to %2$s</string>
     <string name="planning_slot_pager_header_default">From 9am to 7pm</string>
     <string name="planning_welcome">"Welcome &amp; Breakfast"</string>

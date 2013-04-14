@@ -81,6 +81,14 @@ public class DateUtils {
 		}
 	}
 
+	public static String formatDayTime(Context ctx, long start, long end) {
+		final String dayStart = sDateFormatSdf.format(new Date(start));
+		final String timeStart = sTimeFormatSdf.format(new Date(start));
+		final String timeEnd = sTimeFormatSdf.format(new Date(end));
+
+		return ctx.getResources().getString(R.string.planning_duplicate_session_title, dayStart, timeStart, timeEnd);
+	}
+
 	public static CharSequence formatPlanningHeader(long start) {
 		return sDateFormatSdf.format(new Date(start));
 	}
