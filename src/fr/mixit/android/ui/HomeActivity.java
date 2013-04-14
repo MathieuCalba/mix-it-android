@@ -1,15 +1,23 @@
 package fr.mixit.android.ui;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.os.Message;
 import android.os.RemoteException;
+import android.support.v4.app.FragmentManager;
 import android.support.v4.view.ViewPager;
 import android.widget.TabHost;
+
+import com.actionbarsherlock.view.Menu;
+import com.actionbarsherlock.view.MenuItem;
+
 import fr.mixit.android.services.MixItService;
 import fr.mixit.android.ui.adapters.TabsAdapter;
+import fr.mixit.android.ui.fragments.AboutFragment;
 import fr.mixit.android.ui.fragments.BoundServiceFragment;
 import fr.mixit.android.ui.fragments.ExploreFragment;
 import fr.mixit.android.ui.fragments.MyPlanningFragment;
+import fr.mixit.android.utils.UIUtils;
 import fr.mixit.android_2012.R;
 
 
@@ -77,6 +85,32 @@ public class HomeActivity extends GenericMixItActivity implements BoundServiceFr
 			} catch (final RemoteException e) {
 				e.printStackTrace();
 			}
+		}
+	}
+
+	@Override
+	public boolean onCreateOptionsMenu(Menu menu) {
+		getSupportMenuInflater().inflate(R.menu.home, menu);
+		return true;
+	}
+
+	@Override
+	public boolean onOptionsItemSelected(MenuItem item) {
+		final int itemId = item.getItemId();
+		if (itemId == R.id.menu_item_about) {
+			if (UIUtils.isTablet(this)) {
+				final FragmentManager fm = getSupportFragmentManager();
+				AboutFragment aboutFrag = (AboutFragment) fm.findFragmentByTag(AboutFragment.TAG);
+				if (aboutFrag == null) {
+					aboutFrag = AboutFragment.newInstance(getIntent());
+				}
+				aboutFrag.show(fm, AboutFragment.TAG);
+			} else {
+				startActivity(new Intent(this, AboutActivity.class));
+			}
+			return true;
+		} else {
+			return super.onOptionsItemSelected(item);
 		}
 	}
 

@@ -77,5 +77,12 @@
     <string name="member_picture">"Member's picture"</string>
     <string name="member_bio_empty">"No Biography"</string>
     <string name="member_empty_interests">No Interests for this Member</string>
+    <!-- About -->
+    <string name="action_bar_about">About</string>
+    <string name="about_text1">Source code created for the MixIt Conference by:</string>
+    <string name="about_text2">Mathieu Calba\nmathieu.calba@gmail.com</string>
+    <string name="about_text3">Source code available at https://github.com/MathieuCalba/mix-it-android</string>
+    <string name="about_text4">Version %s</string>
+    <string name="about_text5">Uses some useful libraries :\n- ActionBarSherlock - http://actionbarsherlock.com/\n- Universal Image Loader - https://github.com/nostra13/Android-Universal-Image-Loader\n- View Pager Indicator - https://github.com/JakeWharton/Android-ViewPagerIndicator\n- Sticky List Headers - https://github.com/emilsjolander/StickyListHeaders</string>
 
 </resources>
