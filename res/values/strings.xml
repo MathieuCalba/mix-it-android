@@ -56,6 +56,11 @@
     <string name="session_day_time_room">"On %1$s, from %2$s to %3$s, in room %4$s"</string>
     <string name="session_time_room">"From %1$s to %2$s, in room %3$s"</string>
     <string name="session_day_time_room_full">"On Thursday 25th and Friday 26th, in room %1$s"</string>
+    <string name="warning_star_session_not_sync_with_site">"Your starred sessions will not be synchronized with the website"</string>
+    <string name="star_session_success">"The session \"%1$s\" was successfully starred"</string>
+    <string name="unstar_session_success">"The session \"%1$s\" was successfully unstarred"</string>
+    <string name="star_session_failed">"The session \"%1$s\" was not successfully starred"</string>
+    <string name="unstar_session_failed">"The session \"%1$s\" was not successfully unstarred"</string>
     <!-- Members -->
     <string name="all_staff">Staff</string>
     <string name="all_members">Members</string>

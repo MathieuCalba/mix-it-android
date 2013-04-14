@@ -2,6 +2,7 @@ package fr.mixit.android.ui.fragments;
 
 import android.annotation.TargetApi;
 import android.app.Activity;
+import android.content.ContentResolver;
 import android.content.Context;
 import android.content.Intent;
 import android.database.Cursor;
@@ -22,20 +23,27 @@ import android.view.View.OnClickListener;
 import android.view.ViewGroup;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 import android.widget.ViewAnimator;
 
+import com.actionbarsherlock.view.Menu;
+import com.actionbarsherlock.view.MenuInflater;
+import com.actionbarsherlock.view.MenuItem;
 import com.petebevin.markdown.MarkdownProcessor;
 
+import fr.mixit.android.SessionAsyncTaskLoader;
 import fr.mixit.android.provider.MixItContract;
 import fr.mixit.android.services.MixItService;
 import fr.mixit.android.ui.widgets.MemberItemView;
 import fr.mixit.android.utils.DateUtils;
 import fr.mixit.android.utils.IntentUtils;
+import fr.mixit.android.utils.PrefUtils;
 import fr.mixit.android.utils.UIUtils;
 import fr.mixit.android_2012.R;
 
 
-public class SessionDetailsFragment extends BoundServiceFragment implements LoaderManager.LoaderCallbacks<Cursor> {
+public class SessionDetailsFragment extends BoundServiceFragment implements LoaderManager.LoaderCallbacks<Cursor>,
+WarningStarSessionDialogFragment.WarningStarSessionDialogContract, SessionAsyncTaskLoader.StarSessionListener {
 
 	public static final String TAG = SessionDetailsFragment.class.getSimpleName();
 
@@ -253,57 +261,63 @@ public class SessionDetailsFragment extends BoundServiceFragment implements Load
 		}
 	}
 
-	// @Override
-	// public void onCreateOptionsMenu(Menu menu, MenuInflater mInflater) {
-	// super.onCreateOptionsMenu(menu, mInflater);
-	//
-	// mInflater.inflate(R.menu.session_details, menu);
-	//
-	// final MenuItem actionItem = menu.findItem(R.id.menu_item_share_action_provider_action_bar);
-	// final ShareActionProvider actionProvider = (ShareActionProvider) actionItem.getActionProvider();
-	// actionProvider.setShareHistoryFileName(ShareActionProvider.DEFAULT_SHARE_HISTORY_FILE_NAME);
-	// }
-	//
-	// @Override
-	// public void onPrepareOptionsMenu(Menu menu) {
-	// super.onPrepareOptionsMenu(menu);
-	//
-	// MenuItem actionItem = menu.findItem(R.id.menu_item_vote_favorite);
-	// if (!mIsSession) {
-	// if (mIsVoted) {
-	// actionItem.setTitle(R.string.action_bar_vote_delete);
-	// actionItem.setIcon(R.drawable.ic_vote_down);
-	// } else {
-	// actionItem.setTitle(R.string.action_bar_vote_add);
-	// actionItem.setIcon(R.drawable.ic_vote_up);
-	// }
-	// } else {
-	// if (mIsVoted) {
-	// actionItem.setTitle(R.string.action_bar_favorite_delete);
-	// actionItem.setIcon(R.drawable.ic_starred);
-	// } else {
-	// actionItem.setTitle(R.string.action_bar_favorite_add);
-	// actionItem.setIcon(R.drawable.ic_star);
-	// }
-	// }
-	//
+	@Override
+	public void onCreateOptionsMenu(Menu menu, MenuInflater mInflater) {
+		super.onCreateOptionsMenu(menu, mInflater);
+
+		mInflater.inflate(R.menu.session_details, menu);
+		final MenuItem actionItem = menu.findItem(R.id.menu_item_vote_favorite);
+		actionItem.setVisible(false);
+
+		// final MenuItem actionItem = menu.findItem(R.id.menu_item_share_action_provider_action_bar);
+		// final ShareActionProvider actionProvider = (ShareActionProvider) actionItem.getActionProvider();
+		// actionProvider.setShareHistoryFileName(ShareActionProvider.DEFAULT_SHARE_HISTORY_FILE_NAME);
+	}
+
+	@Override
+	public void onPrepareOptionsMenu(Menu menu) {
+		super.onPrepareOptionsMenu(menu);
+
+		final MenuItem actionItem = menu.findItem(R.id.menu_item_vote_favorite);
+		if (mSessionFormat == null || mSessionFormat.equalsIgnoreCase(MixItContract.Sessions.FORMAT_LIGHTNING_TALK)) {
+			actionItem.setVisible(false);
+			// if (mIsVoted) {
+			// actionItem.setTitle(R.string.action_bar_vote_delete);
+			// actionItem.setIcon(R.drawable.ic_vote_down);
+			// } else {
+			// actionItem.setTitle(R.string.action_bar_vote_add);
+			// actionItem.setIcon(R.drawable.ic_vote_up);
+			// }
+		} else {
+			actionItem.setVisible(true);
+			if (mIsVoted) {
+				actionItem.setTitle(R.string.action_bar_favorite_delete);
+				actionItem.setIcon(R.drawable.ic_starred);
+			} else {
+				actionItem.setTitle(R.string.action_bar_favorite_add);
+				actionItem.setIcon(R.drawable.ic_star);
+			}
+		}
+
+	}
+
 	// actionItem = menu.findItem(R.id.menu_item_share_action_provider_action_bar);
 	// final ShareActionProvider actionProvider = (ShareActionProvider) actionItem.getActionProvider();
 	// actionProvider.setShareIntent(createShareIntent());
 	// }
-	//
-	// @Override
-	// public boolean onOptionsItemSelected(MenuItem item) {
-	// final int id = item.getItemId();
-	// if (id == R.id.menu_item_vote_favorite) {
-	// if (!mIsSession) {
-	// voteForLightning(!mIsVoted);
-	// } else {
-	// favoriteSession(!mIsVoted);
-	// }
-	// }
-	// return super.onOptionsItemSelected(item);
-	// }
+
+	@Override
+	public boolean onOptionsItemSelected(MenuItem item) {
+		final int id = item.getItemId();
+		if (id == R.id.menu_item_vote_favorite) {
+			// if (!mIsSession) {
+			// voteForLightning(!mIsVoted);
+			// } else {
+			favoriteSessionWithDialog(String.valueOf(mSessionId), mTitleStr, !mIsVoted);
+			// }
+		}
+		return super.onOptionsItemSelected(item);
+	}
 
 	protected void showSession() {
 		final int displayedChild = mViewAnimator.getDisplayedChild();
@@ -504,23 +518,59 @@ public class SessionDetailsFragment extends BoundServiceFragment implements Load
 	// }
 	// }
 
-	// protected void favoriteSession(boolean addFavorite) {
-	// if (mIsBound && mServiceReady) {
-	// setRefreshMode(true);
-	//
-	// final Message msg = Message.obtain(null, MixItService.MSG_STAR_SESSION, 0, 0);
-	// msg.replyTo = mMessenger;
-	// final Bundle b = new Bundle();
-	// b.putBoolean(MixItService.EXTRA_STATE_STAR, addFavorite);
-	// b.putInt(MixItService.EXTRA_SESSION_ID, mSessionId);
-	// msg.setData(b);
-	// try {
-	// mService.send(msg);
-	// } catch (final RemoteException e) {
-	// e.printStackTrace();
-	// }
-	// }
-	// }
+	protected void favoriteSessionWithDialog(String sessionId, String sessionTitle, boolean addFavorite) {
+		final boolean isWarningStarSessionShouldBeShown = PrefUtils.isWarningStarSessionShouldBeShown(getActivity());
+		if (isWarningStarSessionShouldBeShown) {
+			final WarningStarSessionDialogFragment frag = WarningStarSessionDialogFragment.newInstance(sessionId, sessionTitle, addFavorite);
+			frag.setTargetFragment(this, WarningStarSessionDialogFragment.WARNING_NO_SYNC_STAR_SESSION);
+			frag.show(getFragmentManager(), WarningStarSessionDialogFragment.TAG);
+		} else {
+			favoriteSession(sessionId, sessionTitle, addFavorite);
+		}
+	}
+
+	protected void favoriteSession(String sessionId, String sessionTitle, boolean addFavorite) {
+		if (getActivity() != null && !isDetached()) {
+			final ContentResolver cr = getActivity().getContentResolver();
+			new SessionAsyncTaskLoader(cr).starSession(sessionId, sessionTitle, addFavorite, this);
+		}
+		// if (mIsBound && mServiceReady) {
+		// setRefreshMode(true);
+		//
+		// final Message msg = Message.obtain(null, MixItService.MSG_STAR_SESSION, 0, 0);
+		// msg.replyTo = mMessenger;
+		// final Bundle b = new Bundle();
+		// b.putBoolean(MixItService.EXTRA_STATE_STAR, addFavorite);
+		// b.putInt(MixItService.EXTRA_SESSION_ID, mSessionId);
+		// msg.setData(b);
+		// try {
+		// mService.send(msg);
+		// } catch (final RemoteException e) {
+		// e.printStackTrace();
+		// }
+		// }
+	}
+
+	@Override
+	public void onWarningClickOk(String sessionId, String sessionTitle, boolean vote) {
+		PrefUtils.setWarningStarSessionShouldBeShown(getActivity(), false);
+
+		favoriteSession(sessionId, sessionTitle, vote);
+	}
+
+	@Override
+	public void onStarSessionSuccessfull(String sessionId, String sessionTitle, boolean vote) {
+		// TODO : show a crouton instead
+		Toast.makeText(getActivity(), getActivity().getString(vote ? R.string.star_session_success : R.string.unstar_session_success, sessionTitle),
+				Toast.LENGTH_LONG).show();
+	}
+
+	@Override
+	public void onStarSessionFailed(String sessionId, String sessionTitle, boolean vote, String error) {
+		// TODO : show a crouton instead
+		Toast.makeText(getActivity(), getActivity().getString(vote ? R.string.star_session_failed : R.string.unstar_session_failed, sessionTitle),
+				Toast.LENGTH_LONG).show();
+	}
 
 	@Override
 	protected void onMessageReceivedFromService(Message msg) {

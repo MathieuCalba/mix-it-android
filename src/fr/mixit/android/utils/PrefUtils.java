@@ -1,20 +1,65 @@
 package fr.mixit.android.utils;
 
-public interface PrefUtils {
+import android.annotation.SuppressLint;
+import android.annotation.TargetApi;
+import android.content.Context;
+import android.content.SharedPreferences;
+import android.os.Build;
 
-	static final int VERSION_NONE = 0;
-	static final int VERSION_LOCAL_2011 = 1;
-	static final int VERSION_REMOTE_2011 = 5;
-	static final int VERSION_LOCAL_2012 = 10;
-	static final int VERSION_REMOTE_2012 = 15;
-	static final int VERSION_LOCAL_2013 = 20;
-	static final int VERSION_REMOTE_2013 = 25;
-	static final int VERSION_LOCAL = VERSION_LOCAL_2013;
-	static final int VERSION_REMOTE = VERSION_REMOTE_2013;
 
-	static final String MIXITSCHED_SYNC = "mixitsched_sync";
-	static final String LOCAL_VERSION = "local_version";
-	static final String LAST_REMOTE_SYNC = "last_remote_sync";
+public class PrefUtils {
+
+	public static final int VERSION_NONE = 0;
+	public static final int VERSION_LOCAL_2011 = 1;
+	public static final int VERSION_REMOTE_2011 = 5;
+	public static final int VERSION_LOCAL_2012 = 10;
+	public static final int VERSION_REMOTE_2012 = 15;
+	public static final int VERSION_LOCAL_2013 = 20;
+	public static final int VERSION_REMOTE_2013 = 25;
+	public static final int VERSION_LOCAL = VERSION_LOCAL_2013;
+	public static final int VERSION_REMOTE = VERSION_REMOTE_2013;
+
+	public static final String MIXITSCHED_SYNC = "mixitsched_sync";
+	public static final String LOCAL_VERSION = "local_version";
+	public static final String LAST_REMOTE_SYNC = "last_remote_sync";
 
 	public static final String SETTINGS_NAME = "MixItScheduleSettings";
+
+	public static final String HIDDEN_SETTINGS = "fr.mixit.android.HIDDEN_SETTINGS";
+	public static final String IS_WARNING_STAR_SESSION_SHOULD_BE_SHOWN = "fr.mixit.android.IS_WARNING_STAR_SESSION_SHOULD_BE_SHOWN";
+
+	public static boolean isWarningStarSessionShouldBeShown(Context ctx) {
+		if (ctx == null) {
+			return false;
+		}
+
+		final SharedPreferences pref = ctx.getSharedPreferences(HIDDEN_SETTINGS, Context.MODE_PRIVATE);
+		final boolean value = pref.getBoolean(IS_WARNING_STAR_SESSION_SHOULD_BE_SHOWN, true);
+		return value;
+	}
+
+	@SuppressLint("CommitPrefEdits")
+	public static void setWarningStarSessionShouldBeShown(Context ctx, boolean value) {
+		if (ctx == null) {
+			return;
+		}
+
+		final SharedPreferences pref = ctx.getSharedPreferences(HIDDEN_SETTINGS, Context.MODE_PRIVATE);
+		final SharedPreferences.Editor editor = pref.edit();
+		editor.putBoolean(IS_WARNING_STAR_SESSION_SHOULD_BE_SHOWN, value);
+		commitOrApply(editor);
+	}
+
+	@TargetApi(9)
+	public static void commitOrApply(SharedPreferences.Editor editor) {
+		if (editor == null) {
+			return;
+		}
+
+		if (Build.VERSION.SDK_INT < Build.VERSION_CODES.GINGERBREAD) {
+			editor.commit();
+		} else {
+			editor.apply();
+		}
+	}
 }
