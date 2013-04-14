@@ -22,6 +22,7 @@ public class MixItContract {
 	public static final String PATH_SESSIONS = "sessions";
 	public static final String PATH_LIGHTNINGS = "lightnings";
 	public static final String PATH_ROOM = "room";
+	public static final String PATH_PLANNING = "planning";
 	public static final String PATH_COMMENTS = "comments";
 
 	public static final String CONTENT_TYPE_START = "vnd.android.cursor.";
@@ -345,6 +346,7 @@ public class MixItContract {
 	public static class Sessions implements SessionsColumns, BaseColumns {
 		public static final Uri CONTENT_URI = BASE_CONTENT_URI.buildUpon().appendPath(PATH_SESSIONS).build();
 		public static final Uri CONTENT_URI_LIGNTHNING = BASE_CONTENT_URI.buildUpon().appendPath(PATH_LIGHTNINGS).build();
+		public static final Uri CONTENT_URI_PLANNING = BASE_CONTENT_URI.buildUpon().appendPath(PATH_PLANNING).build();
 
 		public static final String CONTENT_TYPE = CONTENT_TYPE_START + CONTENT_TYPE_DIR + VENDOR + PATH_SESSIONS;
 		public static final String CONTENT_ITEM_TYPE = CONTENT_TYPE_START + CONTENT_TYPE_ITEM + VENDOR + PATH_SESSIONS;
@@ -352,6 +354,8 @@ public class MixItContract {
 		public static final String DEFAULT_SORT = MixItDatabase.Tables.SESSIONS + "." + SessionsColumns.SESSION_ID + " ASC";
 		public static final String ROOM_SORT = MixItDatabase.Tables.SESSIONS + "." + SessionsColumns.ROOM_ID + " ASC";
 		public static final String PLANNING_SORT = MixItDatabase.Tables.SESSIONS + "." + SessionsColumns.START + " ASC";
+		public static final String PLANNING_FULL_SORT = MixItDatabase.Tables.SESSIONS + "." + SessionsColumns.START + " ASC, " + MixItDatabase.Tables.SESSIONS
+				+ "." + SessionsColumns.ROOM_ID;
 
 		public static final String FORMAT_TALK = "Talk";
 		public static final String FORMAT_LIGHTNING_TALK = "Lightning Talk";
@@ -365,10 +369,10 @@ public class MixItContract {
 					Sessions.START, //
 					Sessions.END, //
 					Sessions.ROOM_ID, //
-					Sessions.IS_FAVORITE, //
 					Sessions.FORMAT, //
 					Sessions.LEVEL, //
-					Sessions.LANG //
+					Sessions.LANG, //
+					Sessions.IS_FAVORITE //
 			};
 
 			int _ID = 0;
@@ -377,10 +381,10 @@ public class MixItContract {
 			int START = 3;
 			int END = 4;
 			int ROOM_ID = 5;
-			int IS_FAVORITE = 6;
-			int FORMAT = 7;
-			int LEVEL = 8;
-			int LANG = 9;
+			int FORMAT = 6;
+			int LEVEL = 7;
+			int LANG = 8;
+			int IS_FAVORITE = 9;
 		}
 
 		public static interface PROJ_DETAIL {
@@ -415,6 +419,37 @@ public class MixItContract {
 			int DESC = 11;
 			int NB_VOTES = 12;
 			int MY_VOTE = 13;
+		}
+
+		protected static final String NB_CONCURRENT_TALKS = "nb_concurrent_talks";
+		protected static final String SLOT_TYPE = "slot_type";
+
+		public static interface PROJ_PLANNING {
+			public String[] PROJECTION = { //
+					Sessions._ID, //
+					Sessions.SESSION_ID, //
+					Sessions.TITLE, //
+					Sessions.START, //
+					Sessions.END, //
+					Sessions.ROOM_ID, //
+					Sessions.FORMAT, //
+					Sessions.LEVEL, //
+					Sessions.LANG, //
+					Sessions.NB_CONCURRENT_TALKS, //
+					Sessions.SLOT_TYPE //
+			};
+
+			int _ID = 0;
+			int SESSION_ID = 1;
+			int TITLE = 2;
+			int START = 3;
+			int END = 4;
+			int ROOM_ID = 5;
+			int FORMAT = 6;
+			int LEVEL = 7;
+			int LANG = 8;
+			int NB_CONCURRENT_TALKS = 9;
+			int SLOT_TYPE = 10;
 		}
 
 		public static interface PROJ_ROOM {
