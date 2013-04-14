@@ -14,6 +14,7 @@ import android.view.ViewGroup;
 import com.emilsjolander.components.stickylistheaders.StickyListHeadersListView;
 
 import fr.mixit.android.provider.MixItContract;
+import fr.mixit.android.services.MixItService;
 import fr.mixit.android.ui.adapters.MyPlanningAdapter;
 import fr.mixit.android.utils.UIUtils;
 import fr.mixit.android_2012.R;
@@ -117,6 +118,23 @@ public class MyPlanningFragment extends BoundServiceFragment implements LoaderMa
 
 	@Override
 	protected void onMessageReceivedFromService(Message msg) {
+		if (msg.what == MixItService.MSG_INIT) {
+			switch (msg.arg1) {
+				case MixItService.Response.STATUS_OK:
+					break;
+
+				case MixItService.Response.STATUS_ERROR:
+					break;
+
+				case MixItService.Response.STATUS_NO_CONNECTIVITY:
+					break;
+
+				default:
+					break;
+			}
+
+			loadStarredSession();
+		}
 	}
 
 }
