@@ -10,6 +10,7 @@ import android.view.View;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
+import fr.mixit.android.model.PlanningSlot;
 import fr.mixit.android.provider.MixItContract;
 import fr.mixit.android.utils.DateUtils;
 import fr.mixit.android_2012.R;
@@ -74,11 +75,61 @@ public class TalkItemView extends RelativeLayout {
 
 		mTitle.setText(title + " [" + format + "]");
 		mSubTitle.setText(DateUtils.formatSessionTime(getContext(), start, end, room));// "On DDD, from HH:MM to HH:MM, in " + room
-		// final Drawable drawable = holder.starred.getDrawable();
-		// drawable.setColorFilter(new LightingColorFilter(mContext.getResources().getColor(R.color.star_color), 1));
+
+		final Drawable drawable = mStar.getDrawable();
+		drawable.setColorFilter(new LightingColorFilter(getContext().getResources().getColor(R.color.star_color), 1));
 
 		final boolean starred = c.getInt(MixItContract.Sessions.PROJ_LIST.IS_FAVORITE) != 0;
 		mStar.setVisibility(mDisplayStar && starred ? View.VISIBLE : View.INVISIBLE);
+	}
+
+	public void setContentPlanning(Cursor c) {
+		if (c == null) {
+			return;
+		}
+
+		final int slotType = c.getInt(MixItContract.Sessions.PROJ_PLANNING.SLOT_TYPE);
+		final int nbConcurrentTalk = c.getInt(MixItContract.Sessions.PROJ_PLANNING.NB_CONCURRENT_TALKS);
+
+		switch (slotType) {
+			case PlanningSlot.TYPE_SESSION:
+			case PlanningSlot.TYPE_NO_SESSION:
+			case PlanningSlot.TYPE_LIGHTNING_TALK:
+			case PlanningSlot.TYPE_KEYNOTE: {
+				final String title = c.getString(MixItContract.Sessions.PROJ_PLANNING.TITLE);
+				final String room = c.getString(MixItContract.Sessions.PROJ_PLANNING.ROOM_ID);
+				final long start = c.getLong(MixItContract.Sessions.PROJ_PLANNING.START);
+				final long end = c.getLong(MixItContract.Sessions.PROJ_PLANNING.END);
+
+				if (nbConcurrentTalk == 1) {
+					final String format = c.getString(MixItContract.Sessions.PROJ_PLANNING.FORMAT);
+
+					mTitle.setText(title + " [" + format + "]");
+				} else {
+					mTitle.setText(title);
+				}
+				mSubTitle.setText(DateUtils.formatPlanningSessionTime(getContext(), start, end, room));// "On DDD, from HH:MM to HH:MM, in " + room
+				mSubTitle.setVisibility(View.VISIBLE);
+
+				break;
+			}
+
+			case PlanningSlot.TYPE_BREAK:
+			case PlanningSlot.TYPE_BREAKFAST:
+			case PlanningSlot.TYPE_LUNCH: {
+				final String title = c.getString(MixItContract.Sessions.PROJ_PLANNING.TITLE);
+
+				mTitle.setText(title);
+				mSubTitle.setVisibility(View.GONE);
+
+				break;
+			}
+
+			default:
+				break;
+		}
+
+		mStar.setVisibility(View.GONE);
 	}
 
 }
