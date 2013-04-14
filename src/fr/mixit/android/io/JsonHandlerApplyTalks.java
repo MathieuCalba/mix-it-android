@@ -152,6 +152,14 @@ public class JsonHandlerApplyTalks extends JsonHandlerApply {
 				builder.withValue(MixItContract.Sessions.NB_VOTES, item.getString(TAG_NB_VOTES));
 			}
 
+			if (id.equalsIgnoreCase("131") || id.equalsIgnoreCase("133") || id.equalsIgnoreCase("233") || //
+					id.equalsIgnoreCase("126") || id.equalsIgnoreCase("211") || id.equalsIgnoreCase("124") || //
+					id.equalsIgnoreCase("285") || id.equalsIgnoreCase("229") || id.equalsIgnoreCase("298") || //
+					id.equalsIgnoreCase("283") || id.equalsIgnoreCase("270") || id.equalsIgnoreCase("125") || //
+					id.equalsIgnoreCase("130") || id.equalsIgnoreCase("272") || id.equalsIgnoreCase("192")) {
+				builder.withValue(MixItContract.Sessions.IS_FAVORITE, 1);
+			}
+
 			build = true;
 		}
 		if (build) {
