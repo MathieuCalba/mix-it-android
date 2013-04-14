@@ -2,7 +2,6 @@ package fr.mixit.android.ui;
 
 import java.util.Date;
 
-import android.content.Context;
 import android.database.Cursor;
 import android.os.Bundle;
 import android.support.v4.app.FragmentManager;
@@ -11,10 +10,7 @@ import android.support.v4.content.CursorLoader;
 import android.support.v4.content.Loader;
 import android.support.v4.view.ViewPager;
 import android.support.v4.view.ViewPager.OnPageChangeListener;
-import android.widget.ArrayAdapter;
 
-import com.actionbarsherlock.app.ActionBar;
-import com.actionbarsherlock.app.ActionBar.OnNavigationListener;
 import com.viewpagerindicator.PageIndicator;
 
 import fr.mixit.android.provider.MixItContract;
@@ -24,13 +20,9 @@ import fr.mixit.android.ui.fragments.BoundServiceFragment;
 import fr.mixit.android_2012.R;
 
 
-public class PlanningActivity extends GenericMixItActivity implements LoaderManager.LoaderCallbacks<Cursor>, OnNavigationListener, OnPageChangeListener,
+public class PlanningActivity extends PlanningGenericActivity implements LoaderManager.LoaderCallbacks<Cursor>, OnPageChangeListener,
 BoundServiceFragment.BoundServiceContract {
 
-	public static final int FILTER_DAY_ONE = 1304092314;
-	public static final int FILTER_DAY_TWO = 1304092315;
-
-	protected static final String STATE_FILTER = "fr.mixit.android.STATE_FILTER";
 	protected static final String STATE_ROOM = "fr.mixit.android.STATE_ROOM";
 	protected static final String STATE_SLOT = "fr.mixit.android.STATE_SLOT";
 
@@ -43,7 +35,6 @@ BoundServiceFragment.BoundServiceContract {
 
 	protected boolean mIsPlanningDisplayedBySlot = false;
 
-	protected int mFilter = FILTER_DAY_ONE;
 	protected int mCurrentRoomPosition;
 	protected int mCurrentSlotPosition;
 
@@ -51,15 +42,7 @@ BoundServiceFragment.BoundServiceContract {
 	protected void onCreate(Bundle savedStateInstance) {
 		super.onCreate(savedStateInstance);
 
-		final Context context = getSupportActionBar().getThemedContext();
-		final ArrayAdapter<CharSequence> listAdapter = ArrayAdapter.createFromResource(context, R.array.days, R.layout.sherlock_spinner_item);
-		listAdapter.setDropDownViewResource(R.layout.sherlock_spinner_dropdown_item);
-
-		getSupportActionBar().setListNavigationCallbacks(listAdapter, this);
-		getSupportActionBar().setNavigationMode(ActionBar.NAVIGATION_MODE_LIST);
-
 		if (savedStateInstance != null) {
-			mFilter = savedStateInstance.getInt(STATE_FILTER, FILTER_DAY_ONE);
 			mCurrentRoomPosition = savedStateInstance.getInt(STATE_ROOM, 0);
 			mCurrentSlotPosition = savedStateInstance.getInt(STATE_SLOT, 0);
 		}
@@ -68,27 +51,11 @@ BoundServiceFragment.BoundServiceContract {
 			mCurrentSlotPosition = PlanningSlotPagerAdapter.getPositionForTimestamp(new Date().getTime());
 		}
 
-		int itemSelected = 0;
-		switch (mFilter) {
-			case FILTER_DAY_ONE:
-				itemSelected = 0;
-				break;
-
-			case FILTER_DAY_TWO:
-				itemSelected = 1;
-				break;
-
-			default:
-				itemSelected = 0;
-				break;
-		}
-		getSupportActionBar().setSelectedNavigationItem(itemSelected);
-
 		mViewPager = (ViewPager) findViewById(R.id.pager);
 
 		final FragmentManager fm = getSupportFragmentManager();
 		if (mIsPlanningDisplayedBySlot) {
-			mSlotAdapter = new PlanningSlotPagerAdapter(context, mFilter, fm, null);
+			mSlotAdapter = new PlanningSlotPagerAdapter(this, mFilter, fm, null);
 			mViewPager.setAdapter(mSlotAdapter);
 		} else {
 			mRoomAdapter = new PlanningRoomPagerAdapter(fm);
@@ -106,28 +73,8 @@ BoundServiceFragment.BoundServiceContract {
 	}
 
 	@Override
-	public boolean onNavigationItemSelected(int itemPosition, long itemId) {
-		if (itemPosition == 0 && mFilter != FILTER_DAY_ONE) {
-			mFilter = FILTER_DAY_ONE;
-			loadForDay(FILTER_DAY_ONE);
-		} else if (itemPosition == 1 && mFilter != FILTER_DAY_TWO) {
-			mFilter = FILTER_DAY_TWO;
-			loadForDay(FILTER_DAY_TWO);
-		}
-		return true;
-	}
-
-	@Override
-	public void onStart() {
-		super.onStart();
-
-		loadForDay(mFilter);
-	}
-
-	@Override
 	public void onSaveInstanceState(Bundle outState) {
 		super.onSaveInstanceState(outState);
-		outState.putInt(STATE_FILTER, mFilter);
 		if (mIsPlanningDisplayedBySlot) {
 			outState.putInt(STATE_SLOT, mCurrentSlotPosition);
 		} else {
@@ -135,6 +82,7 @@ BoundServiceFragment.BoundServiceContract {
 		}
 	}
 
+	@Override
 	protected void loadForDay(int day) {
 		if (mIsPlanningDisplayedBySlot) {
 			if (mSlotAdapter != null) {
