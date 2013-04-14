@@ -23,5 +23,11 @@
     <dimen name="member_image_size_detail">80dp</dimen>
     <dimen name="member_image_padding">8dp</dimen>
     <dimen name="detail_breadcrumb_height">36dp</dimen>
+    <!-- Planning -->
+    <dimen name="planning_full_width">800dp</dimen>
+    <dimen name="planning_full_height">600dp</dimen>
+    <dimen name="planning_min_height_header">32dp</dimen>
+    <dimen name="planning_min_height_half_hour">32dp</dimen>
+    <dimen name="planning_header_min_height">32dp</dimen>
 
 </resources>
