@@ -94,6 +94,11 @@
             android:icon="@drawable/ic_action_bar"
             android:label="" >
         </activity>
+        <activity
+            android:name="fr.mixit.android.ui.PlanningFullActivity"
+            android:icon="@drawable/ic_action_bar"
+            android:label="" >
+        </activity>
 
         <service
             android:name="fr.mixit.android.services.MixItService"

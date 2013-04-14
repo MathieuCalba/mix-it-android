@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8"?>
+<fr.mixit.android.ui.widgets.VScroll xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/planning_v_scroll"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent" >
+
+    <fr.mixit.android.ui.widgets.HScroll
+        android:id="@+id/planning_h_scroll"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent" >
+
+        <LinearLayout
+            android:id="@+id/planning_grid"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical" />
+    </fr.mixit.android.ui.widgets.HScroll>
+
+</fr.mixit.android.ui.widgets.VScroll>
