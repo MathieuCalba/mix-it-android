@@ -21,7 +21,7 @@ public class DateUtils {
 		return cal.getTimeInMillis();
 	}
 
-	private static final SimpleDateFormat sParserSdf = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSSZ", Locale.FRANCE);
+	private static final SimpleDateFormat sParserSdf = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSSZ", Locale.getDefault());
 
 	public static long parseISO8601(String str) {
 		synchronized (sParserSdf) {
@@ -55,6 +55,21 @@ public class DateUtils {
 		}
 	}
 
+	public static String formatPlanningSessionTime(Context ctx, long start, long end, String room) {
+		if (start == 0 && end == 0) {
+			return ctx.getResources().getString(R.string.session_day_time_room_full, room);
+		} else {
+			final String timeStart = sTimeFormatSdf.format(new Date(start));
+			final String timeEnd = sTimeFormatSdf.format(new Date(end));
+
+			// if (dayEnd.equalsIgnoreCase(dayStart)) {
+			return ctx.getResources().getString(R.string.session_time_room, timeStart, timeEnd, room);
+			// } else {
+			// return ctx.getResources().getString(R.string.session_day_time_room, dayStart + " & " + dayEnd, timeStart, timeEnd, room);
+			// }
+		}
+	}
+
 	public static String formatSlotTime(Context ctx, long start, long end) {
 		if (start == 0 && end == 0) {
 			return ctx.getResources().getString(R.string.planning_slot_pager_header_default);
@@ -64,6 +79,10 @@ public class DateUtils {
 
 			return ctx.getResources().getString(R.string.planning_slot_pager_header, timeStart, timeEnd);
 		}
+	}
+
+	public static CharSequence formatPlanningHeader(long start) {
+		return sDateFormatSdf.format(new Date(start));
 	}
 
 }
