@@ -80,7 +80,7 @@ public class TalkItemView extends RelativeLayout {
 		drawable.setColorFilter(new LightingColorFilter(getContext().getResources().getColor(R.color.star_color), 1));
 
 		final boolean starred = c.getInt(MixItContract.Sessions.PROJ_LIST.IS_FAVORITE) != 0;
-		mStar.setVisibility(mDisplayStar && starred ? View.VISIBLE : View.INVISIBLE);
+		mStar.setVisibility(mDisplayStar ? starred ? View.VISIBLE : View.INVISIBLE : View.GONE);
 	}
 
 	public void setContentPlanning(Cursor c) {

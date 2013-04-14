@@ -71,7 +71,8 @@ public class SessionsListFragment extends BoundServiceFragment implements Loader
 			mCheckedPosition = savedInstanceState.getInt(STATE_CHECKED_POSITION, -1);
 		}
 
-		mAdapter = new SessionsAdapter(getActivity(), !(mMode == SessionsActivity.DISPLAY_MODE_SESSIONS_STARRED));
+		mAdapter = new SessionsAdapter(getActivity(),
+				!(mMode == SessionsActivity.DISPLAY_MODE_SESSIONS_STARRED || mMode == SessionsActivity.DISPLAY_MODE_LIGHTNING_TALKS));
 		mListView.setAdapter(mAdapter);
 		mListView.setOnItemClickListener(this);
 	}
@@ -149,6 +150,7 @@ public class SessionsListFragment extends BoundServiceFragment implements Loader
 				}
 			}
 			mAdapter.swapCursor(data);
+			mAdapter.setDisplayStar(!(mMode == SessionsActivity.DISPLAY_MODE_SESSIONS_STARRED || mMode == SessionsActivity.DISPLAY_MODE_LIGHTNING_TALKS));
 
 			if (mCheckedPosition >= 0 && getView() != null) {
 				mListView.setItemChecked(mCheckedPosition, true);
