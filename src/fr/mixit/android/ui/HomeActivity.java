@@ -135,4 +135,9 @@ public class HomeActivity extends GenericMixItActivity implements BoundServiceFr
 		}
 	}
 
+	@Override
+	protected int getActivityLevel() {
+		return 0;
+	}
+
 }
