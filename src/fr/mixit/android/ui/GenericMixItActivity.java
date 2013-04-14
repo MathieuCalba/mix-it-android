@@ -209,11 +209,11 @@ public abstract class GenericMixItActivity extends SherlockFragmentActivity {
 		return super.onOptionsItemSelected(item);
 	}
 
-	public int getActivityLevel() {
+	protected int getActivityLevel() {
 		return 1;
 	}
 
-	public Intent getParentIntent(int level) {
+	protected Intent getParentIntent(int level) {
 		if (level > getActivityLevel() || level < 0) {
 			return null;
 		}
