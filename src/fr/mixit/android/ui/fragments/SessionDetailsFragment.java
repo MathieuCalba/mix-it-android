@@ -31,9 +31,9 @@ import com.actionbarsherlock.view.MenuInflater;
 import com.actionbarsherlock.view.MenuItem;
 import com.petebevin.markdown.MarkdownProcessor;
 
-import fr.mixit.android.SessionAsyncTaskLoader;
 import fr.mixit.android.provider.MixItContract;
 import fr.mixit.android.services.MixItService;
+import fr.mixit.android.tasks.SessionAsyncTaskLoader;
 import fr.mixit.android.ui.widgets.MemberItemView;
 import fr.mixit.android.utils.DateUtils;
 import fr.mixit.android.utils.IntentUtils;

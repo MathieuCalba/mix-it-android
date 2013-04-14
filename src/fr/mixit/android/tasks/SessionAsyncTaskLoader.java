@@ -1,4 +1,4 @@
-package fr.mixit.android;
+package fr.mixit.android.tasks;
 
 import java.lang.ref.WeakReference;
 
@@ -7,6 +7,7 @@ import android.content.ContentResolver;
 import android.content.ContentValues;
 import android.net.Uri;
 import android.util.Log;
+import fr.mixit.android.MixItApplication;
 import fr.mixit.android.provider.MixItContract;
 
 
