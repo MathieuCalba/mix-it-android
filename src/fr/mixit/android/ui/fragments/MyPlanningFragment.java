@@ -2,6 +2,7 @@ package fr.mixit.android.ui.fragments;
 
 import android.content.Intent;
 import android.database.Cursor;
+import android.net.Uri;
 import android.os.Bundle;
 import android.os.Message;
 import android.support.v4.app.LoaderManager;
@@ -10,17 +11,21 @@ import android.support.v4.content.Loader;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
+import android.widget.AdapterView.OnItemClickListener;
 
 import com.emilsjolander.components.stickylistheaders.StickyListHeadersListView;
 
+import fr.mixit.android.model.PlanningSlot;
 import fr.mixit.android.provider.MixItContract;
 import fr.mixit.android.services.MixItService;
+import fr.mixit.android.ui.SessionsActivity;
 import fr.mixit.android.ui.adapters.MyPlanningAdapter;
 import fr.mixit.android.utils.UIUtils;
 import fr.mixit.android_2012.R;
 
 
-public class MyPlanningFragment extends BoundServiceFragment implements LoaderManager.LoaderCallbacks<Cursor> {
+public class MyPlanningFragment extends BoundServiceFragment implements LoaderManager.LoaderCallbacks<Cursor>, OnItemClickListener {
 
 	public static final String TAG = MyPlanningFragment.class.getSimpleName();
 
@@ -48,6 +53,7 @@ public class MyPlanningFragment extends BoundServiceFragment implements LoaderMa
 
 		mAdapter = new MyPlanningAdapter(getActivity());
 		mListView.setAdapter(mAdapter);
+		mListView.setOnItemClickListener(this);
 	}
 
 	@Override
@@ -134,6 +140,49 @@ public class MyPlanningFragment extends BoundServiceFragment implements LoaderMa
 			}
 
 			loadStarredSession();
+		}
+	}
+
+	@Override
+	public void onItemClick(AdapterView<?> adapter, View v, int position, long id) {
+		Intent intent = null;
+
+		final Cursor cursor = (Cursor) mAdapter.getItem(position);
+
+		final int slotType = cursor.getInt(MixItContract.Sessions.PROJ_PLANNING.SLOT_TYPE);
+
+		switch (slotType) {
+			case PlanningSlot.TYPE_SESSION:
+				final int nbConcurrentTalks = cursor.getInt(MixItContract.Sessions.PROJ_PLANNING.NB_CONCURRENT_TALKS);
+
+				if (nbConcurrentTalks == 1) {
+					final String sessionId = cursor.getString(MixItContract.Sessions.PROJ_PLANNING.SESSION_ID);
+
+					final Uri sessionUri = MixItContract.Sessions.buildSessionUri(sessionId);
+					intent = new Intent(Intent.ACTION_VIEW, sessionUri);
+				} else {
+					final long slotStart = cursor.getLong(MixItContract.Sessions.PROJ_PLANNING.START);
+					final long slotEnd = cursor.getLong(MixItContract.Sessions.PROJ_PLANNING.END);
+
+					intent = new Intent(getActivity(), SessionsActivity.class);
+					intent.putExtra(SessionsActivity.EXTRA_MODE, SessionsActivity.DISPLAY_MODE_SESSIONS_DUPLICATE);
+					intent.putExtra(SessionsActivity.EXTRA_SLOT_START, slotStart);
+					intent.putExtra(SessionsActivity.EXTRA_SLOT_END, slotEnd);
+				}
+				break;
+
+			case PlanningSlot.TYPE_LIGHTNING_TALK:
+				intent = new Intent(getActivity(), SessionsActivity.class);
+				intent.putExtra(SessionsActivity.EXTRA_MODE, SessionsActivity.DISPLAY_MODE_LIGHTNING_TALKS);
+
+			default:
+				break;
+		}
+
+		if (intent != null) {
+			startActivity(intent);
+
+			mListView.setItemChecked(position, true);
 		}
 	}
 

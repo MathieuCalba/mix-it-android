@@ -1,6 +1,8 @@
 package fr.mixit.android.ui.fragments;
 
+import android.content.Intent;
 import android.database.Cursor;
+import android.net.Uri;
 import android.os.Bundle;
 import android.os.Message;
 import android.support.v4.app.LoaderManager;
@@ -35,11 +37,14 @@ public class PlanningSlotPageFragment extends BoundServiceFragment implements Lo
 
 	public static PlanningSlotPageFragment newInstance(long slotStart, long slotEnd, int position) {
 		final PlanningSlotPageFragment f = new PlanningSlotPageFragment();
+
 		final Bundle args = new Bundle();
 		args.putLong(EXTRA_SLOT_START, slotStart);
 		args.putLong(EXTRA_SLOT_END, slotEnd);
 		args.putInt(EXTRA_POSITION, position);
+
 		f.setArguments(args);
+
 		return f;
 	}
 
@@ -187,6 +192,13 @@ public class PlanningSlotPageFragment extends BoundServiceFragment implements Lo
 
 	@Override
 	public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+		final Cursor cursor = (Cursor) mAdapter.getItem(position);
+		final String sessionId = cursor.getString(MixItContract.Sessions.PROJ_LIST.SESSION_ID);
+		final Uri sessionUri = MixItContract.Sessions.buildSessionUri(sessionId);
+		final Intent intent = new Intent(Intent.ACTION_VIEW, sessionUri);
+		startActivity(intent);
+
+		mListView.setItemChecked(position, true);
 	}
 
 }

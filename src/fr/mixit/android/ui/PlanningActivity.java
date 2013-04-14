@@ -33,7 +33,7 @@ BoundServiceFragment.BoundServiceContract {
 	protected PlanningRoomPagerAdapter mRoomAdapter;
 	protected PlanningSlotPagerAdapter mSlotAdapter;
 
-	protected boolean mIsPlanningDisplayedBySlot = false;
+	protected boolean mIsPlanningDisplayedBySlot = true;
 
 	protected int mCurrentRoomPosition;
 	protected int mCurrentSlotPosition;
