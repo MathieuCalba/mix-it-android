@@ -52,6 +52,10 @@
 
                 <data android:mimeType="vnd.android.cursor.dir/vnd.mixit.sessions" />
             </intent-filter>
+
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="fr.mixit.android.ui.HomeActivity" />
         </activity>
         <activity
             android:name="fr.mixit.android.ui.SessionDetailsActivity"
@@ -64,6 +68,10 @@
 
                 <data android:mimeType="vnd.android.cursor.item/vnd.mixit.sessions" />
             </intent-filter>
+
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="fr.mixit.android.ui.SessionsActivity" />
         </activity>
         <activity
             android:name="fr.mixit.android.ui.MembersActivity"
@@ -76,6 +84,10 @@
 
                 <data android:mimeType="vnd.android.cursor.dir/vnd.mixit.members" />
             </intent-filter>
+
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="fr.mixit.android.ui.HomeActivity" />
         </activity>
         <activity
             android:name="fr.mixit.android.ui.MemberDetailsActivity"
@@ -88,11 +100,18 @@
 
                 <data android:mimeType="vnd.android.cursor.item/vnd.mixit.members" />
             </intent-filter>
+
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="fr.mixit.android.ui.MembersActivity" />
         </activity>
         <activity
             android:name="fr.mixit.android.ui.PlanningActivity"
             android:icon="@drawable/ic_action_bar"
             android:label="" >
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="fr.mixit.android.ui.HomeActivity" />
         </activity>
         <activity
             android:name="fr.mixit.android.ui.AboutActivity"
@@ -103,6 +122,10 @@
 
                 <category android:name="android.intent.category.DEFAULT" />
             </intent-filter>
+
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="fr.mixit.android.ui.HomeActivity" />
         </activity>
 
         <service
