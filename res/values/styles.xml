@@ -1,4 +1,4 @@
-<resources>
+<resources xmlns:android="http://schemas.android.com/apk/res/android">
 
     <!--
         Base application theme, dependent on API level. This theme is replaced
@@ -17,7 +17,25 @@
 
         <!-- All customizations that are NOT specific to a particular API-level can go here. -->
         <item name="vpiTitlePageIndicatorStyle">@style/PlanningTitlePageIndicator</item>
+        <item name="UnderlinedTextViewStyle">@style/Widget.UnderlinedTextView</item>
+        <item name="android:windowBackground">@color/background</item>
     </style>
+
+    <style name="ButtonBlueWithWhiteTextMixIT" parent="ButtonBlueMixIT">
+        <item name="android:textColor">#FFFFFF</item>
+    </style>
+
+    <style name="ItemHeader">
+        <item name="android:textSize">@dimen/text_size_small</item>
+        <item name="android:textColor">@color/body_text_1</item>
+        <item name="line_color">@color/blue_mixit</item>
+        <!-- <item name="line_height">@dimen/planning_underline_height</item> -->
+        <item name="android:background">@color/background</item>
+    </style>
+
+    <!-- <style name="Widget.UnderlinedTextView" parent="Widget"> -->
+    <!-- <item name="line_color">@color/light_blue_mixit</item> -->
+    <!-- </style> -->
 
     <style name="ItemTitle">
         <item name="android:textStyle">bold</item>
@@ -26,17 +44,6 @@
     </style>
 
     <style name="ItemSubTitle">
-        <item name="android:textSize">@dimen/text_size_small</item>
-        <item name="android:textColor">@color/body_text_2</item>
-    </style>
-
-    <style name="ListItemTitle">
-        <item name="android:textStyle">bold</item>
-        <item name="android:textSize">@dimen/text_size_medium</item>
-        <item name="android:textColor">@color/body_text_1</item>
-    </style>
-
-    <style name="ListItemSubtitle">
         <item name="android:textSize">@dimen/text_size_small</item>
         <item name="android:textColor">@color/body_text_2</item>
     </style>
