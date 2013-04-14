@@ -1,0 +1,91 @@
+<resources>
+
+    <!--
+        Base application theme, dependent on API level. This theme is replaced
+        by AppBaseTheme from res/values-vXX/styles.xml on newer devices.
+    -->
+    <style name="AppBaseTheme" parent="MixIT_actionbar">
+        <!--
+            Theme customizations available in newer API levels can go in
+            res/values-vXX/styles.xml, while customizations related to
+            backward-compatibility can go here.
+        -->
+    </style>
+
+    <!-- Application theme. -->
+    <style name="AppTheme" parent="AppBaseTheme">
+
+        <!-- All customizations that are NOT specific to a particular API-level can go here. -->
+        <item name="vpiTitlePageIndicatorStyle">@style/PlanningTitlePageIndicator</item>
+    </style>
+
+    <style name="ItemTitle">
+        <item name="android:textStyle">bold</item>
+        <item name="android:textSize">@dimen/text_size_medium</item>
+        <item name="android:textColor">@color/body_text_1</item>
+    </style>
+
+    <style name="ItemSubTitle">
+        <item name="android:textSize">@dimen/text_size_small</item>
+        <item name="android:textColor">@color/body_text_2</item>
+    </style>
+
+    <style name="ListItemTitle">
+        <item name="android:textStyle">bold</item>
+        <item name="android:textSize">@dimen/text_size_medium</item>
+        <item name="android:textColor">@color/body_text_1</item>
+    </style>
+
+    <style name="ListItemSubtitle">
+        <item name="android:textSize">@dimen/text_size_small</item>
+        <item name="android:textColor">@color/body_text_2</item>
+    </style>
+
+    <style name="ListItemContainerBase">
+        <item name="android:minHeight">?android:attr/listPreferredItemHeight</item>
+    </style>
+    <!-- a simple list item is one whose container and content are the same view -->
+    <style name="SimpleListItem" parent="style/ListItemContainerBase">
+        <item name="android:paddingLeft">10dp</item>
+        <item name="android:paddingRight">10dp</item>
+        <item name="android:paddingTop">8dp</item>
+        <item name="android:paddingBottom">8dp</item>
+    </style>
+    <!-- used for more complex list items, e.g. those with stars aligned to the top-right -->
+    <style name="ListItemContainer" parent="style/ListItemContainerBase" />
+
+    <style name="ListItemContent">
+        <item name="android:paddingLeft">10dp</item>
+        <item name="android:paddingRight">10dp</item>
+        <item name="android:paddingTop">8dp</item>
+        <item name="android:paddingBottom">8dp</item>
+    </style>
+
+    <style name="Widget.MixIt.Tab" parent="Widget.Sherlock.ActionBar.TabView">
+        <item name="android:background">@drawable/tab_indicator_ab_mixit</item>
+        <item name="android:layout_width">0dip</item>
+        <item name="android:layout_weight">1</item>
+        <item name="android:paddingLeft">5dip</item>
+        <item name="android:paddingRight">5dip</item>
+        <item name="android:minWidth">80dip</item>
+        <!-- <item name="android:layout_height">@dimen/abs__action_bar_default_height</item> -->
+        <item name="android:minHeight">@dimen/abs__action_bar_default_height</item>
+    </style>
+
+    <style name="Widget.MixIt.TabText" parent="Widget.Sherlock.ActionBar.TabText">
+        <item name="android:maxWidth">180dip</item>
+    </style>
+
+    <style name="PlanningTitlePageIndicator">
+        <item name="android:background">@drawable/ab_stacked_solid_mixit</item>
+        <item name="footerColor">@color/pressed_mixit</item>
+        <item name="footerLineHeight">1dp</item>
+        <item name="footerIndicatorHeight">3dp</item>
+        <item name="footerIndicatorStyle">underline</item>
+        <item name="android:textColor">#FFFFFF</item>
+        <item name="selectedColor">@color/pressed_mixit</item>
+        <item name="selectedBold">true</item>
+    </style>
+    <!-- @color/blue_mixit -->
+
+</resources>

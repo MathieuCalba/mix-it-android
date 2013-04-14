@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Generated with http://android-holo-colors.com -->
+<resources xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <style name="MixIT_component" parent="@style/Theme.Sherlock.Light.DarkActionBar">
+        <item name="android:editTextStyle">@style/EditTextMixIT</item>
+        <item name="android:buttonStyle">@style/ButtonMixIT</item>
+        <item name="android:imageButtonStyle">@style/ImageButtonMixIT</item>
+        <item name="android:progressBarStyleHorizontal">@style/ProgressBarMixIT</item>
+        <item name="android:buttonStyleToggle">@style/ToggleMixIT</item>
+        <item name="android:listViewStyle">@style/ListViewMixIT</item>
+        <item name="android:listViewWhiteStyle">@style/ListViewMixIT.White</item>
+        <item name="android:spinnerItemStyle">@style/SpinnerItemMixIT</item>
+    </style>
+
+</resources>

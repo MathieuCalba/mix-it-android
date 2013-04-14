@@ -1,0 +1,90 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="@drawable/bkg_member_header"
+    android:padding="@dimen/margin_small" >
+
+    <ImageView
+        android:id="@+id/member_picture"
+        android:layout_width="@dimen/member_image_size_detail"
+        android:layout_height="@dimen/member_image_size_detail"
+        android:layout_alignParentRight="true"
+        android:layout_alignParentTop="true"
+        android:layout_marginBottom="@dimen/margin_very_small"
+        android:layout_marginLeft="@dimen/margin_small"
+        android:contentDescription="@string/member_picture" />
+
+    <TextView
+        android:id="@+id/member_consults"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignLeft="@id/member_picture"
+        android:layout_alignRight="@id/member_picture"
+        android:layout_below="@id/member_picture"
+        android:layout_marginBottom="@dimen/margin_small"
+        android:gravity="center"
+        android:textColor="@color/body_text_2"
+        android:textIsSelectable="false"
+        android:textSize="@dimen/text_size_very_small" />
+
+    <TextView
+        android:id="@+id/member_name"
+        style="@style/ItemTitle"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentTop="true"
+        android:layout_toLeftOf="@id/member_picture"
+        android:textIsSelectable="false" />
+
+    <TextView
+        android:id="@+id/member_company"
+        style="@style/ItemSubTitle"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentLeft="true"
+        android:layout_below="@id/member_name"
+        android:layout_marginBottom="@dimen/margin_small"
+        android:layout_toLeftOf="@id/member_picture"
+        android:textIsSelectable="false" />
+
+    <TextView
+        android:id="@+id/member_short_desc"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentLeft="true"
+        android:layout_below="@id/member_company"
+        android:layout_marginBottom="@dimen/margin_small"
+        android:layout_toLeftOf="@id/member_picture"
+        android:textColor="@color/body_text_2"
+        android:textIsSelectable="false"
+        android:textSize="@dimen/text_size_small" />
+
+    <Button
+        android:id="@+id/member_links"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentLeft="true"
+        android:layout_below="@id/member_short_desc"
+        android:layout_marginBottom="@dimen/margin_small"
+        android:layout_marginRight="@dimen/margin_very_small"
+        android:minHeight="32dp"
+        android:minWidth="100dp"
+        android:textColor="@color/body_text_2"
+        android:textSize="@dimen/text_size_small" />
+
+    <Button
+        android:id="@+id/member_linkers"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/member_short_desc"
+        android:layout_marginBottom="@dimen/margin_small"
+        android:layout_marginRight="@dimen/margin_small"
+        android:layout_toRightOf="@id/member_links"
+        android:minHeight="32dp"
+        android:minWidth="100dp"
+        android:textColor="@color/body_text_2"
+        android:textSize="@dimen/text_size_small" />
+
+</RelativeLayout>

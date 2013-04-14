@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <!-- Generic Margin & Padding -->
+    <dimen name="margin_very_small">4dp</dimen>
+    <dimen name="margin_small">8dp</dimen>
+    <dimen name="margin_normal">16dp</dimen>
+    <dimen name="margin_big">24dp</dimen>
+    <dimen name="margin_very_big">32dp</dimen>
+    <!-- Generic sizes -->
+    <dimen name="normal_touchable_height">48dp</dimen>
+    <dimen name="small_touchable_height">32dp</dimen>
+    <dimen name="detail_second_column_width">200dp</dimen>
+    <!-- Generic text sizes -->
+    <dimen name="text_size_very_small">12sp</dimen>
+    <dimen name="text_size_small">14sp</dimen>
+    <dimen name="text_size_small_medium">16sp</dimen>
+    <dimen name="text_size_medium">18sp</dimen>
+    <!-- Session Detail Sizes -->
+    <dimen name="underline_height">1dp</dimen>
+    <!-- Member item sizes -->
+    <dimen name="member_image_size_item_list">60dp</dimen>
+    <dimen name="member_image_size_detail">80dp</dimen>
+    <dimen name="member_image_padding">8dp</dimen>
+    <dimen name="detail_breadcrumb_height">36dp</dimen>
+    <!-- Planning -->
+    <dimen name="planning_full_width">800dp</dimen>
+    <dimen name="planning_full_height">600dp</dimen>
+    <dimen name="planning_min_height_header">32dp</dimen>
+    <dimen name="planning_min_height_half_hour">32dp</dimen>
+    <dimen name="planning_header_min_height">32dp</dimen>
+
+</resources>

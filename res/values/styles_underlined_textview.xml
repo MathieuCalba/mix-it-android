@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <style name="Theme.UnderlinedTextView" parent="android:Theme">
+        <item name="UnderlinedTextViewStyle">@style/Widget.UnderlinedTextView</item>
+    </style>
+
+    <style name="Widget"></style>
+
+    <style name="Widget.UnderlinedTextView" parent="Widget">
+        <item name="line_color">@color/blue_mixit</item>
+        <item name="line_height">@dimen/underline_height</item>
+    </style>
+
+</resources>
