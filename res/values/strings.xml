@@ -12,6 +12,17 @@
     <string name="second_day">Friday</string>
     <string name="planning_slot_pager_header">From %1$s to %2$s</string>
     <string name="planning_slot_pager_header_default">From 9am to 7pm</string>
+    <string name="planning_welcome">"Welcome &amp; Breakfast"</string>
+    <string name="planning_lunch">"Lunch"</string>
+    <string name="planning_break">"Break"</string>
+    <string name="planning_lightning_talk">"Lightning Talks"</string>
+    <string name="planning_keynote">"Keynote"</string>
+    <string name="planning_multiple_session">"Multiple session selected"</string>
+    <string name="planning_multiple_room">"Multiple room"</string>
+    <string name="planning_no_session">"No session selected"</string>
+    <string name="planning_no_room">"No room"</string>
+    <string name="planning_lightning_room">"Gosling, Eich &amp; Nonaka"</string>
+    <string name="planning_every_room">"Every room"</string>
     <!-- Explore -->
     <string name="map_bt">Map</string>
     <string name="planning_bt">Planning</string>
@@ -43,6 +54,7 @@
     <string name="sessions_empty_speakers">No Speakers for this Session</string>
     <string name="sessions_empty_interests">No Interests for this Session</string>
     <string name="session_day_time_room">"On %1$s, from %2$s to %3$s, in room %4$s"</string>
+    <string name="session_time_room">"From %2$s to %3$s, in room %4$s"</string>
     <string name="session_day_time_room_full">"On Thursday 25th and Friday 26th, in room %1$s"</string>
     <!-- Members -->
     <string name="all_staff">Staff</string>
