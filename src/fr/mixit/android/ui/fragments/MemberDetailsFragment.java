@@ -32,6 +32,7 @@ import com.petebevin.markdown.MarkdownProcessor;
 
 import fr.mixit.android.provider.MixItContract;
 import fr.mixit.android.services.MixItService;
+import fr.mixit.android.ui.MembersActivity;
 import fr.mixit.android.ui.widgets.MemberSharedLinkView;
 import fr.mixit.android.ui.widgets.TalkItemView;
 import fr.mixit.android.utils.IntentUtils;
@@ -109,7 +110,12 @@ public class MemberDetailsFragment extends BoundServiceFragment implements Loade
 
 			@Override
 			public void onClick(View v) {
-				// TODO : launch SessionsActivity with LINKS_MODE and MEMBER_ID
+				if (getActivity() != null && !isDetached()) {
+					final Intent intent = new Intent(getActivity(), MembersActivity.class);
+					intent.putExtra(MembersActivity.EXTRA_DISPLAY_MODE, MembersActivity.DISPLAY_MODE_LINKS);
+					intent.putExtra(MembersActivity.EXTRA_MEMBER_ID, mMemberId);
+					startActivity(intent);
+				}
 			}
 		});
 		mLinkers = (Button) root.findViewById(R.id.member_linkers);
@@ -117,7 +123,12 @@ public class MemberDetailsFragment extends BoundServiceFragment implements Loade
 
 			@Override
 			public void onClick(View v) {
-				// TODO : launch SessionsActivity with LINKERS_MODE and MEMBER_ID
+				if (getActivity() != null && !isDetached()) {
+					final Intent intent = new Intent(getActivity(), MembersActivity.class);
+					intent.putExtra(MembersActivity.EXTRA_DISPLAY_MODE, MembersActivity.DISPLAY_MODE_LINKERS);
+					intent.putExtra(MembersActivity.EXTRA_MEMBER_ID, mMemberId);
+					startActivity(intent);
+				}
 			}
 		});
 		mBio = (TextView) root.findViewById(R.id.member_bio_value);
