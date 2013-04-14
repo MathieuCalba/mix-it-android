@@ -280,27 +280,26 @@ public class MixItProvider extends ContentProvider {
 		switch (match) {
 			case PLANNING: {
 				final SelectionBuilder builder = new SelectionBuilder() //
-						.table(MixItDatabase.Tables.SESSIONS)//
-						.where(MixItContract.Sessions.FORMAT + "=? OR " + MixItContract.Sessions.FORMAT + "=?", //
-								MixItContract.Sessions.FORMAT_TALK, MixItContract.Sessions.FORMAT_WORKSHOP) //
+				.table(MixItDatabase.Tables.SESSIONS)//
+				.where(MixItContract.Sessions.FORMAT + "=? OR " + MixItContract.Sessions.FORMAT + "=?", //
+						MixItContract.Sessions.FORMAT_TALK, MixItContract.Sessions.FORMAT_WORKSHOP) //
 						.where(MixItContract.Sessions.IS_FAVORITE + "=?", String.valueOf(1));
 
 				final Cursor cursor = builder.query(db, MixItContract.Sessions.PROJ_LIST.PROJECTION, sort);
 
-				if (cursor != null && cursor.moveToFirst()) {
-					final MatrixCursor fullCursor = new MatrixCursor(MixItContract.Sessions.PROJ_PLANNING.PROJECTION);
+				final MatrixCursor fullCursor = new MatrixCursor(MixItContract.Sessions.PROJ_PLANNING.PROJECTION);
 
+				if (cursor != null && cursor.moveToFirst()) {
 					final Context ctx = getContext();
 
 					final int i = 1;
 					final long nextStart = Planning.TIMESTAMP_OFFSET_DAY_ONE + Planning.EIGHT_AM;
 					final long nextEnd = nextStart + Planning.ONE_HOUR_AND_HALF;
 					addSessions(ctx, fullCursor, cursor, nextStart, nextEnd, i);
-
-					return fullCursor;
 				}
 
-				return null;
+				fullCursor.setNotificationUri(getContext().getContentResolver(), uri);
+				return fullCursor;
 			}
 
 			default:
@@ -429,17 +428,17 @@ public class MixItProvider extends ContentProvider {
 
 	private int addSessionToCursor(MatrixCursor newCursor, PlanningSlot planningSlot, int i) {
 		newCursor.newRow() //
-				.add(i++) // _ID
-				.add(planningSlot.getSessionId()) // SESSION_ID
-				.add(planningSlot.getTitle()) // TITLE
-				.add(planningSlot.getStart()) // START
-				.add(planningSlot.getEnd()) // END
-				.add(planningSlot.getRoomId()) // ROOM_ID
-				.add(planningSlot.getFormat()) // FORMAT
-				.add(planningSlot.getLevel()) // LEVEL
-				.add(planningSlot.getLang()) // LANG
-				.add(planningSlot.getNbConcurrent()) // NB_CONCURRENT_TALKS
-				.add(planningSlot.getSlotType()); // NB_CONCURRENT_TALKS
+		.add(i++) // _ID
+		.add(planningSlot.getSessionId()) // SESSION_ID
+		.add(planningSlot.getTitle()) // TITLE
+		.add(planningSlot.getStart()) // START
+		.add(planningSlot.getEnd()) // END
+		.add(planningSlot.getRoomId()) // ROOM_ID
+		.add(planningSlot.getFormat()) // FORMAT
+		.add(planningSlot.getLevel()) // LEVEL
+		.add(planningSlot.getLang()) // LANG
+		.add(planningSlot.getNbConcurrent()) // NB_CONCURRENT_TALKS
+		.add(planningSlot.getSlotType()); // NB_CONCURRENT_TALKS
 
 		return i;
 	}
@@ -905,7 +904,7 @@ public class MixItProvider extends ContentProvider {
 						.mapToTable(MixItContract.Sessions.SESSION_ID, MixItDatabase.Tables.SESSIONS)//
 						.where(MixItContract.Sessions.FORMAT + "=? OR " + MixItContract.Sessions.FORMAT + "=?", //
 								MixItContract.Sessions.FORMAT_TALK, MixItContract.Sessions.FORMAT_WORKSHOP)//
-						.where(MixItDatabase.SessionsInterests.INTEREST_ID + "=?", interestId);
+								.where(MixItDatabase.SessionsInterests.INTEREST_ID + "=?", interestId);
 			}
 			case INTERESTS_ID_LIGHTNINGS: {
 				final String interestId = MixItContract.Sessions.getInterestIdFromInterestSessions(uri);
@@ -1015,7 +1014,7 @@ public class MixItProvider extends ContentProvider {
 						.mapToTable(MixItContract.Sessions.SESSION_ID, MixItDatabase.Tables.SESSIONS)//
 						.where(MixItContract.Sessions.FORMAT + "=? OR " + MixItContract.Sessions.FORMAT + "=?", //
 								MixItContract.Sessions.FORMAT_TALK, MixItContract.Sessions.FORMAT_WORKSHOP) //
-						.where(MixItDatabase.Tables.SESSIONS_SPEAKERS + "." + SessionsSpeakers.SPEAKER_ID + "=?", memberId);
+								.where(MixItDatabase.Tables.SESSIONS_SPEAKERS + "." + SessionsSpeakers.SPEAKER_ID + "=?", memberId);
 			}
 			// case SPEAKERS_ID_SESSIONS_ID: {
 			// final String memberId = MixItContract.Members.getMemberId(uri);
