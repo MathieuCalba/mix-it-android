@@ -69,18 +69,25 @@ public class TalkItemView extends RelativeLayout {
 
 		final String title = c.getString(MixItContract.Sessions.PROJ_LIST.TITLE);
 		final String format = c.getString(MixItContract.Sessions.PROJ_LIST.FORMAT);
-		final String room = c.getString(MixItContract.Sessions.PROJ_LIST.ROOM_ID);
-		final long start = c.getLong(MixItContract.Sessions.PROJ_LIST.START);
-		final long end = c.getLong(MixItContract.Sessions.PROJ_LIST.END);
+
+		if (format == null || format.equalsIgnoreCase(MixItContract.Sessions.FORMAT_LIGHTNING_TALK)) {
+			mSubTitle.setVisibility(View.GONE);
+		} else {
+			final String room = c.getString(MixItContract.Sessions.PROJ_LIST.ROOM_ID);
+			final long start = c.getLong(MixItContract.Sessions.PROJ_LIST.START);
+			final long end = c.getLong(MixItContract.Sessions.PROJ_LIST.END);
+
+			mSubTitle.setText(DateUtils.formatSessionTime(getContext(), start, end, room));// "On DDD, from HH:MM to HH:MM, in " + room
+			mSubTitle.setVisibility(View.VISIBLE);
+		}
 
 		mTitle.setText(title + " [" + format + "]");
-		mSubTitle.setText(DateUtils.formatSessionTime(getContext(), start, end, room));// "On DDD, from HH:MM to HH:MM, in " + room
 
 		final Drawable drawable = mStar.getDrawable();
 		drawable.setColorFilter(new LightingColorFilter(getContext().getResources().getColor(R.color.star_color), 1));
 
 		final boolean starred = c.getInt(MixItContract.Sessions.PROJ_LIST.IS_FAVORITE) != 0;
-		mStar.setVisibility(mDisplayStar && starred ? View.VISIBLE : View.INVISIBLE);
+		mStar.setVisibility(mDisplayStar ? starred ? View.VISIBLE : View.INVISIBLE : View.GONE);
 	}
 
 	public void setContentPlanning(Cursor c) {

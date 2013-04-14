@@ -25,6 +25,10 @@ public class SessionsAdapter extends CursorAdapter {
 		mDisplayStar = displayStar;
 	}
 
+	public void setDisplayStar(boolean displayStar) {
+		mDisplayStar = displayStar;
+	}
+
 	@Override
 	public View newView(Context context, Cursor cursor, ViewGroup parent) {
 		final TalkItemView v = new TalkItemView(context);
