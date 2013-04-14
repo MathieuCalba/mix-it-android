@@ -185,7 +185,8 @@ public abstract class GenericMixItActivity extends SherlockFragmentActivity {
 	public boolean onOptionsItemSelected(MenuItem item) {
 		switch (item.getItemId()) {
 			case android.R.id.home:
-				final Intent upIntent = getParentIntent(getActivityLevel() - 1);
+				final int levelActivity = getActivityLevel();
+				final Intent upIntent = getParentIntent(levelActivity - 1);
 				if (upIntent == null) {
 					// no parent activity ie. this activity is already on the top of the stack, so up button should not be touchable
 					return false;
@@ -194,8 +195,8 @@ public abstract class GenericMixItActivity extends SherlockFragmentActivity {
 				if (NavUtils.shouldUpRecreateTask(this, upIntent)) {
 					// This activity is not part of the application's task, so create a new task with a synthesized back stack.
 					final TaskStackBuilder builder = TaskStackBuilder.create(this);
-					for (int i = getActivityLevel(); i >= 0; i++) {
-						final Intent intent = getParentIntent(i - 1);
+					for (int i = 0; i < levelActivity; i++) {
+						final Intent intent = getParentIntent(i);
 						builder.addNextIntent(intent);
 					}
 					builder.startActivities();
@@ -209,11 +210,11 @@ public abstract class GenericMixItActivity extends SherlockFragmentActivity {
 		return super.onOptionsItemSelected(item);
 	}
 
-	public int getActivityLevel() {
+	protected int getActivityLevel() {
 		return 1;
 	}
 
-	public Intent getParentIntent(int level) {
+	protected Intent getParentIntent(int level) {
 		if (level > getActivityLevel() || level < 0) {
 			return null;
 		}

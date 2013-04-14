@@ -51,16 +51,20 @@ public class MemberDetailsActivity extends GenericMixItActivity implements /* Me
 	// }
 	// }
 
-	public Intent getParentIntent() {
-		return new Intent(this, MembersActivity.class);
+	@Override
+	protected int getActivityLevel() {
+		return 2;
 	}
 
-	public Intent getGrandParentIntent() {
-		return new Intent(this, HomeActivity.class);
-	}
+	@Override
+	protected Intent getParentIntent(int level) {
+		switch (level) {
+			case 1:
+				return new Intent(this, MembersActivity.class);
 
-	public Intent getGreatGrandParentIntent() {
-		return null;
+			default:
+				return super.getParentIntent(level);
+		}
 	}
 
 }
