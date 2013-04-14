@@ -6,6 +6,7 @@ import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentStatePagerAdapter;
 import android.view.ViewGroup;
+import fr.mixit.android.model.Planning;
 import fr.mixit.android.ui.PlanningActivity;
 import fr.mixit.android.ui.fragments.PlanningSlotPageFragment;
 import fr.mixit.android.utils.DateUtils;
@@ -13,15 +14,17 @@ import fr.mixit.android.utils.DateUtils;
 
 public class PlanningSlotPagerAdapter extends FragmentStatePagerAdapter {
 
-	protected static final long TIMESTAMP_OFFSET_DAY_ONE = 1366840800000L; // 25 à 00h
-	protected static final long TIMESTAMP_OFFSET_DAY_TWO = 1366927200000L; // 26 à 00h
+	protected static final long TIMESTAMP_OFFSET_DAY_ONE = Planning.TIMESTAMP_OFFSET_DAY_ONE; // 25 à 00h
+	protected static final long TIMESTAMP_OFFSET_DAY_TWO = Planning.TIMESTAMP_OFFSET_DAY_TWO; // 26 à 00h
 
 	protected static final int NB_SLOT_DAY_ONE = 6;
 	protected static final int NB_SLOT_DAY_TWO = 5;
 
-	protected static final long[] SLOTS_START = { 34200000L, 39600000L, 46800000L, 52200000L, 57600000L, 63000000L };
+	protected static final long[] SLOTS_START = { Planning.NINE_AND_A_HALF_AM, Planning.ELEVEN_AM, Planning.ONE_PM, Planning.TWO_AND_A_HALF_PM,
+			Planning.FOUR_PM, Planning.FIVE_AND_A_HALF_PM };
 
-	protected static final long[] SLOTS_END = { 39600000L, 45000000L, 52200000L, 57600000L, 63000000L, 68400000L };
+	protected static final long[] SLOTS_END = { Planning.ELEVEN_AM, Planning.TWELVE_AND_A_HALF_PM, Planning.TWO_AND_A_HALF_PM, Planning.FOUR_PM,
+			Planning.FIVE_AND_A_HALF_PM, Planning.SEVEN_PM };
 
 	protected Context mContext;
 	protected Fragment[] mFragments = new Fragment[NB_SLOT_DAY_ONE];
