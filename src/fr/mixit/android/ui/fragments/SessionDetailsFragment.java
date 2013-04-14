@@ -266,6 +266,8 @@ WarningStarSessionDialogFragment.WarningStarSessionDialogContract, SessionAsyncT
 		super.onCreateOptionsMenu(menu, mInflater);
 
 		mInflater.inflate(R.menu.session_details, menu);
+		final MenuItem actionItem = menu.findItem(R.id.menu_item_vote_favorite);
+		actionItem.setVisible(false);
 
 		// final MenuItem actionItem = menu.findItem(R.id.menu_item_share_action_provider_action_bar);
 		// final ShareActionProvider actionProvider = (ShareActionProvider) actionItem.getActionProvider();
@@ -277,21 +279,24 @@ WarningStarSessionDialogFragment.WarningStarSessionDialogContract, SessionAsyncT
 		super.onPrepareOptionsMenu(menu);
 
 		final MenuItem actionItem = menu.findItem(R.id.menu_item_vote_favorite);
-		// if (!mIsSession) {
-		// if (mIsVoted) {
-		// actionItem.setTitle(R.string.action_bar_vote_delete);
-		// actionItem.setIcon(R.drawable.ic_vote_down);
-		// } else {
-		// actionItem.setTitle(R.string.action_bar_vote_add);
-		// actionItem.setIcon(R.drawable.ic_vote_up);
-		// }
-		// } else
-		if (mIsVoted) {
-			actionItem.setTitle(R.string.action_bar_favorite_delete);
-			actionItem.setIcon(R.drawable.ic_starred);
+		if (mSessionFormat == null || mSessionFormat.equalsIgnoreCase(MixItContract.Sessions.FORMAT_LIGHTNING_TALK)) {
+			actionItem.setVisible(false);
+			// if (mIsVoted) {
+			// actionItem.setTitle(R.string.action_bar_vote_delete);
+			// actionItem.setIcon(R.drawable.ic_vote_down);
+			// } else {
+			// actionItem.setTitle(R.string.action_bar_vote_add);
+			// actionItem.setIcon(R.drawable.ic_vote_up);
+			// }
 		} else {
-			actionItem.setTitle(R.string.action_bar_favorite_add);
-			actionItem.setIcon(R.drawable.ic_star);
+			actionItem.setVisible(true);
+			if (mIsVoted) {
+				actionItem.setTitle(R.string.action_bar_favorite_delete);
+				actionItem.setIcon(R.drawable.ic_starred);
+			} else {
+				actionItem.setTitle(R.string.action_bar_favorite_add);
+				actionItem.setIcon(R.drawable.ic_star);
+			}
 		}
 
 	}
