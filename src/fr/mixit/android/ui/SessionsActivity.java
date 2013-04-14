@@ -19,6 +19,7 @@ import fr.mixit.android.ui.fragments.MemberDetailsFragment;
 import fr.mixit.android.ui.fragments.SessionDetailsFragment;
 import fr.mixit.android.ui.fragments.SessionDetailsFragment.SessionDetailsContract;
 import fr.mixit.android.ui.fragments.SessionsListFragment;
+import fr.mixit.android.utils.DateUtils;
 import fr.mixit.android.utils.IntentUtils;
 import fr.mixit.android.utils.UIUtils;
 import fr.mixit.android_2012.R;
@@ -28,11 +29,14 @@ public class SessionsActivity extends GenericMixItActivity implements OnNavigati
 
 	private static final String TAG = SessionsActivity.class.getSimpleName();
 
-	public static final String EXTRA_STARRED_MODE = "fr.mixit.android.EXTRA_STARRED_MODE";
+	public static final String EXTRA_MODE = "fr.mixit.android.EXTRA_MODE";
+	public static final String EXTRA_SLOT_START = "fr.mixit.android.EXTRA_START";
+	public static final String EXTRA_SLOT_END = "fr.mixit.android.EXTRA_END";
 
 	public static final int DISPLAY_MODE_SESSIONS = 1204101927;
 	public static final int DISPLAY_MODE_LIGHTNING_TALKS = 1204101928;
 	public static final int DISPLAY_MODE_SESSIONS_STARRED = 1204101929;
+	public static final int DISPLAY_MODE_SESSIONS_DUPLICATE = 1204101930;
 
 	protected static final String STATE_DISPLAY_MODE = "fr.mixit.android.STATE_DISPLAY_MODE";
 
@@ -47,9 +51,9 @@ public class SessionsActivity extends GenericMixItActivity implements OnNavigati
 	protected void onCreate(Bundle savedStateInstance) {
 		super.onCreate(savedStateInstance);
 
-		mMode = getIntent().getBooleanExtra(EXTRA_STARRED_MODE, false) ? DISPLAY_MODE_SESSIONS_STARRED : DISPLAY_MODE_SESSIONS;
+		mMode = getIntent().getIntExtra(EXTRA_MODE, DISPLAY_MODE_SESSIONS);
 
-		if (mMode != DISPLAY_MODE_SESSIONS_STARRED) {
+		if (mMode != DISPLAY_MODE_SESSIONS_STARRED && mMode != DISPLAY_MODE_SESSIONS_DUPLICATE) {
 			final Context context = getSupportActionBar().getThemedContext();
 			final ArrayAdapter<CharSequence> listAdapter = ArrayAdapter.createFromResource(context, R.array.sessions, R.layout.sherlock_spinner_item);
 			listAdapter.setDropDownViewResource(R.layout.sherlock_spinner_dropdown_item);
@@ -69,7 +73,7 @@ public class SessionsActivity extends GenericMixItActivity implements OnNavigati
 			fm.beginTransaction().add(R.id.content_sessions_list, mSessionsListFrag, SessionsListFragment.TAG).commit();
 		}
 
-		if (mMode != DISPLAY_MODE_SESSIONS_STARRED) {
+		if (mMode != DISPLAY_MODE_SESSIONS_STARRED && mMode != DISPLAY_MODE_SESSIONS_DUPLICATE) {
 			int itemSelected = 0;
 			switch (mMode) {
 				case DISPLAY_MODE_SESSIONS:
@@ -85,6 +89,14 @@ public class SessionsActivity extends GenericMixItActivity implements OnNavigati
 					break;
 			}
 			getSupportActionBar().setSelectedNavigationItem(itemSelected);
+		} else if (mMode == DISPLAY_MODE_SESSIONS_DUPLICATE) {
+			final ActionBar sab = getSupportActionBar();
+
+			final long slotStart = getIntent().getLongExtra(SessionsActivity.EXTRA_SLOT_START, -1);
+			final long slotEnd = getIntent().getLongExtra(SessionsActivity.EXTRA_SLOT_END, -1);
+
+			final String title = DateUtils.formatDayTime(this, slotStart, slotEnd);
+			sab.setTitle(title);
 		}
 		mSessionsListFrag.setDisplayMode(mMode);
 

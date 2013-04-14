@@ -112,6 +112,27 @@ public class SessionsListFragment extends BoundServiceFragment implements Loader
 				selection.append(MixItContract.Sessions.IS_FAVORITE);
 				selection.append("=1");
 			}
+			if (mMode == SessionsActivity.DISPLAY_MODE_SESSIONS_DUPLICATE) {
+				long slotStart = 0;
+				long slotEnd = 0;
+				if (args != null) {
+					slotStart = args.getLong(SessionsActivity.EXTRA_SLOT_START, -1);
+					slotEnd = args.getLong(SessionsActivity.EXTRA_SLOT_END, -1);
+				}
+
+				if (slotStart == -1 || slotEnd == -1) {
+					return null;
+				}
+
+				selection.append(MixItContract.Sessions.START);
+				selection.append('<');
+				selection.append(slotEnd);
+				selection.append(" AND \"");
+				selection.append(MixItContract.Sessions.END);
+				selection.append("\">");
+				selection.append(slotStart);
+			}
+
 			return new CursorLoader(getActivity(), sessionsUri, MixItContract.Sessions.PROJ_LIST.PROJECTION, selection.toString(), null,
 					MixItContract.Sessions.DEFAULT_SORT);
 		}
