@@ -11,7 +11,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:text="@string/member_bio"
-        android:textColor="@color/blue_mixit"
+        android:textColor="@color/dark_blue_mixit"
         android:textIsSelectable="false" />
 
     <TextView
@@ -27,7 +27,7 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="@dimen/margin_normal"
         android:text="@string/member_shared_links"
-        android:textColor="@color/blue_mixit"
+        android:textColor="@color/dark_blue_mixit"
         android:textIsSelectable="false" />
 
     <LinearLayout
@@ -43,7 +43,7 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="@dimen/margin_normal"
         android:text="@string/member_talks"
-        android:textColor="@color/blue_mixit"
+        android:textColor="@color/dark_blue_mixit"
         android:textIsSelectable="false" />
 
     <LinearLayout
@@ -59,7 +59,7 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="@dimen/margin_normal"
         android:text="@string/member_interests"
-        android:textColor="@color/blue_mixit"
+        android:textColor="@color/dark_blue_mixit"
         android:textIsSelectable="false" />
 
     <LinearLayout

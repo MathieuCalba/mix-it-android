@@ -19,7 +19,9 @@
     <color name="border_bt_track">#CCC</color>
     <color name="star_color">#FFFFD700</color>
     <color name="background">#EEE</color>
-    <color name="blue_mixit">#FF0064CD</color>
+    <color name="dark_blue_mixit">#FF0064CD</color>
+    <!-- <color name="blue_mixit">#12ABF5</color> -->
+    <color name="blue_mixit">#05AEE8</color>
     <color name="light_blue_mixit">#1F0064CD</color>
     <color name="light_gray">#FFF4F4F4</color>
 
