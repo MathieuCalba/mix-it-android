@@ -123,7 +123,9 @@ public class TalkItemView extends RelativeLayout {
 
 			case PlanningSlot.TYPE_BREAK:
 			case PlanningSlot.TYPE_BREAKFAST:
-			case PlanningSlot.TYPE_LUNCH: {
+			case PlanningSlot.TYPE_LUNCH:
+			case PlanningSlot.TYPE_TALKS_PRESENTATION:
+			case PlanningSlot.TYPE_WELCOME: {
 				final String title = c.getString(MixItContract.Sessions.PROJ_PLANNING.TITLE);
 
 				mTitle.setText(title);
@@ -133,6 +135,9 @@ public class TalkItemView extends RelativeLayout {
 			}
 
 			default:
+				mTitle.setText("Missing Slot type management");
+				mSubTitle.setVisibility(View.GONE);
+
 				break;
 		}
 
