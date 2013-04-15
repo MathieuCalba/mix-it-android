@@ -390,6 +390,7 @@ WarningStarSessionDialogFragment.WarningStarSessionDialogContract, SessionAsyncT
 			do {
 				final String speakerId = c.getString(MixItContract.Members.PROJ_LIST.MEMBER_ID);
 				final MemberItemView speakerView = new MemberItemView(ctx);
+				speakerView.setBackgroundResource(R.drawable.item_member_bkg);
 				speakerView.setContent(c);
 				speakerView.setOnClickListener(new OnClickListener() {
 

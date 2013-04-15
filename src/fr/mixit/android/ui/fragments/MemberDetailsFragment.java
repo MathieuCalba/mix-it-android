@@ -552,6 +552,7 @@ public class MemberDetailsFragment extends BoundServiceFragment implements Loade
 			do {
 				final String talkId = c.getString(MixItContract.Sessions.PROJ_LIST.SESSION_ID);
 				final TalkItemView talkView = new TalkItemView(ctx);
+				talkView.setBackgroundResource(R.drawable.item_member_bkg);
 				talkView.setContent(c);
 				talkView.setOnClickListener(new OnClickListener() {
 
