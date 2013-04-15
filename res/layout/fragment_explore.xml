@@ -1,36 +1,41 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:orientation="vertical"
-    android:padding="@dimen/margin_normal" >
+    android:layout_height="match_parent" >
 
-    <Button
-        android:id="@+id/map_bt"
+    <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginBottom="@dimen/margin_normal"
-        android:text="@string/map_bt" />
+        android:orientation="vertical"
+        android:padding="@dimen/margin_normal" >
 
-    <Button
-        android:id="@+id/planning_bt"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginBottom="@dimen/margin_normal"
-        android:text="@string/planning_bt" />
+        <Button
+            android:id="@+id/map_bt"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="@dimen/margin_normal"
+            android:text="@string/map_bt" />
 
-    <Button
-        android:id="@+id/sessions_bt"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginBottom="@dimen/margin_normal"
-        android:text="@string/sessions_bt" />
+        <Button
+            android:id="@+id/planning_bt"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="@dimen/margin_normal"
+            android:text="@string/planning_bt" />
 
-    <Button
-        android:id="@+id/speakers_bt"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginBottom="@dimen/margin_normal"
-        android:text="@string/speakers_bt" />
+        <Button
+            android:id="@+id/sessions_bt"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="@dimen/margin_normal"
+            android:text="@string/sessions_bt" />
 
-</LinearLayout>
+        <Button
+            android:id="@+id/speakers_bt"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="@dimen/margin_normal"
+            android:text="@string/speakers_bt" />
+    </LinearLayout>
+
+</ScrollView>

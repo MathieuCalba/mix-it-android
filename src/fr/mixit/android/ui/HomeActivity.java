@@ -6,14 +6,13 @@ import android.os.Message;
 import android.os.RemoteException;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.view.ViewPager;
-import android.widget.TabHost;
 
 import com.actionbarsherlock.app.ActionBar;
 import com.actionbarsherlock.view.Menu;
 import com.actionbarsherlock.view.MenuItem;
 
 import fr.mixit.android.services.MixItService;
-import fr.mixit.android.ui.adapters.TabsAdapter;
+import fr.mixit.android.ui.adapters.ActionBarTabsAdapter;
 import fr.mixit.android.ui.fragments.AboutFragment;
 import fr.mixit.android.ui.fragments.BoundServiceFragment;
 import fr.mixit.android.ui.fragments.ExploreFragment;
@@ -29,25 +28,23 @@ public class HomeActivity extends GenericMixItActivity implements BoundServiceFr
 
 	protected static final String STATE_CURRENT_TAB = "fr.mixit.android.STATE_CURRENT_TAB";
 
-	protected TabHost mTabHost;
 	protected ViewPager mViewPager;
-	protected TabsAdapter mTabsAdapter;
+	protected ActionBarTabsAdapter mTabsAdapter;
 
 	@Override
 	protected void onCreate(Bundle savedStateInstance) {
 		super.onCreate(savedStateInstance);
 
-		mTabHost = (TabHost) findViewById(android.R.id.tabhost);
-		mTabHost.setup();
-
 		mViewPager = (ViewPager) findViewById(R.id.pager);
 
-		mTabsAdapter = new TabsAdapter(this, mTabHost, mViewPager);
+		final ActionBar bar = getSupportActionBar();
+		bar.setNavigationMode(ActionBar.NAVIGATION_MODE_TABS);
+		mTabsAdapter = new ActionBarTabsAdapter(this, mViewPager);
 
 		initTabs();
 
 		if (savedStateInstance != null) {
-			mTabHost.setCurrentTabByTag(savedStateInstance.getString(STATE_CURRENT_TAB));
+			bar.setSelectedNavigationItem(savedStateInstance.getInt(STATE_CURRENT_TAB, 0));
 		}
 	}
 
@@ -64,14 +61,16 @@ public class HomeActivity extends GenericMixItActivity implements BoundServiceFr
 	}
 
 	protected void initTabs() {
-		mTabsAdapter.addTab(mTabHost.newTabSpec(TAB_MY_PLANNING).setIndicator(getString(R.string.my_planning_tab)), MyPlanningFragment.class, null);
-		mTabsAdapter.addTab(mTabHost.newTabSpec(TAB_EXPLORE).setIndicator(getString(R.string.explore_tab)), ExploreFragment.class, null);
+		final ActionBar bar = getSupportActionBar();
+		mTabsAdapter.addTab(bar.newTab().setText(getString(R.string.my_planning_tab)), MyPlanningFragment.class, null);
+		mTabsAdapter.addTab(bar.newTab().setText(getString(R.string.explore_tab)), ExploreFragment.class, null);
 	}
 
 	@Override
 	protected void onSaveInstanceState(Bundle outState) {
 		super.onSaveInstanceState(outState);
-		outState.putString(STATE_CURRENT_TAB, mTabHost.getCurrentTabTag());
+
+		outState.putInt(STATE_CURRENT_TAB, getSupportActionBar().getSelectedNavigationIndex());
 	}
 
 	@Override
