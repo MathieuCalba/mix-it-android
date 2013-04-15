@@ -8,6 +8,7 @@ import android.support.v4.app.FragmentManager;
 import android.support.v4.view.ViewPager;
 import android.widget.TabHost;
 
+import com.actionbarsherlock.app.ActionBar;
 import com.actionbarsherlock.view.Menu;
 import com.actionbarsherlock.view.MenuItem;
 
@@ -48,6 +49,13 @@ public class HomeActivity extends GenericMixItActivity implements BoundServiceFr
 		if (savedStateInstance != null) {
 			mTabHost.setCurrentTabByTag(savedStateInstance.getString(STATE_CURRENT_TAB));
 		}
+	}
+
+	@Override
+	protected void initActionBar() {
+		super.initActionBar();
+		final ActionBar sab = getSupportActionBar();
+		sab.setIcon(R.drawable.ic_action_bar_bis);
 	}
 
 	@Override
