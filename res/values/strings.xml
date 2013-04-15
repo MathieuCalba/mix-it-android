@@ -13,7 +13,9 @@
     <string name="planning_duplicate_session_title">On %1$s, from %2$s to %3$s</string>
     <string name="planning_slot_pager_header">From %1$s to %2$s</string>
     <string name="planning_slot_pager_header_default">From 9am to 7pm</string>
-    <string name="planning_welcome">"Welcome &amp; Breakfast"</string>
+    <string name="planning_breakfast">"Welcome &amp; Breakfast"</string>
+    <string name="planning_welcome">"Staff welcome speech"</string>
+    <string name="planning_talks_presentation">"Pitch of the sessions of the day by their speaker"</string>
     <string name="planning_lunch">"Lunch"</string>
     <string name="planning_break">"Break"</string>
     <string name="planning_lightning_talk">"Lightning Talks"</string>
@@ -22,7 +24,7 @@
     <string name="planning_multiple_room">"Multiple room"</string>
     <string name="planning_no_session">"No session selected"</string>
     <string name="planning_no_room">"No room"</string>
-    <string name="planning_lightning_room">"Gosling, Eich &amp; Nonaka"</string>
+    <string name="planning_lightning_room">"Gosling"</string>
     <string name="planning_every_room">"Every room"</string>
     <!-- Explore -->
     <string name="map_bt">Map</string>
