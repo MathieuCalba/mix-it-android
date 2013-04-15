@@ -15,6 +15,8 @@ public abstract class PlanningSlot {
 	public static final int TYPE_BREAK = 1304141537;
 	public static final int TYPE_LUNCH = 1304141538;
 	public static final int TYPE_BREAKFAST = 1304141539;
+	public static final int TYPE_WELCOME = 1304141540;
+	public static final int TYPE_TALKS_PRESENTATION = 1304141541;
 
 	protected final String mSessionId;
 	protected String mTitle;
@@ -148,7 +150,24 @@ public abstract class PlanningSlot {
 	public static class BreakfastSlot extends PlanningSlot {
 
 		public BreakfastSlot(Context ctx, long start, long end) {
-			super(TYPE_BREAKFAST, start, end, ctx.getResources().getString(R.string.planning_welcome), ctx.getResources().getString(R.string.planning_no_room));
+			super(TYPE_BREAKFAST, start, end, ctx.getResources().getString(R.string.planning_breakfast), ctx.getResources().getString(R.string.planning_no_room));
+		}
+
+	}
+
+	public static class WelcomeSlot extends PlanningSlot {
+
+		public WelcomeSlot(Context ctx, long start, long end) {
+			super(TYPE_WELCOME, start, end, ctx.getResources().getString(R.string.planning_welcome), ctx.getResources().getString(R.string.planning_no_room));
+		}
+
+	}
+
+	public static class TalksPresentationSlot extends PlanningSlot {
+
+		public TalksPresentationSlot(Context ctx, long start, long end) {
+			super(TYPE_TALKS_PRESENTATION, start, end, ctx.getResources().getString(R.string.planning_talks_presentation), ctx.getResources().getString(
+					R.string.planning_no_room));
 		}
 
 	}
