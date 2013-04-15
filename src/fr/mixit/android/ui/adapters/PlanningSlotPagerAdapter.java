@@ -20,11 +20,23 @@ public class PlanningSlotPagerAdapter extends FragmentStatePagerAdapter {
 	protected static final int NB_SLOT_DAY_ONE = 6;
 	protected static final int NB_SLOT_DAY_TWO = 5;
 
-	protected static final long[] SLOTS_START = { Planning.NINE_AND_A_HALF_AM, Planning.ELEVEN_AM, Planning.ONE_PM, Planning.TWO_AND_A_HALF_PM,
-			Planning.FOUR_PM, Planning.FIVE_AND_A_HALF_PM };
+	protected static final long[] SLOTS_START = { //
+	Planning.TALKS_MORNING_START, //
+			Planning.TALKS_MORNING_START + Planning.TALKS_SLOT_LENGTH, //
+			Planning.TALKS_AFTERNOON_START, //
+			Planning.TALKS_AFTERNOON_START + Planning.TALKS_SLOT_LENGTH, //
+			Planning.TALKS_AFTERNOON_START + 2 * Planning.TALKS_SLOT_LENGTH, //
+			Planning.TALKS_AFTERNOON_START + 3 * Planning.TALKS_SLOT_LENGTH //
+	};
 
-	protected static final long[] SLOTS_END = { Planning.ELEVEN_AM, Planning.TWELVE_AND_A_HALF_PM, Planning.TWO_AND_A_HALF_PM, Planning.FOUR_PM,
-			Planning.FIVE_AND_A_HALF_PM, Planning.SEVEN_PM };
+	protected static final long[] SLOTS_END = { //
+	Planning.TALKS_MORNING_START + Planning.TALKS_SLOT_LENGTH, //
+			Planning.TALKS_MORNING_START + 2 * Planning.TALKS_SLOT_LENGTH, //
+			Planning.TALKS_AFTERNOON_START + Planning.TALKS_SLOT_LENGTH, //
+			Planning.TALKS_AFTERNOON_START + 2 * Planning.TALKS_SLOT_LENGTH,//
+			Planning.TALKS_AFTERNOON_START + 3 * Planning.TALKS_SLOT_LENGTH, //
+			Planning.TALKS_AFTERNOON_START + 4 * Planning.TALKS_SLOT_LENGTH //
+	};
 
 	protected Context mContext;
 	protected Fragment[] mFragments = new Fragment[NB_SLOT_DAY_ONE];
