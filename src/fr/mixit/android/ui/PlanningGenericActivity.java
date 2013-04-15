@@ -1,5 +1,6 @@
 package fr.mixit.android.ui;
 
+import android.content.Context;
 import android.os.Bundle;
 import android.widget.ArrayAdapter;
 
@@ -22,7 +23,8 @@ public abstract class PlanningGenericActivity extends GenericMixItActivity imple
 	protected void onCreate(Bundle savedStateInstance) {
 		super.onCreate(savedStateInstance);
 
-		final ArrayAdapter<CharSequence> listAdapter = ArrayAdapter.createFromResource(this, R.array.days, R.layout.sherlock_spinner_item);
+		final Context context = getSupportActionBar().getThemedContext();
+		final ArrayAdapter<CharSequence> listAdapter = ArrayAdapter.createFromResource(context, R.array.days, R.layout.sherlock_spinner_item);
 		listAdapter.setDropDownViewResource(R.layout.sherlock_spinner_dropdown_item);
 
 		getSupportActionBar().setListNavigationCallbacks(listAdapter, this);
