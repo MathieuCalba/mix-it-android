@@ -12,25 +12,25 @@ import fr.mixit.android.provider.MixItContract;
 import fr.mixit.android_2012.R;
 
 
-public class MemberSharedLinkView extends LinearLayout {
+public class SharedLinkItemView extends LinearLayout {
 
 	protected TextView mTitle;
 	protected TextView mSubTitle;
 
-	public MemberSharedLinkView(Context context) {
+	public SharedLinkItemView(Context context) {
 		super(context);
 
 		init(context);
 	}
 
-	public MemberSharedLinkView(Context context, AttributeSet attrs) {
+	public SharedLinkItemView(Context context, AttributeSet attrs) {
 		super(context, attrs);
 
 		init(context);
 	}
 
 	@TargetApi(Build.VERSION_CODES.HONEYCOMB)
-	public MemberSharedLinkView(Context context, AttributeSet attrs, int defStyle) {
+	public SharedLinkItemView(Context context, AttributeSet attrs, int defStyle) {
 		super(context, attrs, defStyle);
 
 		init(context);
@@ -38,17 +38,12 @@ public class MemberSharedLinkView extends LinearLayout {
 
 	protected void init(Context context) {
 		final LayoutInflater inflater = LayoutInflater.from(context);
-		inflater.inflate(R.layout.member_shared_link_item, this, true);
-
-		final LayoutParams lp = new LayoutParams(LayoutParams.MATCH_PARENT, LayoutParams.WRAP_CONTENT);
-		setLayoutParams(lp);
+		inflater.inflate(R.layout.item_shared_link, this, true);
 
 		final int padding = context.getResources().getDimensionPixelSize(R.dimen.margin_small);
 		setPadding(padding, padding, padding, padding);
 
 		setOrientation(VERTICAL);
-
-		setBackgroundColor(context.getResources().getColor(R.color.light_gray));
 
 		mTitle = (TextView) findViewById(R.id.shared_link_title);
 		mSubTitle = (TextView) findViewById(R.id.shared_link_subtitle);
