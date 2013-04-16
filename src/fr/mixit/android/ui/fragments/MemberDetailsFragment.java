@@ -33,7 +33,7 @@ import com.petebevin.markdown.MarkdownProcessor;
 import fr.mixit.android.provider.MixItContract;
 import fr.mixit.android.services.MixItService;
 import fr.mixit.android.ui.MembersActivity;
-import fr.mixit.android.ui.widgets.MemberSharedLinkView;
+import fr.mixit.android.ui.widgets.SharedLinkItemView;
 import fr.mixit.android.ui.widgets.TalkItemView;
 import fr.mixit.android.utils.IntentUtils;
 import fr.mixit.android.utils.UIUtils;
@@ -516,7 +516,8 @@ public class MemberDetailsFragment extends BoundServiceFragment implements Loade
 			mSharedLinks.setVisibility(View.VISIBLE);
 			do {
 				final String sharedLinkUrl = c.getString(MixItContract.SharedLinks.PROJ.URL);
-				final MemberSharedLinkView sharedLinkView = new MemberSharedLinkView(ctx);
+				final SharedLinkItemView sharedLinkView = new SharedLinkItemView(ctx);
+				sharedLinkView.setBackgroundResource(R.drawable.item_detail_state_list_bkg);
 				sharedLinkView.setContent(c);
 				sharedLinkView.setOnClickListener(new OnClickListener() {
 
@@ -552,6 +553,7 @@ public class MemberDetailsFragment extends BoundServiceFragment implements Loade
 			do {
 				final String talkId = c.getString(MixItContract.Sessions.PROJ_LIST.SESSION_ID);
 				final TalkItemView talkView = new TalkItemView(ctx);
+				talkView.setBackgroundResource(R.drawable.item_detail_state_list_bkg);
 				talkView.setContent(c);
 				talkView.setOnClickListener(new OnClickListener() {
 

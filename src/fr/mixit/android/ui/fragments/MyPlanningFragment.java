@@ -61,7 +61,7 @@ public class MyPlanningFragment extends BoundServiceFragment implements LoaderMa
 	public void onActivityCreated(Bundle savedInstanceState) {
 		super.onActivityCreated(savedInstanceState);
 
-		mAdapter = new MyPlanningAdapter(getActivity());
+		mAdapter = new MyPlanningAdapter(getSherlockActivity().getSupportActionBar().getThemedContext());
 		mListView.setAdapter(mAdapter);
 		mListView.setOnItemClickListener(this);
 	}

@@ -19,7 +19,7 @@
 
 <resources>
 
-    <style name="MixIT_actionbar" parent="@style/Theme.Sherlock.Light.DarkActionBar">
+    <style name="MixIT_actionbar" parent="@style/MixIT_component">
         <item name="actionBarItemBackground">@drawable/selectable_background_mixit</item>
         <item name="popupMenuStyle">@style/PopupMenu.Mixit</item>
         <item name="dropDownListViewStyle">@style/DropDownListView.Mixit</item>

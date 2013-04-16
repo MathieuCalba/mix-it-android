@@ -49,7 +49,7 @@ public class TalkItemView extends RelativeLayout {
 		final int padding = context.getResources().getDimensionPixelSize(R.dimen.margin_small);
 		setPadding(padding, padding, padding, padding);
 
-		setBackgroundColor(context.getResources().getColor(R.color.light_gray));
+		// setBackgroundColor(context.getResources().getColor(R.color.light_gray));
 
 		mTitle = (TextView) findViewById(R.id.talk_title);
 		mSubTitle = (TextView) findViewById(R.id.talk_subtitle);

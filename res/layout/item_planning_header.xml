@@ -1,7 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
 <fr.mixit.android.ui.widgets.UnderlinedTextView xmlns:android="http://schemas.android.com/apk/res/android"
     android:id="@+id/underlinedTextView1"
+    style="@style/ItemHeader"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:minHeight="@dimen/planning_header_min_height"
+    android:paddingBottom="@dimen/margin_very_small"
+    android:paddingLeft="@dimen/margin_small"
+    android:paddingRight="@dimen/margin_small"
+    android:paddingTop="@dimen/margin_very_small"
     android:textIsSelectable="false" />
+<!-- android:minHeight="@dimen/planning_header_min_height" -->

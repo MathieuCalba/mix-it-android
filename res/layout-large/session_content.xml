@@ -12,7 +12,7 @@
         android:layout_alignParentRight="true"
         android:layout_marginLeft="@dimen/margin_normal"
         android:text="@string/session_interests"
-        android:textColor="@color/blue_mixit"
+        android:textColor="@color/dark_blue_mixit"
         android:textIsSelectable="false" />
 
     <LinearLayout
@@ -33,7 +33,7 @@
         android:layout_alignParentLeft="true"
         android:layout_toLeftOf="@id/session_interests_title"
         android:text="@string/session_summary"
-        android:textColor="@color/blue_mixit"
+        android:textColor="@color/dark_blue_mixit"
         android:textIsSelectable="false" />
 
     <TextView
@@ -55,7 +55,7 @@
         android:layout_marginTop="@dimen/margin_normal"
         android:layout_toLeftOf="@id/session_interests_title"
         android:text="@string/session_speakers"
-        android:textColor="@color/blue_mixit"
+        android:textColor="@color/dark_blue_mixit"
         android:textIsSelectable="false" />
 
     <LinearLayout
