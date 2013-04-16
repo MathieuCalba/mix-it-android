@@ -8,6 +8,7 @@
     <string name="my_planning_tab">My Planning</string>
     <string name="explore_tab">Explore</string>
     <!-- Planning -->
+    <string name="action_bar_import_starred_session">Import Starred Session</string>
     <string name="first_day">Thursday</string>
     <string name="second_day">Friday</string>
     <string name="planning_duplicate_session_title">On %1$s, from %2$s to %3$s</string>
@@ -80,6 +81,16 @@
     <string name="member_picture">"Member's picture"</string>
     <string name="member_bio_empty">"No Biography"</string>
     <string name="member_empty_interests">No Interests for this Member</string>
+    <!-- Map -->
+    <string name="action_bar_map">Map</string>
+    <string name="map_title">Comment accéder au site ?</string>
+    <string name="access_title">Lieu :</string>
+    <string name="access_content">SUPINFO LYON\n
+Les Jardins d\'Osaka\n
+16 Rue Jean Desparmet\n
+69008 LYON\n
+Nous vous convions à privilégier les transports en commun, les vélos ou la marche pour venir à la conférence. C\'est plus écologique et sachez aussi que les places de parking aux alentours de SUPINFO ne sont pas nombreuses!</string>
+    <string name="mixit_map_url">http://www.mix-it.fr/infos/acces</string>
     <!-- About -->
     <string name="action_bar_about">About</string>
     <string name="about_text1">Source code created for the MixIt Conference by:</string>
