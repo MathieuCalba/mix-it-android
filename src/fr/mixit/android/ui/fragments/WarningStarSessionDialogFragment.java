@@ -4,13 +4,16 @@ import android.app.AlertDialog;
 import android.app.Dialog;
 import android.content.DialogInterface;
 import android.os.Bundle;
-import android.support.v4.app.DialogFragment;
 import android.support.v4.app.Fragment;
 import android.text.TextUtils;
 import android.util.Log;
+
+import com.actionbarsherlock.app.SherlockDialogFragment;
+
 import fr.mixit.android_2012.R;
 
-public class WarningStarSessionDialogFragment extends DialogFragment {
+
+public class WarningStarSessionDialogFragment extends SherlockDialogFragment {
 
 	public static final String TAG = WarningStarSessionDialogFragment.class.getSimpleName();
 
