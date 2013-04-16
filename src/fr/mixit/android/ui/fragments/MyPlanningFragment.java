@@ -14,6 +14,9 @@ import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
 
+import com.actionbarsherlock.view.Menu;
+import com.actionbarsherlock.view.MenuInflater;
+import com.actionbarsherlock.view.MenuItem;
 import com.emilsjolander.components.stickylistheaders.StickyListHeadersListView;
 
 import fr.mixit.android.model.PlanningSlot;
@@ -38,6 +41,13 @@ public class MyPlanningFragment extends BoundServiceFragment implements LoaderMa
 		final MyPlanningFragment f = new MyPlanningFragment();
 		f.setArguments(UIUtils.intentToFragmentArguments(intent));
 		return f;
+	}
+
+	@Override
+	public void onCreate(Bundle savedInstanceState) {
+		super.onCreate(savedInstanceState);
+
+		setHasOptionsMenu(true);
 	}
 
 	@Override
@@ -184,6 +194,35 @@ public class MyPlanningFragment extends BoundServiceFragment implements LoaderMa
 
 			mListView.setItemChecked(position, true);
 		}
+	}
+
+	@Override
+	public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
+		super.onCreateOptionsMenu(menu, inflater);
+
+		inflater.inflate(R.menu.my_planning, menu);
+	}
+
+	@Override
+	public void onPrepareOptionsMenu(Menu menu) {
+		super.onPrepareOptionsMenu(menu);
+	}
+
+	@Override
+	public boolean onOptionsItemSelected(MenuItem item) {
+		final int id = item.getItemId();
+
+		switch (id) {
+			case R.id.menu_item_import_starred_session:
+				final ImportStarredDialogFragment fragment = ImportStarredDialogFragment.newInstance();
+				fragment.show(getFragmentManager(), ImportStarredDialogFragment.TAG);
+				break;
+
+			default:
+				break;
+		}
+
+		return super.onOptionsItemSelected(item);
 	}
 
 }
