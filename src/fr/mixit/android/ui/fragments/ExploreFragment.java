@@ -7,6 +7,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.ViewGroup;
+import fr.mixit.android.ui.MapActivity;
 import fr.mixit.android.ui.MembersActivity;
 import fr.mixit.android.ui.PlanningActivity;
 import fr.mixit.android.ui.SessionsActivity;
@@ -49,21 +50,19 @@ public class ExploreFragment extends BoundServiceFragment implements OnClickList
 			}
 		} else if (id == R.id.map_bt) {
 			if (getActivity() != null && !isDetached()) {
+				final Intent i = new Intent(getActivity(), MapActivity.class);
+				startActivity(i);
 			}
 		} else if (id == R.id.planning_bt) {
 			if (getActivity() != null && !isDetached()) {
 				final Intent i = new Intent(getActivity(), PlanningActivity.class);
 				startActivity(i);
 			}
-
 		}
-
 	}
 
 	@Override
 	protected void onMessageReceivedFromService(Message msg) {
-		// TODO Auto-generated method stub
-
 	}
 
 }
