@@ -95,6 +95,16 @@
             android:label="" >
         </activity>
         <activity
+            android:name="fr.mixit.android.ui.MapActivity"
+            android:icon="@drawable/ic_launcher"
+            android:label="@string/action_bar_map" >
+            <intent-filter>
+                <action android:name="android.intent.action.VIEW" />
+
+                <category android:name="android.intent.category.DEFAULT" />
+            </intent-filter>
+        </activity>
+        <activity
             android:name="fr.mixit.android.ui.AboutActivity"
             android:icon="@drawable/ic_action_bar"
             android:label="@string/action_bar_about" >
