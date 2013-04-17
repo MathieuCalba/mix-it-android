@@ -155,17 +155,7 @@ public class MixItService extends Service {
 				default:
 					if (mClients.contains(callMsg.replyTo)) {
 						r = handleMixItMessage(callMsg.what, callMsg.arg1, callMsg.arg2, callMsg.getData());
-						for (int i = mClients.size() - 1; i >= 0; i--) {
-							try {
-								final Message responseMsg = Message.obtain(null, callMsg.what, r.status, r.arg2);
-								responseMsg.setData(r.bundle);
-								mClients.get(i).send(responseMsg);
-							} catch (final RemoteException e) {
-								// The client is dead. Remove it from the list;
-								// we are going through the list from back to front so this is safe to do inside the loop.
-								mClients.remove(i);
-							}
-						}
+						sendMessageToClients(mClients, callMsg.what, r.status, r.arg2, r.bundle);
 					} else {
 						// we don't need to do anything because the object requesting this call is no longer listening
 					}
@@ -173,6 +163,20 @@ public class MixItService extends Service {
 			}
 		}
 
+	}
+
+	public static void sendMessageToClients(ArrayList<Messenger> clients, int what, int status, int arg2, Bundle b) {
+		for (int i = clients.size() - 1; i >= 0; i--) {
+			try {
+				final Message responseMsg = Message.obtain(null, what, status, arg2);
+				responseMsg.setData(b);
+				clients.get(i).send(responseMsg);
+			} catch (final RemoteException e) {
+				// The client is dead. Remove it from the list;
+				// we are going through the list from back to front so this is safe to do inside the loop.
+				clients.remove(i);
+			}
+		}
 	}
 
 	Messenger mMessenger;
@@ -325,51 +329,39 @@ public class MixItService extends Service {
 		}
 		final Response r = new Response();
 
-		// final JsonExecutor executor = new JsonExecutor(getContentResolver());
-
-		final SharedPreferences syncServicePrefs = getSharedPreferences(PrefUtils.MIXITSCHED_SYNC, Context.MODE_PRIVATE);
-		// final int localVersion = syncServicePrefs.getInt(PrefUtils.LOCAL_VERSION, PrefUtils.VERSION_NONE);
-
-		// try {
-		// if no data yet, we need to execute the local data
-		final long startLocal = System.currentTimeMillis();
-		// final boolean localParse = localVersion < PrefUtils.VERSION_LOCAL;
-		// if (DEBUG_MODE) {
-		// Log.d(TAG, "found localVersion=" + localVersion + " and VERSION_LOCAL=" + PrefUtils.VERSION_LOCAL);
-		// }
-		// if (localParse) {
-		// executor.execute(getApplicationContext(), ASSET_INTERESTS_JSON, new InterestsHandler());
-		// executor.execute(getApplicationContext(), ASSET_MEMBERS_JSON, new MembersHandler(true, true));
-		// executor.execute(getApplicationContext(), ASSET_SESSIONS_JSON, new SessionsHandler(true, true, true));
-		// executor.execute(getApplicationContext(), ASSET_LIGTHNING_TALKS_JSON, new SessionsHandler(false, true, true));
-		//
-		// // Save local parsed version
-		// syncServicePrefs.edit().putInt(PrefUtils.LOCAL_VERSION, PrefUtils.VERSION_LOCAL).commit();
-		// }
-
-		if (DEBUG_MODE) {
-			Log.d(TAG, "local sync took " + (System.currentTimeMillis() - startLocal) + "ms");
-		}
 		// we ask if we need to update our data with the new data from net, if so, then update
 		final long startRemote = System.currentTimeMillis();
 		final boolean performRemoteSync = performRemoteSync(/* mResolver, *//* mHttpClient, */b, this);
 		if (performRemoteSync) {
-			getInterests(null);
-			// getMembers(null);
+			final Response rInterests = getInterests(null);
+
 			Bundle args = new Bundle();
 			args.putInt(EXTRA_MEMBER_TYPE, MixItContract.Members.TYPE_SPEAKER);
-			getMembers(args);
+			final Response rSpeakers = getMembers(args);
+
 			args = new Bundle();
 			args.putInt(EXTRA_MEMBER_TYPE, MixItContract.Members.TYPE_STAFF);
-			getMembers(args);
+			final Response rStaff = getMembers(args);
+
 			args = new Bundle();
 			args.putInt(EXTRA_MEMBER_TYPE, MixItContract.Members.TYPE_SPONSOR);
-			getMembers(args);
-			getMembers(null);
-			getSessions(null);
-			getLightningTalks(null);
+			final Response rSponsors = getMembers(args);
 
-			syncServicePrefs.edit().putInt(PrefUtils.LOCAL_VERSION, PrefUtils.VERSION_REMOTE_2013).commit();
+			final Response rAllMembers = getMembers(null); // all members
+
+			final Response rSessions = getSessions(null);
+
+			final Response rLightningTalks = getLightningTalks(null);
+
+			if (rInterests != null && rInterests.status == Response.STATUS_OK && //
+					rSpeakers != null && rSpeakers.status == Response.STATUS_OK && //
+					rStaff != null && rStaff.status == Response.STATUS_OK && //
+					rSponsors != null && rSponsors.status == Response.STATUS_OK && //
+					rAllMembers != null && rAllMembers.status == Response.STATUS_OK && //
+					rSessions != null && rSessions.status == Response.STATUS_OK && //
+					rLightningTalks != null && rLightningTalks.status == Response.STATUS_OK) {
+				PrefUtils.setLastRemoteSync(this, System.currentTimeMillis());
+			}
 		}
 		if (DEBUG_MODE) {
 			Log.d(TAG, "remote sync took " + (System.currentTimeMillis() - startRemote) + "ms");
@@ -1016,21 +1008,31 @@ public class MixItService extends Service {
 		return null;
 	}
 
+	protected static final long MIN_INTERVAL_TO_NOT_SYNC = 5 * 60 * 1000L;
+
 	/**
 	 * Should we perform a remote sync?
 	 */
 	private static boolean performRemoteSync(/* ContentResolver resolver, *//* HttpClient httpClient, */Bundle bundle, Context context) {
 		final SharedPreferences settingsPrefs = context.getSharedPreferences(PrefUtils.SETTINGS_NAME, MODE_PRIVATE);
-		final SharedPreferences syncServicePrefs = context.getSharedPreferences(PrefUtils.MIXITSCHED_SYNC, Context.MODE_PRIVATE);
 		final boolean onlySyncWifi = settingsPrefs.getBoolean(context.getString(R.string.sync_only_wifi_key), false);
-		final int localVersion = syncServicePrefs.getInt(PrefUtils.LOCAL_VERSION, PrefUtils.VERSION_NONE);
-		if (!onlySyncWifi || isWifiConnected(context)) {
-			final boolean remoteParse = localVersion < PrefUtils.VERSION_REMOTE;
-			final boolean forceRemoteRefresh = bundle.getBoolean(EXTRA_FORCE_REFRESH, true); // TODO : change the force refresh to user intention only
-			// final boolean hasContentChanged = hasContentChanged(resolver, httpClient);
-			return remoteParse || forceRemoteRefresh/* || hasContentChanged */;
+
+		if (onlySyncWifi && !isWifiConnected(context)) {
+			return false;
 		}
-		return false;
+
+		final boolean forceRemoteRefresh = bundle.getBoolean(EXTRA_FORCE_REFRESH, false);
+		final long lastSync = PrefUtils.getLastRemoteSync(context);
+		final long currentTime = System.currentTimeMillis();
+		boolean notSyncMinInterval = true;
+		if (currentTime - lastSync < MIN_INTERVAL_TO_NOT_SYNC) {
+			if (DEBUG_MODE) {
+				Log.d(TAG, "No refresh because minimum interval to not sync (" + MIN_INTERVAL_TO_NOT_SYNC + " ms) is not yet over!");
+			}
+			notSyncMinInterval = false;
+		}
+
+		return forceRemoteRefresh || notSyncMinInterval;
 	}
 
 	/**
