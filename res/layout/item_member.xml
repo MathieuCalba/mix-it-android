@@ -20,6 +20,7 @@
         android:layout_height="wrap_content"
         android:layout_alignParentRight="true"
         android:layout_alignParentTop="true"
+        android:layout_alignWithParentIfMissing="true"
         android:layout_toRightOf="@id/member_image"
         android:ellipsize="end"
         android:singleLine="true"
@@ -31,6 +32,8 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignLeft="@id/member_title"
+        android:layout_alignParentRight="true"
+        android:layout_alignWithParentIfMissing="true"
         android:layout_below="@id/member_title"
         android:ellipsize="end"
         android:textIsSelectable="false" />
