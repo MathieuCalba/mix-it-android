@@ -12,7 +12,7 @@
         android:layout_alignParentRight="true"
         android:layout_marginLeft="@dimen/margin_normal"
         android:text="@string/member_interests"
-        android:textColor="@color/blue_mixit"
+        android:textColor="@color/dark_blue_mixit"
         android:textIsSelectable="false" />
 
     <LinearLayout
@@ -33,7 +33,7 @@
         android:layout_alignParentLeft="true"
         android:layout_toLeftOf="@id/member_interests_title"
         android:text="@string/member_bio"
-        android:textColor="@color/blue_mixit"
+        android:textColor="@color/dark_blue_mixit"
         android:textIsSelectable="false" />
 
     <TextView
@@ -55,7 +55,7 @@
         android:layout_marginTop="@dimen/margin_normal"
         android:layout_toLeftOf="@id/member_interests_title"
         android:text="@string/member_shared_links"
-        android:textColor="@color/blue_mixit"
+        android:textColor="@color/dark_blue_mixit"
         android:textIsSelectable="false" />
 
     <LinearLayout
@@ -77,7 +77,7 @@
         android:layout_marginTop="@dimen/margin_normal"
         android:layout_toLeftOf="@id/member_interests_title"
         android:text="@string/member_talks"
-        android:textColor="@color/blue_mixit"
+        android:textColor="@color/dark_blue_mixit"
         android:textIsSelectable="false" />
 
     <LinearLayout

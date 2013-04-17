@@ -15,12 +15,14 @@ import android.support.v4.app.NavUtils;
 import android.support.v4.app.TaskStackBuilder;
 import android.util.Log;
 
+import com.actionbarsherlock.app.ActionBar;
 import com.actionbarsherlock.app.SherlockFragmentActivity;
 import com.actionbarsherlock.view.MenuItem;
 import com.actionbarsherlock.view.Window;
 
 import fr.mixit.android.MixItApplication;
 import fr.mixit.android.services.MixItService;
+import fr.mixit.android_2012.R;
 
 
 public abstract class GenericMixItActivity extends SherlockFragmentActivity {
@@ -103,8 +105,11 @@ public abstract class GenericMixItActivity extends SherlockFragmentActivity {
 
 	protected void initActionBar() {
 		final boolean isUpEnabled = getActivityLevel() > 0;
-		getSupportActionBar().setDisplayHomeAsUpEnabled(isUpEnabled);
-		getSupportActionBar().setHomeButtonEnabled(isUpEnabled);
+		final ActionBar sab = getSupportActionBar();
+		sab.setDisplayHomeAsUpEnabled(isUpEnabled);
+		sab.setHomeButtonEnabled(isUpEnabled);
+		sab.setIcon(R.drawable.ic_action_bar);
+		sab.setTitle("");
 		setRefreshMode(false);
 	}
 

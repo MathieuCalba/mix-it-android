@@ -75,7 +75,7 @@ public class MembersListFragment extends BoundServiceFragment implements LoaderM
 			mCheckedPosition = savedInstanceState.getInt(STATE_CHECKED_POSITION, -1);
 		}
 
-		mAdapter = new MembersAdapter(getActivity(), mImageLoader);
+		mAdapter = new MembersAdapter(getActivity());
 		mListView.setAdapter(mAdapter);
 		mListView.setOnItemClickListener(this);
 	}

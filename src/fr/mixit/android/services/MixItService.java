@@ -29,6 +29,7 @@ import fr.mixit.android.MixItApplication;
 import fr.mixit.android.io.JsonExecutor;
 import fr.mixit.android.io.JsonHandlerApplyInterests;
 import fr.mixit.android.io.JsonHandlerApplyMembers;
+import fr.mixit.android.io.JsonHandlerApplyStarredSessions;
 import fr.mixit.android.io.JsonHandlerApplyTalks;
 import fr.mixit.android.io.JsonHandlerException;
 import fr.mixit.android.model.OAuth;
@@ -78,6 +79,7 @@ public class MixItService extends Service {
 	public static final int MSG_MY_ACTIVITIES = 25;
 	public static final int MSG_VOTE_LIGHTNING_TALK = 26;
 	public static final int MSG_STAR_SESSION = 27;
+	public static final int MSG_GET_STARRED_SESSION = 28;
 
 	public static final String EXTRA_FORCE_REFRESH = "fr.mixit.android.EXTRA_FORCE_REFRESH";
 	public static final String EXTRA_ID = "fr.mixit.android.EXTRA_ID";
@@ -90,6 +92,7 @@ public class MixItService extends Service {
 	public static final String EXTRA_STATE_STAR = "fr.mixit.android.EXTRA_STATE_STAR";
 	public static final String EXTRA_SESSION_ID = "fr.mixit.android.EXTRA_SESSION_ID";
 	public static final String EXTRA_MEMBER_TYPE = "fr.mixit.android.EXTRA_MEMBER_TYPE";
+	public static final String EXTRA_MEMBER_ID = "fr.mixit.android.EXTRA_MEMBER_ID";
 
 	// URLs
 	static final String MAIN_URL = "http://www.mix-it.fr/api";
@@ -121,6 +124,7 @@ public class MixItService extends Service {
 	static final String URL_SUGGESTIONS_MEMBERS = MAIN_URL + "/suggestions/membres";
 	static final String URL_ACTIVITIES = MAIN_URL + "/activities";
 	static final String URL_MY_ACTIVITIES = MAIN_URL + "/myactivities";
+	static final String URL_STARRED_SESSIONS = MAIN_URL + "/members/%d/favorites";
 
 	// Params
 	static final String PARAM_OAUTH_PROVIDER = "oauth_provider";
@@ -264,6 +268,10 @@ public class MixItService extends Service {
 
 			case MSG_STAR_SESSION:
 				r = starSession(b);
+				break;
+
+			case MSG_GET_STARRED_SESSION:
+				r = getStarredSession(b);
 				break;
 
 			default:
@@ -909,6 +917,59 @@ public class MixItService extends Service {
 			if (DEBUG_MODE) {
 				Log.e(TAG, "Error while trying to update session star", e);
 			}
+		}
+		r.status = Response.STATUS_OK;
+
+		return r;
+	}
+
+	protected Response getStarredSession(Bundle b) {
+		if (DEBUG_MODE) {
+			Log.d(TAG, "getStarredSession() with bundle=" + b);
+		}
+
+		final Response r = new Response();
+		r.bundle = new Bundle();
+
+		if (NetworkUtils.getConnectivity(this) == ConnectivityState.NONE) {
+			r.status = Response.STATUS_NO_CONNECTIVITY;
+			return r;
+		}
+
+		final int memberId = b.getInt(EXTRA_MEMBER_ID, -1);
+
+		if (memberId == -1) {
+			r.bundle.putString(EXTRA_ERROR_MESSAGE, "Error while calling getStarredSession {memberId=" + memberId + " : Missing/Bad parameters");
+			r.status = Response.STATUS_ERROR;
+			return r;
+		}
+
+		final String url = String.format(Locale.getDefault(), URL_STARRED_SESSIONS, memberId);
+		final ResponseHttp myMemberResponse = NetworkUtils.sendURL(url, false, null);
+		if (myMemberResponse == null || myMemberResponse.status != HttpURLConnection.HTTP_OK) {
+			r.bundle.putString(EXTRA_ERROR_MESSAGE, "Error while calling " + url);
+			r.status = Response.STATUS_ERROR;
+			return r;
+		}
+
+		final String json = myMemberResponse.jsonText;
+
+		if (TextUtils.isEmpty(json)) {
+			r.bundle.putString(EXTRA_ERROR_MESSAGE, "Error while calling " + url + " : No Data to retrieve");
+			r.status = Response.STATUS_ERROR;
+			return r;
+		}
+
+		final JsonExecutor executor = new JsonExecutor(getContentResolver());
+		try {
+			executor.executeAndInsert(json, new JsonHandlerApplyStarredSessions(memberId));
+			r.status = Response.STATUS_OK;
+		} catch (final JsonHandlerException e) {
+			if (DEBUG_MODE) {
+				Log.e(TAG, "An error occured while processing JSON data from " + url + " web mService", e);
+			}
+			r.bundle.putString(EXTRA_ERROR_MESSAGE, "Error while calling " + url + " : error while processing JSON");
+			r.status = Response.STATUS_ERROR;
 		}
 		r.status = Response.STATUS_OK;
 
