@@ -351,7 +351,7 @@ public class MixItContract {
 		public static final String CONTENT_TYPE = CONTENT_TYPE_START + CONTENT_TYPE_DIR + VENDOR + PATH_SESSIONS;
 		public static final String CONTENT_ITEM_TYPE = CONTENT_TYPE_START + CONTENT_TYPE_ITEM + VENDOR + PATH_SESSIONS;
 
-		public static final String DEFAULT_SORT = MixItDatabase.Tables.SESSIONS + "." + SessionsColumns.SESSION_ID + " ASC";
+		public static final String DEFAULT_SORT = MixItDatabase.Tables.SESSIONS + "." + SessionsColumns.TITLE + " ASC";
 		public static final String ROOM_SORT = MixItDatabase.Tables.SESSIONS + "." + SessionsColumns.ROOM_ID + " ASC";
 		public static final String PLANNING_SORT = MixItDatabase.Tables.SESSIONS + "." + SessionsColumns.START + " ASC";
 		public static final String PLANNING_FULL_SORT = MixItDatabase.Tables.SESSIONS + "." + SessionsColumns.START + " ASC, " + MixItDatabase.Tables.SESSIONS
