@@ -31,6 +31,7 @@
     <string name="planning_no_room">"No room"</string>
     <string name="planning_lightning_room">"Gosling"</string>
     <string name="planning_every_room">"Every room"</string>
+    <string name="empty_my_planning">"You can import your planning from the server by touching here"</string>
     <!-- Explore -->
     <string name="map_bt">Map</string>
     <string name="planning_bt">Planning</string>

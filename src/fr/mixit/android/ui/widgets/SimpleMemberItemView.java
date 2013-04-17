@@ -27,6 +27,7 @@ public class SimpleMemberItemView extends MemberItemView {
 		setMinimumHeight(context.getResources().getDimensionPixelSize(R.dimen.small_touchable_height));
 		mSubTitle.setVisibility(View.GONE);
 		mImage.setVisibility(View.GONE);
+		mImageLoader = null;
 	}
 
 }

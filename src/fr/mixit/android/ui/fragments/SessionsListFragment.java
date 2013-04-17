@@ -143,7 +143,7 @@ public class SessionsListFragment extends BoundServiceFragment implements Loader
 	public void onLoadFinished(Loader<Cursor> loader, Cursor data) {
 		final int id = loader.getId();
 		if (id == CURSOR_SESSIONS) {
-			if (data == null) {
+			if (data == null || !data.moveToFirst()) {
 				switch (mAnimator.getDisplayedChild()) {
 					case 0:
 						mAnimator.showPrevious();

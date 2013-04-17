@@ -12,15 +12,18 @@ import android.support.v4.content.Loader;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.view.View.OnClickListener;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
+import android.widget.ListView;
+import android.widget.TextView;
 import android.widget.Toast;
+import android.widget.ViewAnimator;
 
 import com.actionbarsherlock.view.Menu;
 import com.actionbarsherlock.view.MenuInflater;
 import com.actionbarsherlock.view.MenuItem;
-import com.emilsjolander.components.stickylistheaders.StickyListHeadersListView;
 
 import fr.mixit.android.model.PlanningSlot;
 import fr.mixit.android.provider.MixItContract;
@@ -38,7 +41,9 @@ WarningImportStarredSessionDialogFragment.WarningImportStarredSessionDialogContr
 
 	protected static final int LOADER_ID_STARRED_SESSIONS = 1304131837;
 
-	protected StickyListHeadersListView mListView;
+	protected ViewAnimator mAnimator;
+	protected ListView mListView;
+	// protected StickyListHeadersListView mListView;
 	protected MyPlanningAdapter mAdapter;
 
 	public static MyPlanningFragment newInstance(Intent intent) {
@@ -57,7 +62,18 @@ WarningImportStarredSessionDialogFragment.WarningImportStarredSessionDialogContr
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
 		final View root = inflater.inflate(R.layout.fragment_my_planning, container, false);
-		mListView = (StickyListHeadersListView) root.findViewById(R.id.planning_list);
+		mAnimator = (ViewAnimator) root.findViewById(R.id.list_animator);
+		// mListView = (StickyListHeadersListView) root.findViewById(R.id.planning_list);
+		mListView = (ListView) root.findViewById(R.id.planning_list);
+		final TextView emptyV = (TextView) root.findViewById(android.R.id.empty);
+		emptyV.setText(R.string.empty_my_planning);
+		emptyV.setOnClickListener(new OnClickListener() {
+
+			@Override
+			public void onClick(View v) {
+				showWarningBeforeImportingStarredSession();
+			}
+		});
 		return root;
 	}
 
@@ -78,6 +94,10 @@ WarningImportStarredSessionDialogFragment.WarningImportStarredSessionDialogContr
 	}
 
 	protected void loadStarredSession() {
+		if (mAnimator.getDisplayedChild() == 2) {
+			mAnimator.showNext();
+		}
+
 		restartLoader(LOADER_ID_STARRED_SESSIONS, null, this);
 	}
 
@@ -102,10 +122,33 @@ WarningImportStarredSessionDialogFragment.WarningImportStarredSessionDialogContr
 		switch (id) {
 			case LOADER_ID_STARRED_SESSIONS:
 				if (cursor == null || !cursor.moveToFirst()) {
-					clearPlanning();
-					// TODO : invite user to import his favorite talks
+					switch (mAnimator.getDisplayedChild()) {
+						case 0:
+							mAnimator.showPrevious();
+							break;
+
+						case 1:
+							mAnimator.showNext();
+							break;
+
+						default:
+							break;
+					}
+					mAdapter.swapCursor(null);
 				} else {
-					displayPlanning(cursor);
+					switch (mAnimator.getDisplayedChild()) {
+						case 0:
+							mAnimator.showNext();
+							break;
+
+						case 2:
+							mAnimator.showPrevious();
+							break;
+
+						default:
+							break;
+					}
+					mAdapter.swapCursor(cursor);
 				}
 				break;
 
@@ -120,20 +163,12 @@ WarningImportStarredSessionDialogFragment.WarningImportStarredSessionDialogContr
 
 		switch (id) {
 			case LOADER_ID_STARRED_SESSIONS:
-				clearPlanning();
+				mAdapter.swapCursor(null);
 				break;
 
 			default:
 				break;
 		}
-	}
-
-	protected void clearPlanning() {
-		mAdapter.swapCursor(null);
-	}
-
-	protected void displayPlanning(Cursor c) {
-		mAdapter.swapCursor(c);
 	}
 
 	@Override
