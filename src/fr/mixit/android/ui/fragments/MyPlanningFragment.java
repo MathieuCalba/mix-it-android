@@ -5,14 +5,17 @@ import android.database.Cursor;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Message;
+import android.os.RemoteException;
 import android.support.v4.app.LoaderManager;
 import android.support.v4.content.CursorLoader;
 import android.support.v4.content.Loader;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
+import android.widget.Toast;
 
 import com.actionbarsherlock.view.Menu;
 import com.actionbarsherlock.view.MenuInflater;
@@ -28,7 +31,8 @@ import fr.mixit.android.utils.UIUtils;
 import fr.mixit.android_2012.R;
 
 
-public class MyPlanningFragment extends BoundServiceFragment implements LoaderManager.LoaderCallbacks<Cursor>, OnItemClickListener {
+public class MyPlanningFragment extends BoundServiceFragment implements LoaderManager.LoaderCallbacks<Cursor>, OnItemClickListener,
+WarningImportStarredSessionDialogFragment.WarningImportStarredSessionDialogContract, ImportStarredDialogFragment.ImportStarredDialogContract {
 
 	public static final String TAG = MyPlanningFragment.class.getSimpleName();
 
@@ -134,23 +138,53 @@ public class MyPlanningFragment extends BoundServiceFragment implements LoaderMa
 
 	@Override
 	protected void onMessageReceivedFromService(Message msg) {
-		if (msg.what == MixItService.MSG_INIT) {
-			switch (msg.arg1) {
-				case MixItService.Response.STATUS_OK:
-					break;
+		switch (msg.what) {
+			case MixItService.MSG_INIT:
+				switch (msg.arg1) {
+					case MixItService.Response.STATUS_OK:
+						break;
 
-				case MixItService.Response.STATUS_ERROR:
-					break;
+					case MixItService.Response.STATUS_ERROR:
+						break;
 
-				case MixItService.Response.STATUS_NO_CONNECTIVITY:
-					break;
+					case MixItService.Response.STATUS_NO_CONNECTIVITY:
+						break;
 
-				default:
-					break;
-			}
+					default:
+						break;
+				}
 
-			loadStarredSession();
+				loadStarredSession();
+				break;
+
+			case MixItService.MSG_GET_STARRED_SESSION:
+				if (getActivity() != null && !isDetached()) {
+					switch (msg.arg1) {
+						case MixItService.Response.STATUS_OK:
+							Toast.makeText(getActivity(), R.string.import_starred_state_success, Toast.LENGTH_LONG).show();
+							break;
+
+						case MixItService.Response.STATUS_ERROR:
+							Toast.makeText(getActivity(), R.string.import_starred_state_error, Toast.LENGTH_LONG).show();
+							break;
+
+						case MixItService.Response.STATUS_NO_CONNECTIVITY:
+							Toast.makeText(getActivity(), R.string.import_starred_state_error, Toast.LENGTH_LONG).show();
+							break;
+
+						default:
+							break;
+					}
+				}
+
+				setRefreshMode(false);
+				loadStarredSession();
+				break;
+
+			default:
+				break;
 		}
+
 	}
 
 	@Override
@@ -214,15 +248,65 @@ public class MyPlanningFragment extends BoundServiceFragment implements LoaderMa
 
 		switch (id) {
 			case R.id.menu_item_import_starred_session:
-				final ImportStarredDialogFragment fragment = ImportStarredDialogFragment.newInstance();
-				fragment.show(getFragmentManager(), ImportStarredDialogFragment.TAG);
-				break;
+				showWarningBeforeImportingStarredSession();
+				return true;
 
 			default:
-				break;
+				return super.onOptionsItemSelected(item);
 		}
+	}
 
-		return super.onOptionsItemSelected(item);
+	protected void showWarningBeforeImportingStarredSession() {
+		final WarningImportStarredSessionDialogFragment fragment = WarningImportStarredSessionDialogFragment.newInstance();
+		fragment.setTargetFragment(this, WarningImportStarredSessionDialogFragment.WARNING_NO_SYNC_STAR_SESSION);
+		fragment.show(getFragmentManager(), WarningImportStarredSessionDialogFragment.TAG);
+	}
+
+	@Override
+	public void onWarningClickOk() {
+		showImportDialog();
+	}
+
+	protected void showImportDialog() {
+		final ImportStarredDialogFragment fragment = ImportStarredDialogFragment.newInstance();
+		fragment.setTargetFragment(this, ImportStarredDialogFragment.SELECT_MEMBER);
+		fragment.show(getFragmentManager(), ImportStarredDialogFragment.TAG);
+	}
+
+	@Override
+	public void onMemberSelect(String memberId) {
+		getStarredSessions(memberId);
+	}
+
+	@Override
+	public void onCancel() {
+	}
+
+	protected void getStarredSessions(String memberId) {
+		try {
+			final int id = Integer.valueOf(memberId);
+			getStarredSessions(id);
+		} catch (final NumberFormatException e) {
+			if (DEBUG_MODE) {
+				Log.e(TAG, "Impossible to convert " + memberId + " to an integer");
+			}
+		}
+	}
+
+	protected void getStarredSessions(int memberId) {
+		if (mIsBound && mServiceReady) {
+			final Message msg = Message.obtain(null, MixItService.MSG_GET_STARRED_SESSION, 0, 0);
+			msg.replyTo = mMessenger;
+			final Bundle b = new Bundle();
+			b.putInt(MixItService.EXTRA_MEMBER_ID, memberId);
+			msg.setData(b);
+			try {
+				mService.send(msg);
+				setRefreshMode(true);
+			} catch (final RemoteException e) {
+				e.printStackTrace();
+			}
+		}
 	}
 
 }
