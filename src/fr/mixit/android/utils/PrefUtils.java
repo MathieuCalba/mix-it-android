@@ -21,12 +21,35 @@ public class PrefUtils {
 
 	public static final String MIXITSCHED_SYNC = "mixitsched_sync";
 	public static final String LOCAL_VERSION = "local_version";
-	public static final String LAST_REMOTE_SYNC = "last_remote_sync";
+	// public static final String LAST_REMOTE_SYNC = "last_remote_sync";
 
 	public static final String SETTINGS_NAME = "MixItScheduleSettings";
 
 	public static final String HIDDEN_SETTINGS = "fr.mixit.android.HIDDEN_SETTINGS";
+	public static final String LAST_REMOTE_SYNC = "fr.mixit.android.LAST_REMOTE_SYNC";
 	public static final String IS_WARNING_STAR_SESSION_SHOULD_BE_SHOWN = "fr.mixit.android.IS_WARNING_STAR_SESSION_SHOULD_BE_SHOWN";
+
+	public static long getLastRemoteSync(Context ctx) {
+		if (ctx == null) {
+			return 0;
+		}
+
+		final SharedPreferences pref = ctx.getSharedPreferences(HIDDEN_SETTINGS, Context.MODE_PRIVATE);
+		final long value = pref.getLong(LAST_REMOTE_SYNC, 0);
+		return value;
+	}
+
+	@SuppressLint("CommitPrefEdits")
+	public static void setLastRemoteSync(Context ctx, long value) {
+		if (ctx == null) {
+			return;
+		}
+
+		final SharedPreferences pref = ctx.getSharedPreferences(HIDDEN_SETTINGS, Context.MODE_PRIVATE);
+		final SharedPreferences.Editor editor = pref.edit();
+		editor.putLong(LAST_REMOTE_SYNC, value);
+		commitOrApply(editor);
+	}
 
 	public static boolean isWarningStarSessionShouldBeShown(Context ctx) {
 		if (ctx == null) {
