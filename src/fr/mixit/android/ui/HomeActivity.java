@@ -6,6 +6,9 @@ import android.os.Message;
 import android.os.RemoteException;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.view.ViewPager;
+import android.view.View;
+import android.widget.ProgressBar;
+import android.widget.TextView;
 
 import com.actionbarsherlock.app.ActionBar;
 import com.actionbarsherlock.view.Menu;
@@ -17,6 +20,7 @@ import fr.mixit.android.ui.fragments.AboutFragment;
 import fr.mixit.android.ui.fragments.BoundServiceFragment;
 import fr.mixit.android.ui.fragments.ExploreFragment;
 import fr.mixit.android.ui.fragments.MyPlanningFragment;
+import fr.mixit.android.utils.PrefUtils;
 import fr.mixit.android.utils.UIUtils;
 import fr.mixit.android_2012.R;
 
@@ -29,6 +33,8 @@ public class HomeActivity extends GenericMixItActivity implements BoundServiceFr
 	protected static final String STATE_CURRENT_TAB = "fr.mixit.android.STATE_CURRENT_TAB";
 
 	protected ViewPager mViewPager;
+	protected ProgressBar mProgressBar;
+	protected TextView mInstruction;
 	protected ActionBarTabsAdapter mTabsAdapter;
 
 	@Override
@@ -36,23 +42,28 @@ public class HomeActivity extends GenericMixItActivity implements BoundServiceFr
 		super.onCreate(savedStateInstance);
 
 		mViewPager = (ViewPager) findViewById(R.id.pager);
+		mProgressBar = (ProgressBar) findViewById(R.id.list_progress);
+		mInstruction = (TextView) findViewById(R.id.instruction);
 
-		final ActionBar bar = getSupportActionBar();
-		bar.setNavigationMode(ActionBar.NAVIGATION_MODE_TABS);
-		mTabsAdapter = new ActionBarTabsAdapter(this, mViewPager);
+		final long lastSync = PrefUtils.getLastRemoteSync(this);
+		if (lastSync == 0L) {
+			showProgress();
+		} else {
+			initTabs();
 
-		initTabs();
-
-		if (savedStateInstance != null) {
-			bar.setSelectedNavigationItem(savedStateInstance.getInt(STATE_CURRENT_TAB, 0));
+			final ActionBar bar = getSupportActionBar();
+			if (savedStateInstance != null) {
+				bar.setSelectedNavigationItem(savedStateInstance.getInt(STATE_CURRENT_TAB, 0));
+			}
 		}
 	}
 
 	@Override
 	protected void initActionBar() {
 		super.initActionBar();
-		final ActionBar sab = getSupportActionBar();
-		sab.setIcon(R.drawable.ic_action_bar_bis);
+
+		final ActionBar bar = getSupportActionBar();
+		bar.setIcon(R.drawable.ic_action_bar_bis);
 	}
 
 	@Override
@@ -60,8 +71,27 @@ public class HomeActivity extends GenericMixItActivity implements BoundServiceFr
 		return R.layout.activity_home;
 	}
 
+	protected void showProgress() {
+		mViewPager.setVisibility(View.GONE);
+		mProgressBar.setVisibility(View.VISIBLE);
+		mInstruction.setVisibility(View.VISIBLE);
+	}
+
+	protected void showContent() {
+		mProgressBar.setVisibility(View.GONE);
+		mInstruction.setVisibility(View.GONE);
+		if (mViewPager.getVisibility() != View.VISIBLE) {
+			mViewPager.setVisibility(View.VISIBLE);
+			initTabs();
+		}
+	}
+
 	protected void initTabs() {
 		final ActionBar bar = getSupportActionBar();
+		bar.setNavigationMode(ActionBar.NAVIGATION_MODE_TABS);
+
+		mTabsAdapter = new ActionBarTabsAdapter(this, mViewPager);
+
 		mTabsAdapter.addTab(bar.newTab().setText(getString(R.string.my_planning_tab)), MyPlanningFragment.class, null);
 		mTabsAdapter.addTab(bar.newTab().setText(getString(R.string.explore_tab)), ExploreFragment.class, null);
 	}
@@ -126,6 +156,7 @@ public class HomeActivity extends GenericMixItActivity implements BoundServiceFr
 		if (msg.what == MixItService.MSG_INIT) {
 			switch (msg.arg1) {
 				case MixItService.Response.STATUS_OK:
+					showContent();
 					break;
 
 				case MixItService.Response.STATUS_ERROR:
