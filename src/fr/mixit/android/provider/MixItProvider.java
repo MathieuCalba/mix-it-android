@@ -325,15 +325,21 @@ public class MixItProvider extends ContentProvider {
 
 		final List<PlanningSlot> planningSlots = getNextSessionSlotBis(ctx, newCursor, oldCursor, slotStart, slotEnd, i);
 
+		boolean hasSlotShifted = false;
 		long nextSlotStart = slotEnd;
 		if (planningSlots != null && !planningSlots.isEmpty()) {
 			for (final Iterator<PlanningSlot> iterator = planningSlots.iterator(); iterator.hasNext();) {
 				final PlanningSlot planningSlot = iterator.next();
 				if (nextSlotStart < planningSlot.getEnd()) {
 					nextSlotStart = planningSlot.getEnd();
+					hasSlotShifted = true;
 				}
 				i = addSessionToCursor(newCursor, planningSlot, i);
 			}
+		}
+
+		if (hasSlotShifted) {
+			slotLengthIndex++;
 		}
 
 		if (nextSlotStart >= Planning.TIMESTAMP_OFFSET_DAY_ONE + Planning.SEVEN_PM && //
@@ -343,123 +349,6 @@ public class MixItProvider extends ContentProvider {
 
 		if (nextSlotStart < Planning.TIMESTAMP_OFFSET_DAY_TWO + Planning.SIX_PM + Planning.THIRTY_MINUTES) {
 			addSessionsBis(ctx, newCursor, oldCursor, nextSlotStart, slotLengthIndex + 1, i);
-		}
-	}
-
-	private void addSessions(Context ctx, MatrixCursor newCursor, Cursor oldCursor, long previousSlotEnd, long nextSlotEnd, int i) {
-		long currentHour = previousSlotEnd;
-
-		if (currentHour == Planning.TIMESTAMP_OFFSET_DAY_ONE + Planning.BREAKFAST_START) {
-			PlanningSlot slot = new PlanningSlot.BreakfastSlot(ctx, currentHour, Planning.TIMESTAMP_OFFSET_DAY_ONE + Planning.WELCOME_START);
-			i = addSessionToCursor(newCursor, slot, i);
-			currentHour = Planning.TIMESTAMP_OFFSET_DAY_ONE + Planning.WELCOME_START;
-
-			slot = new PlanningSlot.WelcomeSlot(ctx, currentHour, Planning.TIMESTAMP_OFFSET_DAY_ONE + Planning.KEYNOTE_MORNING_START);
-			i = addSessionToCursor(newCursor, slot, i);
-			currentHour = Planning.TIMESTAMP_OFFSET_DAY_ONE + Planning.KEYNOTE_MORNING_START;
-
-			slot = getNextSessionSlot(ctx, newCursor, oldCursor, currentHour, currentHour + Planning.KEYNOTE_SLOT_LENGTH, i);
-			// PlanningSlot slot = new PlanningSlot.KeynoteSlot(ctx, currentHour, Planning.TIMESTAMP_OFFSET_DAY_ONE + Planning.PITCH_START);
-			i = addSessionToCursor(newCursor, slot, i);
-			currentHour = slot.getEnd();
-			// currentHour = Planning.TIMESTAMP_OFFSET_DAY_ONE + Planning.PITCH_START;
-
-			slot = new PlanningSlot.TalksPresentationSlot(ctx, currentHour, Planning.TIMESTAMP_OFFSET_DAY_ONE + Planning.TALKS_MORNING_START);
-			i = addSessionToCursor(newCursor, slot, i);
-			currentHour = Planning.TIMESTAMP_OFFSET_DAY_ONE + Planning.TALKS_MORNING_START;
-
-			previousSlotEnd = currentHour;
-			nextSlotEnd = currentHour + Planning.TALKS_SLOT_LENGTH;
-		}
-
-		final PlanningSlot planningSlot = getNextSessionSlot(ctx, newCursor, oldCursor, previousSlotEnd, nextSlotEnd, i);
-
-		final long currentSlotStart = planningSlot.getStart();
-		final long currentSlotEnd = planningSlot.getEnd();
-		currentHour = currentSlotEnd;
-
-		if (currentSlotStart != previousSlotEnd) {
-			if (currentSlotStart == Planning.TIMESTAMP_OFFSET_DAY_ONE + Planning.ONE_PM + Planning.THIRTY_MINUTES && //
-					previousSlotEnd == Planning.TIMESTAMP_OFFSET_DAY_ONE + Planning.ONE_PM || //
-					currentSlotStart == Planning.TIMESTAMP_OFFSET_DAY_TWO + Planning.ONE_PM + Planning.THIRTY_MINUTES && //
-					previousSlotEnd == Planning.TIMESTAMP_OFFSET_DAY_TWO + Planning.ONE_PM) {
-				final PlanningSlot slot = new PlanningSlot.LightningTalkSlot(ctx, currentSlotStart - Planning.THIRTY_MINUTES, currentSlotStart);
-				i = addSessionToCursor(newCursor, slot, i);
-			} else if (previousSlotEnd == Planning.TIMESTAMP_OFFSET_DAY_ONE + Planning.TWO_PM + Planning.THIRTY_MINUTES && //
-					currentSlotStart == Planning.TIMESTAMP_OFFSET_DAY_ONE + Planning.THREE_PM || //
-					previousSlotEnd == Planning.TIMESTAMP_OFFSET_DAY_TWO + Planning.TWO_PM + Planning.THIRTY_MINUTES && //
-					currentSlotStart == Planning.TIMESTAMP_OFFSET_DAY_TWO + Planning.THREE_PM || //
-					previousSlotEnd == Planning.TIMESTAMP_OFFSET_DAY_ONE + Planning.FOUR_PM && //
-					currentSlotStart == Planning.TIMESTAMP_OFFSET_DAY_ONE + Planning.FOUR_PM + Planning.THIRTY_MINUTES || //
-					previousSlotEnd == Planning.TIMESTAMP_OFFSET_DAY_TWO + Planning.FOUR_PM && //
-					currentSlotStart == Planning.TIMESTAMP_OFFSET_DAY_TWO + Planning.FOUR_PM + Planning.THIRTY_MINUTES || //
-					previousSlotEnd == Planning.TIMESTAMP_OFFSET_DAY_ONE + Planning.FIVE_PM + Planning.THIRTY_MINUTES && //
-					currentSlotStart == Planning.TIMESTAMP_OFFSET_DAY_ONE + Planning.SIX_PM || //
-					previousSlotEnd == Planning.TIMESTAMP_OFFSET_DAY_TWO + Planning.FIVE_PM + Planning.THIRTY_MINUTES && //
-					currentSlotStart == Planning.TIMESTAMP_OFFSET_DAY_TWO + Planning.SIX_PM) {
-				final PlanningSlot slot = new PlanningSlot.BreakSlot(ctx, currentSlotStart - Planning.THIRTY_MINUTES, currentSlotStart);
-				i = addSessionToCursor(newCursor, slot, i);
-			}
-		}
-
-		i = addSessionToCursor(newCursor, planningSlot, i);
-
-		if (currentSlotEnd != nextSlotEnd) {
-			if (currentSlotEnd == Planning.TIMESTAMP_OFFSET_DAY_ONE + Planning.TEN_AM + Planning.FORTY_FIVE_MINUTES && //
-					nextSlotEnd == Planning.TIMESTAMP_OFFSET_DAY_ONE + Planning.ELEVEN_AM + Planning.FIFTEEN_MINUTES || //
-					currentSlotEnd == Planning.TIMESTAMP_OFFSET_DAY_TWO + Planning.TEN_AM + Planning.FORTY_FIVE_MINUTES && //
-					nextSlotEnd == Planning.TIMESTAMP_OFFSET_DAY_TWO + Planning.ELEVEN_AM + Planning.FIFTEEN_MINUTES) {
-				final PlanningSlot slot = new PlanningSlot.BreakSlot(ctx, currentHour, currentHour + Planning.THIRTY_MINUTES);
-				i = addSessionToCursor(newCursor, slot, i);
-				currentHour += Planning.BREAK_SLOT_LENGTH;
-			} else if (currentSlotEnd == Planning.TIMESTAMP_OFFSET_DAY_ONE + Planning.TWELVE_PM + Planning.FIFTEEN_MINUTES || //
-					currentSlotEnd == Planning.TIMESTAMP_OFFSET_DAY_TWO + Planning.TWELVE_PM + Planning.FIFTEEN_MINUTES) {
-				final PlanningSlot slot = new PlanningSlot.LunchSlot(ctx, currentHour, currentHour + Planning.FORTY_FIVE_MINUTES);
-				i = addSessionToCursor(newCursor, slot, i);
-				currentHour += Planning.FORTY_FIVE_MINUTES;
-			} else if (currentSlotEnd == Planning.TIMESTAMP_OFFSET_DAY_ONE + Planning.TWELVE_PM + Planning.FORTY_FIVE_MINUTES || //
-					currentSlotEnd == Planning.TIMESTAMP_OFFSET_DAY_TWO + Planning.TWELVE_PM + Planning.FORTY_FIVE_MINUTES) {
-				final PlanningSlot slot = new PlanningSlot.LunchSlot(ctx, currentHour, currentHour + Planning.FIFTEEN_MINUTES);
-				i = addSessionToCursor(newCursor, slot, i);
-				currentHour += Planning.FIFTEEN_MINUTES;
-			}
-		}
-
-		if (currentHour == Planning.TIMESTAMP_OFFSET_DAY_ONE + Planning.SEVEN_PM) {
-			// TODO : add Mix-IT Party
-			currentHour = Planning.TIMESTAMP_OFFSET_DAY_TWO + Planning.BREAKFAST_START;
-
-			PlanningSlot slot = new PlanningSlot.BreakfastSlot(ctx, currentHour, Planning.TIMESTAMP_OFFSET_DAY_TWO + Planning.WELCOME_START);
-			i = addSessionToCursor(newCursor, slot, i);
-			currentHour = Planning.TIMESTAMP_OFFSET_DAY_TWO + Planning.WELCOME_START;
-
-			slot = new PlanningSlot.WelcomeSlot(ctx, currentHour, Planning.TIMESTAMP_OFFSET_DAY_TWO + Planning.KEYNOTE_MORNING_START);
-			i = addSessionToCursor(newCursor, slot, i);
-			currentHour = Planning.TIMESTAMP_OFFSET_DAY_TWO + Planning.KEYNOTE_MORNING_START;
-
-			slot = getNextSessionSlot(ctx, newCursor, oldCursor, currentHour, currentHour + Planning.KEYNOTE_SLOT_LENGTH, i);
-			// PlanningSlot slot = new PlanningSlot.KeynoteSlot(ctx, currentHour, Planning.TIMESTAMP_OFFSET_DAY_ONE + Planning.PITCH_START);
-			i = addSessionToCursor(newCursor, slot, i);
-			currentHour = planningSlot.getEnd();
-			// slot = new PlanningSlot.KeynoteSlot(ctx, currentHour, Planning.TIMESTAMP_OFFSET_DAY_TWO + Planning.PITCH_START);
-			// i = addSessionToCursor(newCursor, slot, i);
-			// currentHour = Planning.TIMESTAMP_OFFSET_DAY_TWO + Planning.PITCH_START;
-
-			slot = new PlanningSlot.TalksPresentationSlot(ctx, currentHour, Planning.TIMESTAMP_OFFSET_DAY_TWO + Planning.TALKS_MORNING_START);
-			i = addSessionToCursor(newCursor, slot, i);
-			currentHour = Planning.TIMESTAMP_OFFSET_DAY_TWO + Planning.TALKS_MORNING_START;
-		}
-
-		if (currentHour == Planning.TIMESTAMP_OFFSET_DAY_TWO + Planning.SIX_PM) {
-			// final PlanningSlot slot = new PlanningSlot.KeynoteSlot(ctx, currentHour, currentHour + Planning.THIRTY_MINUTES);
-			final PlanningSlot slot = getNextSessionSlot(ctx, newCursor, oldCursor, currentHour, currentHour + Planning.KEYNOTE_LONG_SLOT_LENGTH, i);
-			i = addSessionToCursor(newCursor, slot, i);
-			// currentHour += Planning.THIRTY_MINUTES;
-			currentHour = planningSlot.getEnd();
-		}
-
-		if (currentHour < Planning.TIMESTAMP_OFFSET_DAY_TWO + Planning.SIX_PM + Planning.THIRTY_MINUTES) {
-			addSessions(ctx, newCursor, oldCursor, currentHour, currentHour + Planning.ONE_HOUR_AND_HALF, i);
 		}
 	}
 
@@ -548,23 +437,13 @@ public class MixItProvider extends ContentProvider {
 		return planningSlots;
 	}
 
-	private PlanningSlot getNextSessionSlot(Context ctx, MatrixCursor newCursor, Cursor cursor, long nextStart, long nextEnd, int i) {
-		final PlanningSlot planningSlot = new PlanningSlot.SessionSlot(cursor);
-		if (isSessionInThisSlot(planningSlot, nextStart, nextEnd)) {
-			return addSession(ctx, planningSlot, cursor, nextStart, nextEnd);
-		} else {
-			final PlanningSlot s = new PlanningSlot.NoSessionSlot(ctx, nextStart, nextEnd);
-			return s;
-		}
-	}
-
 	private PlanningSlot addSession(Context ctx, PlanningSlot planningSlot, Cursor cursor, long minSlotStart, long maxSlotEnd) {
 		if (cursor.moveToNext()) {
 			final PlanningSlot newSession = new PlanningSlot.SessionSlot(cursor);
 
 			if (areSessionsMultiple(planningSlot, newSession)) {
-				final long start = planningSlot.getStart() < minSlotStart ? planningSlot.getStart() : minSlotStart;
-				final long end = planningSlot.getEnd() > maxSlotEnd ? planningSlot.getEnd() : maxSlotEnd;
+				final long start = newSession.getStart() < minSlotStart ? newSession.getStart() : minSlotStart;
+				final long end = newSession.getEnd() > maxSlotEnd ? newSession.getEnd() : maxSlotEnd;
 
 				planningSlot.addSession(ctx, newSession, start, end);
 				return addSession(ctx, planningSlot, cursor, minSlotStart, maxSlotEnd);
@@ -597,7 +476,8 @@ public class MixItProvider extends ContentProvider {
 	}
 
 	private boolean areSessionsMultiple(PlanningSlot sessionOri, PlanningSlot sessionNew) {
-		return sessionOri.getStart() == sessionNew.getStart() || sessionOri.getEnd() == sessionNew.getEnd();
+		return sessionNew.getStart() >= sessionOri.getStart() && sessionNew.getStart() < sessionOri.getEnd() || //
+				sessionNew.getEnd() > sessionOri.getStart() && sessionNew.getEnd() <= sessionOri.getEnd();
 	}
 
 	@Override
