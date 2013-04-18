@@ -7,6 +7,7 @@ import android.os.RemoteException;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.view.ViewPager;
 import android.view.View;
+import android.view.View.OnClickListener;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 
@@ -35,7 +36,9 @@ public class HomeActivity extends GenericMixItActivity implements BoundServiceFr
 	protected ViewPager mViewPager;
 	protected ProgressBar mProgressBar;
 	protected TextView mInstruction;
+	protected TextView mError;
 	protected ActionBarTabsAdapter mTabsAdapter;
+	protected boolean mIsFirstInitDone = false;
 
 	@Override
 	protected void onCreate(Bundle savedStateInstance) {
@@ -44,12 +47,22 @@ public class HomeActivity extends GenericMixItActivity implements BoundServiceFr
 		mViewPager = (ViewPager) findViewById(R.id.pager);
 		mProgressBar = (ProgressBar) findViewById(R.id.list_progress);
 		mInstruction = (TextView) findViewById(R.id.instruction);
+		mError = (TextView) findViewById(R.id.error);
+		mError.setOnClickListener(new OnClickListener() {
+
+			@Override
+			public void onClick(View v) {
+				init();
+				showProgress();
+			}
+		});
 
 		final long lastSync = PrefUtils.getLastRemoteSync(this);
-		if (lastSync == 0L) {
+		mIsFirstInitDone = lastSync != 0L;
+		if (!mIsFirstInitDone) {
 			showProgress();
 		} else {
-			initTabs();
+			showContent(true);
 
 			final ActionBar bar = getSupportActionBar();
 			if (savedStateInstance != null) {
@@ -75,15 +88,29 @@ public class HomeActivity extends GenericMixItActivity implements BoundServiceFr
 		mViewPager.setVisibility(View.GONE);
 		mProgressBar.setVisibility(View.VISIBLE);
 		mInstruction.setVisibility(View.VISIBLE);
+		mError.setVisibility(View.GONE);
 	}
 
 	protected void showContent() {
+		showContent(false);
+	}
+
+	protected void showContent(boolean forceInitTab) {
+		mIsFirstInitDone = true;
 		mProgressBar.setVisibility(View.GONE);
 		mInstruction.setVisibility(View.GONE);
-		if (mViewPager.getVisibility() != View.VISIBLE) {
+		mError.setVisibility(View.GONE);
+		if (mViewPager.getVisibility() != View.VISIBLE || forceInitTab) {
 			mViewPager.setVisibility(View.VISIBLE);
 			initTabs();
 		}
+	}
+
+	protected void showError() {
+		mViewPager.setVisibility(View.GONE);
+		mProgressBar.setVisibility(View.GONE);
+		mInstruction.setVisibility(View.GONE);
+		mError.setVisibility(View.VISIBLE);
 	}
 
 	protected void initTabs() {
@@ -160,9 +187,15 @@ public class HomeActivity extends GenericMixItActivity implements BoundServiceFr
 					break;
 
 				case MixItService.Response.STATUS_ERROR:
+					if (!mIsFirstInitDone) {
+						showError();
+					}
 					break;
 
 				case MixItService.Response.STATUS_NO_CONNECTIVITY:
+					if (!mIsFirstInitDone) {
+						showError();
+					}
 					break;
 
 				default:

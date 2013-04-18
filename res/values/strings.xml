@@ -8,6 +8,7 @@
     <string name="my_planning_tab">My Planning</string>
     <string name="explore_tab">Explore</string>
     <string name="first_initialization">Please wait during this first initialization of the Mix-IT data</string>
+    <string name="first_initialization_error">An error occurred while doing the first initialization of the app.\nTouch here to retry.</string>
     <!-- Planning -->
     <string name="action_bar_import_starred_session">Import Starred Session</string>
     <string name="warning_import_starred_session_not_sync_with_site">"As there is no possibility to login with an API into Mix-IT, currently, you can only choose a member and import its starred sessions into the application.\nNote that this import will not override your current starred sessions from within the app, it will only add these starred sessions to your's."</string>
