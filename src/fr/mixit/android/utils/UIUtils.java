@@ -3,14 +3,15 @@ package fr.mixit.android.utils;
 import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
-import android.content.res.Configuration;
 import android.net.Uri;
 import android.os.Bundle;
+import fr.mixit.android_2012.R;
 
 public class UIUtils {
 
 	public static boolean isTablet(Context context) {
-		return (context.getResources().getConfiguration().screenLayout & Configuration.SCREENLAYOUT_SIZE_MASK) >= Configuration.SCREENLAYOUT_SIZE_LARGE;
+		// return (context.getResources().getConfiguration().screenLayout & Configuration.SCREENLAYOUT_SIZE_MASK) >= Configuration.SCREENLAYOUT_SIZE_LARGE;
+		return context.getResources().getBoolean(R.bool.dual_screen);
 	}
 
 	/**
