@@ -3,12 +3,16 @@ package fr.mixit.android.ui;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.FragmentManager;
+
+import com.actionbarsherlock.app.ActionBar;
+
 import fr.mixit.android.ui.fragments.BoundServiceFragment;
 import fr.mixit.android.ui.fragments.MemberDetailsFragment;
+import fr.mixit.android.ui.fragments.MemberDetailsFragment.MemberDetailsContract;
 import fr.mixit.android_2012.R;
 
 
-public class MemberDetailsActivity extends GenericMixItActivity implements /* MemberDetailsContract, */BoundServiceFragment.BoundServiceContract {
+public class MemberDetailsActivity extends GenericMixItActivity implements MemberDetailsContract, BoundServiceFragment.BoundServiceContract {
 
 	protected MemberDetailsFragment mMemberDetailsFrag;
 
@@ -65,6 +69,13 @@ public class MemberDetailsActivity extends GenericMixItActivity implements /* Me
 			default:
 				return super.getParentIntent(level);
 		}
+	}
+
+	@Override
+	public void setActionBarTitle(String title) {
+		final ActionBar bar = getSupportActionBar();
+		bar.setTitle(title);
+		bar.setDisplayShowTitleEnabled(true);
 	}
 
 }

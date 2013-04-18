@@ -16,6 +16,7 @@ import com.actionbarsherlock.app.ActionBar.OnNavigationListener;
 import fr.mixit.android.provider.MixItContract;
 import fr.mixit.android.ui.fragments.BoundServiceFragment;
 import fr.mixit.android.ui.fragments.MemberDetailsFragment;
+import fr.mixit.android.ui.fragments.MemberDetailsFragment.MemberDetailsContract;
 import fr.mixit.android.ui.fragments.SessionDetailsFragment;
 import fr.mixit.android.ui.fragments.SessionDetailsFragment.SessionDetailsContract;
 import fr.mixit.android.ui.fragments.SessionsListFragment;
@@ -25,7 +26,8 @@ import fr.mixit.android.utils.UIUtils;
 import fr.mixit.android_2012.R;
 
 
-public class SessionsActivity extends GenericMixItActivity implements OnNavigationListener, SessionDetailsContract, BoundServiceFragment.BoundServiceContract {
+public class SessionsActivity extends GenericMixItActivity implements OnNavigationListener, SessionDetailsContract, MemberDetailsContract,
+BoundServiceFragment.BoundServiceContract {
 
 	private static final String TAG = SessionsActivity.class.getSimpleName();
 
@@ -97,6 +99,7 @@ public class SessionsActivity extends GenericMixItActivity implements OnNavigati
 
 			final String title = DateUtils.formatDayTime(this, slotStart, slotEnd);
 			sab.setTitle(title);
+			getSupportActionBar().setDisplayShowTitleEnabled(true);
 		}
 		mSessionsListFrag.setDisplayMode(mMode);
 
@@ -112,6 +115,12 @@ public class SessionsActivity extends GenericMixItActivity implements OnNavigati
 	@Override
 	protected int getContentLayoutId() {
 		return R.layout.activity_sessions;
+	}
+
+	@Override
+	protected void initActionBar() {
+		super.initActionBar();
+		getSupportActionBar().setDisplayShowTitleEnabled(false);
 	}
 
 	@Override
@@ -209,6 +218,11 @@ public class SessionsActivity extends GenericMixItActivity implements OnNavigati
 	@Override
 	public void refreshList() {
 		mSessionsListFrag.reload();
+	}
+
+	@Override
+	public void setActionBarTitle(String title) {
+		// Nothing to
 	}
 
 }

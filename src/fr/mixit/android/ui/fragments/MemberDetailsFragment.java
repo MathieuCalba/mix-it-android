@@ -1,6 +1,7 @@
 package fr.mixit.android.ui.fragments;
 
 import android.annotation.TargetApi;
+import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.database.Cursor;
@@ -79,10 +80,23 @@ public class MemberDetailsFragment extends BoundServiceFragment implements Loade
 	protected ImageLoader mImageLoader = ImageLoader.getInstance();
 	protected DisplayImageOptions mOptions;
 
+	public interface MemberDetailsContract {
+		public void setActionBarTitle(String title);
+	}
+
 	public static MemberDetailsFragment newInstance(Intent intent) {
 		final MemberDetailsFragment f = new MemberDetailsFragment();
 		f.setArguments(UIUtils.intentToFragmentArguments(intent));
 		return f;
+	}
+
+	@Override
+	public void onAttach(Activity activity) {
+		super.onAttach(activity);
+
+		if (!(activity instanceof MemberDetailsContract)) {
+			throw new IllegalArgumentException(activity.getClass().getName() + " must implement MemberDetailsContract");
+		}
 	}
 
 	@Override
@@ -429,6 +443,7 @@ public class MemberDetailsFragment extends BoundServiceFragment implements Loade
 		int nbConsults = 0;
 		String bio = null;
 		Spanned bioSpanned = null;
+		int memberType = MixItContract.Members.TYPE_MEMBER;
 
 		if (c != null && c.moveToFirst()) {
 			showMember();
@@ -443,6 +458,7 @@ public class MemberDetailsFragment extends BoundServiceFragment implements Loade
 			nbConsults = c.getInt(MixItContract.Members.PROJ_DETAIL.NB_CONSULT);
 			bio = c.getString(MixItContract.Members.PROJ_DETAIL.LONG_DESC);
 			imageUrl = c.getString(MixItContract.Members.PROJ_DETAIL.IMAGE_URL);
+			memberType = c.getInt(MixItContract.Members.PROJ_DETAIL.TYPE);
 		} else {
 			showNoMemberSelected();
 			mImage.setImageDrawable(null);
@@ -458,6 +474,29 @@ public class MemberDetailsFragment extends BoundServiceFragment implements Loade
 			final String longDescHTML = m.markdown(bio);
 			bioSpanned = Html.fromHtml(longDescHTML);
 			mBio.setText(bioSpanned);
+		}
+
+		if (getActivity() != null && !isDetached()) {
+			String memberTypeName = null;
+			switch (memberType) {
+				case MixItContract.Members.TYPE_SPEAKER:
+					memberTypeName = getString(R.string.speaker_detail_title);
+					break;
+
+				case MixItContract.Members.TYPE_SPONSOR:
+					memberTypeName = getString(R.string.sponsor_detail_title);
+					break;
+
+				case MixItContract.Members.TYPE_STAFF:
+					memberTypeName = getString(R.string.staff_detail_title);
+					break;
+
+				case MixItContract.Members.TYPE_MEMBER:
+				default:
+					memberTypeName = getString(R.string.member_detail_title);
+					break;
+			}
+			((MemberDetailsContract) getActivity()).setActionBarTitle(memberTypeName);
 		}
 	}
 

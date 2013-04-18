@@ -3,6 +3,9 @@ package fr.mixit.android.ui;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.FragmentManager;
+
+import com.actionbarsherlock.app.ActionBar;
+
 import fr.mixit.android.ui.fragments.BoundServiceFragment;
 import fr.mixit.android.ui.fragments.SessionDetailsFragment;
 import fr.mixit.android.ui.fragments.SessionDetailsFragment.SessionDetailsContract;
@@ -38,6 +41,13 @@ public class SessionDetailsActivity extends GenericMixItActivity implements Sess
 	@Override
 	public void refreshList() {
 		// Nothing to do because there is no list to refresh in this activity
+	}
+
+	@Override
+	public void setActionBarTitle(String title) {
+		final ActionBar bar = getSupportActionBar();
+		bar.setTitle(title);
+		bar.setDisplayShowTitleEnabled(true);
 	}
 
 	@Override

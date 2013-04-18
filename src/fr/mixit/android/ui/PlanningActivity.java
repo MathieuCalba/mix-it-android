@@ -73,6 +73,12 @@ BoundServiceFragment.BoundServiceContract {
 	}
 
 	@Override
+	protected void initActionBar() {
+		super.initActionBar();
+		getSupportActionBar().setDisplayShowTitleEnabled(false);
+	}
+
+	@Override
 	public void onSaveInstanceState(Bundle outState) {
 		super.onSaveInstanceState(outState);
 		if (mIsPlanningDisplayedBySlot) {

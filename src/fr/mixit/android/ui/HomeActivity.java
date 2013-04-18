@@ -77,7 +77,9 @@ public class HomeActivity extends GenericMixItActivity implements BoundServiceFr
 
 		final ActionBar bar = getSupportActionBar();
 		bar.setIcon(R.drawable.ic_action_bar_bis);
+		bar.setDisplayShowTitleEnabled(false);
 	}
+
 
 	@Override
 	protected int getContentLayoutId() {

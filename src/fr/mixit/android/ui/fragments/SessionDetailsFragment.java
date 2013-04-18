@@ -75,6 +75,8 @@ WarningStarSessionDialogFragment.WarningStarSessionDialogContract, SessionAsyncT
 		public void refreshMenu();
 
 		public void refreshList();
+
+		public void setActionBarTitle(String title);
 	}
 
 	public static SessionDetailsFragment newInstance(Intent intent) {
@@ -347,6 +349,7 @@ WarningStarSessionDialogFragment.WarningStarSessionDialogContract, SessionAsyncT
 			showSession();
 
 			mTitleStr = c.getString(MixItContract.Sessions.PROJ_DETAIL.TITLE);
+			mTitleStr = c.getString(MixItContract.Sessions.PROJ_DETAIL.TITLE);
 			start = c.getLong(MixItContract.Sessions.PROJ_DETAIL.START);
 			end = c.getLong(MixItContract.Sessions.PROJ_DETAIL.END);
 			final MarkdownProcessor m = new MarkdownProcessor();
@@ -364,6 +367,7 @@ WarningStarSessionDialogFragment.WarningStarSessionDialogContract, SessionAsyncT
 
 		if (getActivity() != null && !isDetached()) {
 			((SessionDetailsContract) getActivity()).refreshMenu();
+			((SessionDetailsContract) getActivity()).setActionBarTitle(mSessionFormat);
 		}
 	}
 
