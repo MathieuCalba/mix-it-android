@@ -2,38 +2,45 @@
 <ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent" >
+
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="vertical"
-        android:padding="10dip" >
+        android:padding="@dimen/outside_margin" >
+
         <ImageView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:paddingBottom="10dip"
+            android:paddingBottom="@dimen/margin_small"
             android:src="@drawable/logo_rgb" />
+
         <TextView
             style="@style/AboutText"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="@string/about_text1" />
+
         <TextView
             style="@style/AboutText"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:autoLink="web|email"
             android:text="@string/about_text2" />
+
         <TextView
             style="@style/AboutText"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:autoLink="web"
             android:text="@string/about_text3" />
+
         <TextView
             android:id="@+id/about_version"
             style="@style/AboutText"
             android:layout_width="match_parent"
             android:layout_height="wrap_content" />
+
         <TextView
             style="@style/AboutText"
             android:layout_width="match_parent"
@@ -41,4 +48,5 @@
             android:autoLink="web"
             android:text="@string/about_text5" />
     </LinearLayout>
+
 </ScrollView>

@@ -43,7 +43,6 @@ WarningImportStarredSessionDialogFragment.WarningImportStarredSessionDialogContr
 
 	protected ViewAnimator mAnimator;
 	protected ListView mListView;
-	// protected StickyListHeadersListView mListView;
 	protected MyPlanningAdapter mAdapter;
 
 	public static MyPlanningFragment newInstance(Intent intent) {
@@ -61,10 +60,9 @@ WarningImportStarredSessionDialogFragment.WarningImportStarredSessionDialogContr
 
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-		final View root = inflater.inflate(R.layout.fragment_my_planning, container, false);
+		final View root = inflater.inflate(R.layout.list_content, container, false);
 		mAnimator = (ViewAnimator) root.findViewById(R.id.list_animator);
-		// mListView = (StickyListHeadersListView) root.findViewById(R.id.planning_list);
-		mListView = (ListView) root.findViewById(R.id.planning_list);
+		mListView = (ListView) root.findViewById(android.R.id.list);
 		final TextView emptyV = (TextView) root.findViewById(android.R.id.empty);
 		emptyV.setText(R.string.empty_my_planning);
 		emptyV.setOnClickListener(new OnClickListener() {

@@ -71,7 +71,7 @@ public class PlanningSlotPageFragment extends BoundServiceFragment implements Lo
 
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-		final View root = inflater.inflate(R.layout.fragment_planning_room_page, container, false);
+		final View root = inflater.inflate(R.layout.fragment_planning_slot_page, container, false);
 
 		mListView = (ListView) root.findViewById(android.R.id.list);
 

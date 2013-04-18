@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <dimen name="outside_margin">@dimen/margin_normal</dimen>
+    <dimen name="outside_margin_big">@dimen/margin_big</dimen>
+
+</resources>
