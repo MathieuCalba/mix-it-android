@@ -38,9 +38,7 @@
             <include
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                layout="@layout/session_content"
-                android:paddingBottom="@dimen/margin_small"
-                android:paddingTop="@dimen/margin_small" />
+                layout="@layout/session_content" />
         </ScrollView>
     </LinearLayout>
 

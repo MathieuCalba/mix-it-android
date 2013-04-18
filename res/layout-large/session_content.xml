@@ -3,7 +3,9 @@
     android:id="@+id/session_content"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:layout_margin="@dimen/margin_small" >
+    android:layout_margin="@dimen/margin_small"
+    android:paddingBottom="@dimen/margin_small"
+    android:paddingTop="@dimen/margin_small" >
 
     <fr.mixit.android.ui.widgets.UnderlinedTextView
         android:id="@+id/session_interests_title"
