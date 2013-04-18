@@ -4,10 +4,12 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.os.Message;
 import android.os.RemoteException;
+import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.view.ViewPager;
 import android.view.View;
 import android.view.View.OnClickListener;
+import android.widget.LinearLayout;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 
@@ -34,6 +36,7 @@ public class HomeActivity extends GenericMixItActivity implements BoundServiceFr
 	protected static final String STATE_CURRENT_TAB = "fr.mixit.android.STATE_CURRENT_TAB";
 
 	protected ViewPager mViewPager;
+	protected LinearLayout mTabletContent;
 	protected ProgressBar mProgressBar;
 	protected TextView mInstruction;
 	protected TextView mError;
@@ -45,6 +48,7 @@ public class HomeActivity extends GenericMixItActivity implements BoundServiceFr
 		super.onCreate(savedStateInstance);
 
 		mViewPager = (ViewPager) findViewById(R.id.pager);
+		mTabletContent = (LinearLayout) findViewById(R.id.content);
 		mProgressBar = (ProgressBar) findViewById(R.id.list_progress);
 		mInstruction = (TextView) findViewById(R.id.instruction);
 		mError = (TextView) findViewById(R.id.error);
@@ -64,9 +68,11 @@ public class HomeActivity extends GenericMixItActivity implements BoundServiceFr
 		} else {
 			showContent(true);
 
-			final ActionBar bar = getSupportActionBar();
-			if (savedStateInstance != null) {
-				bar.setSelectedNavigationItem(savedStateInstance.getInt(STATE_CURRENT_TAB, 0));
+			if (mViewPager != null) {
+				final ActionBar bar = getSupportActionBar();
+				if (savedStateInstance != null) {
+					bar.setSelectedNavigationItem(savedStateInstance.getInt(STATE_CURRENT_TAB, 0));
+				}
 			}
 		}
 	}
@@ -77,6 +83,7 @@ public class HomeActivity extends GenericMixItActivity implements BoundServiceFr
 
 		final ActionBar bar = getSupportActionBar();
 		bar.setIcon(R.drawable.ic_action_bar_bis);
+		bar.setDisplayShowTitleEnabled(false);
 	}
 
 	@Override
@@ -85,7 +92,12 @@ public class HomeActivity extends GenericMixItActivity implements BoundServiceFr
 	}
 
 	protected void showProgress() {
-		mViewPager.setVisibility(View.GONE);
+		if (mViewPager != null) {
+			mViewPager.setVisibility(View.GONE);
+		}
+		if (mTabletContent != null) {
+			mTabletContent.setVisibility(View.GONE);
+		}
 		mProgressBar.setVisibility(View.VISIBLE);
 		mInstruction.setVisibility(View.VISIBLE);
 		mError.setVisibility(View.GONE);
@@ -100,14 +112,22 @@ public class HomeActivity extends GenericMixItActivity implements BoundServiceFr
 		mProgressBar.setVisibility(View.GONE);
 		mInstruction.setVisibility(View.GONE);
 		mError.setVisibility(View.GONE);
-		if (mViewPager.getVisibility() != View.VISIBLE || forceInitTab) {
+		if (mViewPager != null && (mViewPager.getVisibility() != View.VISIBLE || forceInitTab)) {
 			mViewPager.setVisibility(View.VISIBLE);
 			initTabs();
+		} else if (mTabletContent != null && (mTabletContent.getVisibility() != View.VISIBLE || forceInitTab)) {
+			mTabletContent.setVisibility(View.VISIBLE);
+			initFragments();
 		}
 	}
 
 	protected void showError() {
-		mViewPager.setVisibility(View.GONE);
+		if (mViewPager != null) {
+			mViewPager.setVisibility(View.GONE);
+		}
+		if (mTabletContent != null) {
+			mTabletContent.setVisibility(View.GONE);
+		}
 		mProgressBar.setVisibility(View.GONE);
 		mInstruction.setVisibility(View.GONE);
 		mError.setVisibility(View.VISIBLE);
@@ -121,6 +141,21 @@ public class HomeActivity extends GenericMixItActivity implements BoundServiceFr
 
 		mTabsAdapter.addTab(bar.newTab().setText(getString(R.string.my_planning_tab)), MyPlanningFragment.class, null);
 		mTabsAdapter.addTab(bar.newTab().setText(getString(R.string.explore_tab)), ExploreFragment.class, null);
+	}
+
+	protected void initFragments() {
+		final FragmentManager fm = getSupportFragmentManager();
+		Fragment mMyPlanningFrag = fm.findFragmentByTag(MyPlanningFragment.TAG);
+		if (mMyPlanningFrag == null) {
+			mMyPlanningFrag = MyPlanningFragment.newInstance(getIntent());
+			fm.beginTransaction().add(R.id.content_my_planning, mMyPlanningFrag, MyPlanningFragment.TAG).commit();
+		}
+
+		Fragment mExploreFrag = fm.findFragmentByTag(ExploreFragment.TAG);
+		if (mExploreFrag == null) {
+			mExploreFrag = ExploreFragment.newInstance(getIntent());
+			fm.beginTransaction().add(R.id.content_explore, mExploreFrag, ExploreFragment.TAG).commit();
+		}
 	}
 
 	@Override

@@ -17,16 +17,16 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:fillViewport="true"
-        android:paddingLeft="@dimen/margin_small"
-        android:paddingRight="@dimen/margin_small" >
+        android:paddingLeft="@dimen/outside_margin"
+        android:paddingRight="@dimen/outside_margin" >
 
         <LinearLayout
             android:id="@+id/member"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="vertical"
-            android:paddingBottom="@dimen/margin_small"
-            android:paddingTop="@dimen/margin_small" >
+            android:paddingBottom="@dimen/outside_margin"
+            android:paddingTop="@dimen/outside_margin" >
 
             <include
                 android:layout_width="match_parent"
@@ -46,6 +46,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="center"
+        android:layout_margin="@dimen/outside_margin_big"
         android:gravity="center"
         android:text="@string/no_member" />
 

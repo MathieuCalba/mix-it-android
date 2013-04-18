@@ -22,9 +22,9 @@
         <include
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginLeft="@dimen/margin_small"
-            android:layout_marginRight="@dimen/margin_small"
-            android:layout_marginTop="@dimen/margin_small"
+            android:layout_marginLeft="@dimen/outside_margin"
+            android:layout_marginRight="@dimen/outside_margin"
+            android:layout_marginTop="@dimen/outside_margin"
             layout="@layout/session_header" />
 
         <ScrollView
@@ -32,23 +32,22 @@
             android:layout_height="0dp"
             android:layout_weight="1"
             android:fillViewport="true"
-            android:paddingLeft="@dimen/margin_small"
-            android:paddingRight="@dimen/margin_small" >
+            android:paddingLeft="@dimen/outside_margin"
+            android:paddingRight="@dimen/outside_margin" >
 
             <include
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                layout="@layout/session_content"
-                android:paddingBottom="@dimen/margin_small"
-                android:paddingTop="@dimen/margin_small" />
+                layout="@layout/session_content" />
         </ScrollView>
     </LinearLayout>
 
     <TextView
         android:id="@+id/session_no_session"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
         android:layout_gravity="center"
+        android:layout_margin="@dimen/outside_margin_big"
         android:gravity="center"
         android:text="@string/no_session" />
 

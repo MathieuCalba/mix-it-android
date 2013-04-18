@@ -72,11 +72,19 @@
     <string name="unstar_session_success">"The session \"%1$s\" was successfully unstarred"</string>
     <string name="star_session_failed">"The session \"%1$s\" was not successfully starred"</string>
     <string name="unstar_session_failed">"The session \"%1$s\" was not successfully unstarred"</string>
+    <string name="talk_detail_title">"Talk"</string>
+    <string name="lightning_detail_title">"Lightning Talk"</string>
+    <string name="workshop_detail_title">"Workshop"</string>
+    <string name="keynote_detail_title">"Keynote"</string>
     <!-- Members -->
     <string name="all_staff">Staff</string>
     <string name="all_members">Members</string>
     <string name="all_speakers">Speakers</string>
     <string name="no_member">No Member Selected</string>
+    <string name="member_detail_title">Member</string>
+    <string name="speaker_detail_title">Speaker</string>
+    <string name="sponsor_detail_title">Sponsor</string>
+    <string name="staff_detail_title">Staff</string>
     <string name="empty_members">No Members</string>
     <string name="nb_consult">%d view(s)</string>
     <string name="member_bio">Biography</string>

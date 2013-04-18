@@ -30,5 +30,7 @@
     <dimen name="planning_min_height_half_hour">32dp</dimen>
     <dimen name="planning_header_min_height">32dp</dimen>
     <dimen name="planning_underline_height">2dp</dimen>
+    <dimen name="outside_margin">@dimen/margin_small</dimen>
+    <dimen name="outside_margin_big">@dimen/margin_normal</dimen>
 
 </resources>

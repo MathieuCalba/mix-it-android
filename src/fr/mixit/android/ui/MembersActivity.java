@@ -16,6 +16,7 @@ import com.actionbarsherlock.app.ActionBar.OnNavigationListener;
 import fr.mixit.android.provider.MixItContract;
 import fr.mixit.android.ui.fragments.BoundServiceFragment.BoundServiceContract;
 import fr.mixit.android.ui.fragments.MemberDetailsFragment;
+import fr.mixit.android.ui.fragments.MemberDetailsFragment.MemberDetailsContract;
 import fr.mixit.android.ui.fragments.MembersListFragment;
 import fr.mixit.android.ui.fragments.SessionDetailsFragment;
 import fr.mixit.android.ui.fragments.SessionDetailsFragment.SessionDetailsContract;
@@ -24,8 +25,7 @@ import fr.mixit.android.utils.UIUtils;
 import fr.mixit.android_2012.R;
 
 
-public class MembersActivity extends GenericMixItActivity implements OnNavigationListener/* , MemberDetailsContract */, SessionDetailsContract,
-BoundServiceContract {
+public class MembersActivity extends GenericMixItActivity implements OnNavigationListener, MemberDetailsContract, SessionDetailsContract, BoundServiceContract {
 
 	private static final String TAG = MembersActivity.class.getSimpleName();
 
@@ -105,6 +105,12 @@ BoundServiceContract {
 	@Override
 	protected int getContentLayoutId() {
 		return R.layout.activity_members;
+	}
+
+	@Override
+	protected void initActionBar() {
+		super.initActionBar();
+		getSupportActionBar().setDisplayShowTitleEnabled(false);
 	}
 
 	@Override
@@ -208,8 +214,8 @@ BoundServiceContract {
 	}
 
 	@Override
-	public void setRefreshMode(boolean state) {
-		setSupportProgressBarIndeterminateVisibility(state);
+	public void setActionBarTitle(String title) {
+		// Nothing to
 	}
 
 }

@@ -39,6 +39,10 @@ public class DateUtils {
 	private static final DateFormat sTimeFormatSdf = SimpleDateFormat.getTimeInstance(SimpleDateFormat.SHORT);
 
 	public static String formatSessionTime(Context ctx, long start, long end, String room) {
+		if (ctx == null) {
+			return null;
+		}
+
 		if (start == 0 && end == 0) {
 			return ctx.getResources().getString(R.string.session_day_time_room_full, room);
 		} else {
@@ -56,6 +60,10 @@ public class DateUtils {
 	}
 
 	public static String formatPlanningSessionTime(Context ctx, long start, long end, String room) {
+		if (ctx == null) {
+			return null;
+		}
+
 		if (start == 0 && end == 0) {
 			return ctx.getResources().getString(R.string.session_day_time_room_full, room);
 		} else {
@@ -71,6 +79,10 @@ public class DateUtils {
 	}
 
 	public static String formatSlotTime(Context ctx, long start, long end) {
+		if (ctx == null) {
+			return null;
+		}
+
 		if (start == 0 && end == 0) {
 			return ctx.getResources().getString(R.string.planning_slot_pager_header_default);
 		} else {
@@ -82,6 +94,10 @@ public class DateUtils {
 	}
 
 	public static String formatDayTime(Context ctx, long start, long end) {
+		if (ctx == null) {
+			return null;
+		}
+
 		final String dayStart = sDateFormatSdf.format(new Date(start));
 		final String timeStart = sTimeFormatSdf.format(new Date(start));
 		final String timeEnd = sTimeFormatSdf.format(new Date(end));

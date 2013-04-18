@@ -56,7 +56,7 @@
         <activity
             android:name="fr.mixit.android.ui.SessionDetailsActivity"
             android:icon="@drawable/ic_launcher"
-            android:label="" >
+            android:label="@string/talk_detail_title" >
             <intent-filter>
                 <action android:name="android.intent.action.VIEW" />
 
@@ -80,7 +80,7 @@
         <activity
             android:name="fr.mixit.android.ui.MemberDetailsActivity"
             android:icon="@drawable/ic_launcher"
-            android:label="" >
+            android:label="@string/member_detail_title" >
             <intent-filter>
                 <action android:name="android.intent.action.VIEW" />
 

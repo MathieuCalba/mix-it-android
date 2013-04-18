@@ -109,7 +109,6 @@ public abstract class GenericMixItActivity extends SherlockFragmentActivity {
 		sab.setDisplayHomeAsUpEnabled(isUpEnabled);
 		sab.setHomeButtonEnabled(isUpEnabled);
 		sab.setIcon(R.drawable.ic_action_bar);
-		sab.setTitle("");
 		setRefreshMode(false);
 	}
 

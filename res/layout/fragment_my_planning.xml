@@ -11,21 +11,19 @@
         android:layout_height="wrap_content"
         android:layout_gravity="center" />
 
-    <!-- <com.emilsjolander.components.stickylistheaders.StickyListHeadersListView -->
-
     <ListView
         android:id="@+id/planning_list"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:paddingLeft="@dimen/margin_small"
-        android:paddingRight="@dimen/margin_small" />
+        android:paddingLeft="@dimen/outside_margin"
+        android:paddingRight="@dimen/outside_margin" />
 
     <TextView
         android:id="@+android:id/empty"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_gravity="center"
-        android:layout_margin="@dimen/margin_normal"
+        android:layout_margin="@dimen/outside_margin_big"
         android:gravity="center"
         android:textAppearance="?android:attr/textAppearanceLarge"
         android:textIsSelectable="false" />
