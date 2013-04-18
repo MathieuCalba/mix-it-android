@@ -331,6 +331,10 @@ WarningStarSessionDialogFragment.WarningStarSessionDialogContract, SessionAsyncT
 	}
 
 	protected void showNoSessionSelected() {
+		if (mViewAnimator == null) {
+			return;
+		}
+
 		final int displayedChild = mViewAnimator.getDisplayedChild();
 		if (displayedChild == 1) {
 			mViewAnimator.showNext();

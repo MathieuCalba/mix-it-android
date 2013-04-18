@@ -68,9 +68,11 @@ public class HomeActivity extends GenericMixItActivity implements BoundServiceFr
 		} else {
 			showContent(true);
 
-			final ActionBar bar = getSupportActionBar();
-			if (savedStateInstance != null) {
-				bar.setSelectedNavigationItem(savedStateInstance.getInt(STATE_CURRENT_TAB, 0));
+			if (mViewPager != null) {
+				final ActionBar bar = getSupportActionBar();
+				if (savedStateInstance != null) {
+					bar.setSelectedNavigationItem(savedStateInstance.getInt(STATE_CURRENT_TAB, 0));
+				}
 			}
 		}
 	}
