@@ -331,8 +331,9 @@ public class MixItService extends Service {
 
 		// we ask if we need to update our data with the new data from net, if so, then update
 		final long startRemote = System.currentTimeMillis();
-		final boolean performRemoteSync = performRemoteSync(/* mResolver, *//* mHttpClient, */b, this);
+		final boolean performRemoteSync = performRemoteSync(b, this);
 		if (performRemoteSync) {
+			// NotificationUtils.showNotification(this);
 			final Response rInterests = getInterests(null);
 
 			Bundle args = new Bundle();
@@ -361,20 +362,17 @@ public class MixItService extends Service {
 					rSessions != null && rSessions.status == Response.STATUS_OK && //
 					rLightningTalks != null && rLightningTalks.status == Response.STATUS_OK) {
 				PrefUtils.setLastRemoteSync(this, System.currentTimeMillis());
+				r.status = Response.STATUS_OK;
+			} else {
+				r.status = Response.STATUS_ERROR;
 			}
+
+			// NotificationUtils.cancelNotifications(this);
 		}
 		if (DEBUG_MODE) {
 			Log.d(TAG, "remote sync took " + (System.currentTimeMillis() - startRemote) + "ms");
 		}
 
-		if (/* !localParse && */performRemoteSync) {
-			// NotificationUtils.cancelNotifications(mContext);
-		}
-		// } catch (final JsonHandler.JsonHandlerException e) {
-		// Log.e(TAG, "An error occured while processing local files", e);
-		// }
-
-		r.status = Response.STATUS_OK;
 		r.bundle = new Bundle();
 		return r;
 	}
@@ -1013,7 +1011,7 @@ public class MixItService extends Service {
 	/**
 	 * Should we perform a remote sync?
 	 */
-	private static boolean performRemoteSync(/* ContentResolver resolver, *//* HttpClient httpClient, */Bundle bundle, Context context) {
+	private static boolean performRemoteSync(Bundle bundle, Context context) {
 		final SharedPreferences settingsPrefs = context.getSharedPreferences(PrefUtils.SETTINGS_NAME, MODE_PRIVATE);
 		final boolean onlySyncWifi = settingsPrefs.getBoolean(context.getString(R.string.sync_only_wifi_key), false);
 
