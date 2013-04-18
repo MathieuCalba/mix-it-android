@@ -6,20 +6,21 @@ import android.support.v4.widget.CursorAdapter;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.TextView;
-
-import com.emilsjolander.components.stickylistheaders.StickyListHeadersAdapter;
-
-import fr.mixit.android.model.Planning;
 import fr.mixit.android.provider.MixItContract;
 import fr.mixit.android.ui.widgets.TalkItemView;
+import fr.mixit.android.ui.widgets.UnderlinedTextView;
 import fr.mixit.android.utils.DateUtils;
 import fr.mixit.android_2012.R;
 
 
-public class MyPlanningAdapter extends CursorAdapter implements StickyListHeadersAdapter {
+public class MyPlanningAdapter extends CursorAdapter {
 
 	protected LayoutInflater mInflater;
+
+	class PlanningViewHolder {
+		UnderlinedTextView mHeader;
+		TalkItemView mTalk;
+	}
 
 	public MyPlanningAdapter(Context context) {
 		super(context, null, 0);
@@ -29,47 +30,42 @@ public class MyPlanningAdapter extends CursorAdapter implements StickyListHeader
 
 	@Override
 	public View newView(Context context, Cursor cursor, ViewGroup parent) {
-		final TalkItemView v = new TalkItemView(context);
-		v.setShouldDisplayStar(false);
+		final View v = mInflater.inflate(R.layout.item_planning_talk, parent, false);
+		final PlanningViewHolder holder = new PlanningViewHolder();
+		holder.mHeader = (UnderlinedTextView) v.findViewById(R.id.item_planning_header);
+		holder.mTalk = (TalkItemView) v.findViewById(R.id.item_planning_talk);
+		holder.mTalk.setShouldDisplayStar(false);
+		v.setTag(holder);
 		return v;
 	}
 
 	@Override
 	public void bindView(View view, Context context, Cursor cursor) {
-		final TalkItemView v = (TalkItemView) view;
-		v.setContentPlanning(cursor);
-	}
+		final PlanningViewHolder holder = (PlanningViewHolder) view.getTag();
 
-	@Override
-	public View getHeaderView(int position, View convertView, ViewGroup parent) {
-		TextView header = null;
-		if (convertView == null) {
-			header = (TextView) mInflater.inflate(R.layout.item_planning_header, parent, false);
-			convertView = header;
-		} else {
-			header = (TextView) convertView;
-		}
+		if (cursor != null) {
+			final int oldPosition = cursor.getPosition();
+			final long start = cursor.getLong(MixItContract.Sessions.PROJ_PLANNING.START);
+			final String header = (String) DateUtils.formatPlanningHeader(start);
 
-		final Cursor c = getCursor();
-		if (c != null && c.moveToPosition(position)) {
-			final long start = c.getLong(MixItContract.Sessions.PROJ_PLANNING.START);
-
-			header.setText(DateUtils.formatPlanningHeader(start));
-		}
-
-		return convertView;
-	}
-
-	@Override
-	public long getHeaderId(int position) {
-		final Cursor c = getCursor();
-		if (c != null && c.moveToPosition(position)) {
-			final long start = c.getLong(MixItContract.Sessions.PROJ_PLANNING.START);
-			if (start > Planning.TIMESTAMP_OFFSET_DAY_TWO) {
-				return 1;
+			long oldStart = 0;
+			String oldHeader = null;
+			if (cursor.moveToPrevious()) {
+				oldStart = cursor.getLong(MixItContract.Sessions.PROJ_PLANNING.START);
+				oldHeader = (String) DateUtils.formatPlanningHeader(oldStart);
 			}
+
+			if (header.equalsIgnoreCase(oldHeader)) {
+				holder.mHeader.setVisibility(View.GONE);
+			} else {
+				holder.mHeader.setVisibility(View.VISIBLE);
+				holder.mHeader.setText(header);
+			}
+
+			cursor.moveToPosition(oldPosition);
 		}
-		return 0;
+
+		holder.mTalk.setContentPlanning(cursor);
 	}
 
 }

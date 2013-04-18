@@ -29,6 +29,7 @@ import fr.mixit.android.MixItApplication;
 import fr.mixit.android.io.JsonExecutor;
 import fr.mixit.android.io.JsonHandlerApplyInterests;
 import fr.mixit.android.io.JsonHandlerApplyMembers;
+import fr.mixit.android.io.JsonHandlerApplyStarredSessions;
 import fr.mixit.android.io.JsonHandlerApplyTalks;
 import fr.mixit.android.io.JsonHandlerException;
 import fr.mixit.android.model.OAuth;
@@ -78,6 +79,7 @@ public class MixItService extends Service {
 	public static final int MSG_MY_ACTIVITIES = 25;
 	public static final int MSG_VOTE_LIGHTNING_TALK = 26;
 	public static final int MSG_STAR_SESSION = 27;
+	public static final int MSG_GET_STARRED_SESSION = 28;
 
 	public static final String EXTRA_FORCE_REFRESH = "fr.mixit.android.EXTRA_FORCE_REFRESH";
 	public static final String EXTRA_ID = "fr.mixit.android.EXTRA_ID";
@@ -90,6 +92,7 @@ public class MixItService extends Service {
 	public static final String EXTRA_STATE_STAR = "fr.mixit.android.EXTRA_STATE_STAR";
 	public static final String EXTRA_SESSION_ID = "fr.mixit.android.EXTRA_SESSION_ID";
 	public static final String EXTRA_MEMBER_TYPE = "fr.mixit.android.EXTRA_MEMBER_TYPE";
+	public static final String EXTRA_MEMBER_ID = "fr.mixit.android.EXTRA_MEMBER_ID";
 
 	// URLs
 	static final String MAIN_URL = "http://www.mix-it.fr/api";
@@ -121,6 +124,7 @@ public class MixItService extends Service {
 	static final String URL_SUGGESTIONS_MEMBERS = MAIN_URL + "/suggestions/membres";
 	static final String URL_ACTIVITIES = MAIN_URL + "/activities";
 	static final String URL_MY_ACTIVITIES = MAIN_URL + "/myactivities";
+	static final String URL_STARRED_SESSIONS = MAIN_URL + "/members/%d/favorites";
 
 	// Params
 	static final String PARAM_OAUTH_PROVIDER = "oauth_provider";
@@ -151,17 +155,7 @@ public class MixItService extends Service {
 				default:
 					if (mClients.contains(callMsg.replyTo)) {
 						r = handleMixItMessage(callMsg.what, callMsg.arg1, callMsg.arg2, callMsg.getData());
-						for (int i = mClients.size() - 1; i >= 0; i--) {
-							try {
-								final Message responseMsg = Message.obtain(null, callMsg.what, r.status, r.arg2);
-								responseMsg.setData(r.bundle);
-								mClients.get(i).send(responseMsg);
-							} catch (final RemoteException e) {
-								// The client is dead. Remove it from the list;
-								// we are going through the list from back to front so this is safe to do inside the loop.
-								mClients.remove(i);
-							}
-						}
+						sendMessageToClients(mClients, callMsg.what, r.status, r.arg2, r.bundle);
 					} else {
 						// we don't need to do anything because the object requesting this call is no longer listening
 					}
@@ -169,6 +163,20 @@ public class MixItService extends Service {
 			}
 		}
 
+	}
+
+	public static void sendMessageToClients(ArrayList<Messenger> clients, int what, int status, int arg2, Bundle b) {
+		for (int i = clients.size() - 1; i >= 0; i--) {
+			try {
+				final Message responseMsg = Message.obtain(null, what, status, arg2);
+				responseMsg.setData(b);
+				clients.get(i).send(responseMsg);
+			} catch (final RemoteException e) {
+				// The client is dead. Remove it from the list;
+				// we are going through the list from back to front so this is safe to do inside the loop.
+				clients.remove(i);
+			}
+		}
 	}
 
 	Messenger mMessenger;
@@ -266,6 +274,10 @@ public class MixItService extends Service {
 				r = starSession(b);
 				break;
 
+			case MSG_GET_STARRED_SESSION:
+				r = getStarredSession(b);
+				break;
+
 			default:
 				r = new Response();
 				r.status = Response.STATUS_NO_WS;
@@ -317,64 +329,50 @@ public class MixItService extends Service {
 		}
 		final Response r = new Response();
 
-		// final JsonExecutor executor = new JsonExecutor(getContentResolver());
-
-		final SharedPreferences syncServicePrefs = getSharedPreferences(PrefUtils.MIXITSCHED_SYNC, Context.MODE_PRIVATE);
-		// final int localVersion = syncServicePrefs.getInt(PrefUtils.LOCAL_VERSION, PrefUtils.VERSION_NONE);
-
-		// try {
-		// if no data yet, we need to execute the local data
-		final long startLocal = System.currentTimeMillis();
-		// final boolean localParse = localVersion < PrefUtils.VERSION_LOCAL;
-		// if (DEBUG_MODE) {
-		// Log.d(TAG, "found localVersion=" + localVersion + " and VERSION_LOCAL=" + PrefUtils.VERSION_LOCAL);
-		// }
-		// if (localParse) {
-		// executor.execute(getApplicationContext(), ASSET_INTERESTS_JSON, new InterestsHandler());
-		// executor.execute(getApplicationContext(), ASSET_MEMBERS_JSON, new MembersHandler(true, true));
-		// executor.execute(getApplicationContext(), ASSET_SESSIONS_JSON, new SessionsHandler(true, true, true));
-		// executor.execute(getApplicationContext(), ASSET_LIGTHNING_TALKS_JSON, new SessionsHandler(false, true, true));
-		//
-		// // Save local parsed version
-		// syncServicePrefs.edit().putInt(PrefUtils.LOCAL_VERSION, PrefUtils.VERSION_LOCAL).commit();
-		// }
-
-		if (DEBUG_MODE) {
-			Log.d(TAG, "local sync took " + (System.currentTimeMillis() - startLocal) + "ms");
-		}
 		// we ask if we need to update our data with the new data from net, if so, then update
 		final long startRemote = System.currentTimeMillis();
-		final boolean performRemoteSync = performRemoteSync(/* mResolver, *//* mHttpClient, */b, this);
+		final boolean performRemoteSync = performRemoteSync(b, this);
 		if (performRemoteSync) {
-			getInterests(null);
-			// getMembers(null);
+			// NotificationUtils.showNotification(this);
+			final Response rInterests = getInterests(null);
+
 			Bundle args = new Bundle();
 			args.putInt(EXTRA_MEMBER_TYPE, MixItContract.Members.TYPE_SPEAKER);
-			getMembers(args);
+			final Response rSpeakers = getMembers(args);
+
 			args = new Bundle();
 			args.putInt(EXTRA_MEMBER_TYPE, MixItContract.Members.TYPE_STAFF);
-			getMembers(args);
+			final Response rStaff = getMembers(args);
+
 			args = new Bundle();
 			args.putInt(EXTRA_MEMBER_TYPE, MixItContract.Members.TYPE_SPONSOR);
-			getMembers(args);
-			getMembers(null);
-			getSessions(null);
-			getLightningTalks(null);
+			final Response rSponsors = getMembers(args);
 
-			syncServicePrefs.edit().putInt(PrefUtils.LOCAL_VERSION, PrefUtils.VERSION_REMOTE_2013).commit();
+			final Response rAllMembers = getMembers(null); // all members
+
+			final Response rSessions = getSessions(null);
+
+			final Response rLightningTalks = getLightningTalks(null);
+
+			if (rInterests != null && rInterests.status == Response.STATUS_OK && //
+					rSpeakers != null && rSpeakers.status == Response.STATUS_OK && //
+					rStaff != null && rStaff.status == Response.STATUS_OK && //
+					rSponsors != null && rSponsors.status == Response.STATUS_OK && //
+					rAllMembers != null && rAllMembers.status == Response.STATUS_OK && //
+					rSessions != null && rSessions.status == Response.STATUS_OK && //
+					rLightningTalks != null && rLightningTalks.status == Response.STATUS_OK) {
+				PrefUtils.setLastRemoteSync(this, System.currentTimeMillis());
+				r.status = Response.STATUS_OK;
+			} else {
+				r.status = Response.STATUS_ERROR;
+			}
+
+			// NotificationUtils.cancelNotifications(this);
 		}
 		if (DEBUG_MODE) {
 			Log.d(TAG, "remote sync took " + (System.currentTimeMillis() - startRemote) + "ms");
 		}
 
-		if (/* !localParse && */performRemoteSync) {
-			// NotificationUtils.cancelNotifications(mContext);
-		}
-		// } catch (final JsonHandler.JsonHandlerException e) {
-		// Log.e(TAG, "An error occured while processing local files", e);
-		// }
-
-		r.status = Response.STATUS_OK;
 		r.bundle = new Bundle();
 		return r;
 	}
@@ -915,6 +913,59 @@ public class MixItService extends Service {
 		return r;
 	}
 
+	protected Response getStarredSession(Bundle b) {
+		if (DEBUG_MODE) {
+			Log.d(TAG, "getStarredSession() with bundle=" + b);
+		}
+
+		final Response r = new Response();
+		r.bundle = new Bundle();
+
+		if (NetworkUtils.getConnectivity(this) == ConnectivityState.NONE) {
+			r.status = Response.STATUS_NO_CONNECTIVITY;
+			return r;
+		}
+
+		final int memberId = b.getInt(EXTRA_MEMBER_ID, -1);
+
+		if (memberId == -1) {
+			r.bundle.putString(EXTRA_ERROR_MESSAGE, "Error while calling getStarredSession {memberId=" + memberId + " : Missing/Bad parameters");
+			r.status = Response.STATUS_ERROR;
+			return r;
+		}
+
+		final String url = String.format(Locale.getDefault(), URL_STARRED_SESSIONS, memberId);
+		final ResponseHttp myMemberResponse = NetworkUtils.sendURL(url, false, null);
+		if (myMemberResponse == null || myMemberResponse.status != HttpURLConnection.HTTP_OK) {
+			r.bundle.putString(EXTRA_ERROR_MESSAGE, "Error while calling " + url);
+			r.status = Response.STATUS_ERROR;
+			return r;
+		}
+
+		final String json = myMemberResponse.jsonText;
+
+		if (TextUtils.isEmpty(json)) {
+			r.bundle.putString(EXTRA_ERROR_MESSAGE, "Error while calling " + url + " : No Data to retrieve");
+			r.status = Response.STATUS_ERROR;
+			return r;
+		}
+
+		final JsonExecutor executor = new JsonExecutor(getContentResolver());
+		try {
+			executor.executeAndInsert(json, new JsonHandlerApplyStarredSessions(memberId));
+			r.status = Response.STATUS_OK;
+		} catch (final JsonHandlerException e) {
+			if (DEBUG_MODE) {
+				Log.e(TAG, "An error occured while processing JSON data from " + url + " web mService", e);
+			}
+			r.bundle.putString(EXTRA_ERROR_MESSAGE, "Error while calling " + url + " : error while processing JSON");
+			r.status = Response.STATUS_ERROR;
+		}
+		r.status = Response.STATUS_OK;
+
+		return r;
+	}
+
 	static String encode(String str) {
 		try {
 			final String plaintext = str;
@@ -955,21 +1006,31 @@ public class MixItService extends Service {
 		return null;
 	}
 
+	protected static final long MIN_INTERVAL_TO_NOT_SYNC = 5 * 60 * 1000L;
+
 	/**
 	 * Should we perform a remote sync?
 	 */
-	private static boolean performRemoteSync(/* ContentResolver resolver, *//* HttpClient httpClient, */Bundle bundle, Context context) {
+	private static boolean performRemoteSync(Bundle bundle, Context context) {
 		final SharedPreferences settingsPrefs = context.getSharedPreferences(PrefUtils.SETTINGS_NAME, MODE_PRIVATE);
-		final SharedPreferences syncServicePrefs = context.getSharedPreferences(PrefUtils.MIXITSCHED_SYNC, Context.MODE_PRIVATE);
 		final boolean onlySyncWifi = settingsPrefs.getBoolean(context.getString(R.string.sync_only_wifi_key), false);
-		final int localVersion = syncServicePrefs.getInt(PrefUtils.LOCAL_VERSION, PrefUtils.VERSION_NONE);
-		if (!onlySyncWifi || isWifiConnected(context)) {
-			final boolean remoteParse = localVersion < PrefUtils.VERSION_REMOTE;
-			final boolean forceRemoteRefresh = bundle.getBoolean(EXTRA_FORCE_REFRESH, true); // TODO : change the force refresh to user intention only
-			// final boolean hasContentChanged = hasContentChanged(resolver, httpClient);
-			return remoteParse || forceRemoteRefresh/* || hasContentChanged */;
+
+		if (onlySyncWifi && !isWifiConnected(context)) {
+			return false;
 		}
-		return false;
+
+		final boolean forceRemoteRefresh = bundle.getBoolean(EXTRA_FORCE_REFRESH, false);
+		final long lastSync = PrefUtils.getLastRemoteSync(context);
+		final long currentTime = System.currentTimeMillis();
+		boolean notSyncMinInterval = true;
+		if (currentTime - lastSync < MIN_INTERVAL_TO_NOT_SYNC) {
+			if (DEBUG_MODE) {
+				Log.d(TAG, "No refresh because minimum interval to not sync (" + MIN_INTERVAL_TO_NOT_SYNC + " ms) is not yet over!");
+			}
+			notSyncMinInterval = false;
+		}
+
+		return forceRemoteRefresh || notSyncMinInterval;
 	}
 
 	/**

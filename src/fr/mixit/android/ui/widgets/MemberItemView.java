@@ -21,7 +21,7 @@ public class MemberItemView extends RelativeLayout {
 	protected TextView mSubTitle;
 	protected ImageView mImage;
 
-	protected ImageLoader mImageLoader = ImageLoader.getInstance();
+	protected ImageLoader mImageLoader;
 	protected DisplayImageOptions mOptions;
 
 	public MemberItemView(Context context) {
@@ -53,6 +53,7 @@ public class MemberItemView extends RelativeLayout {
 		mSubTitle = (TextView) findViewById(R.id.member_subtitle);
 		mImage = (ImageView) findViewById(R.id.member_image);
 
+		mImageLoader = ImageLoader.getInstance();
 		mOptions = new DisplayImageOptions.Builder()//
 		.showImageForEmptyUrl(R.drawable.speaker_thumbnail)//
 		.showStubImage(R.drawable.speaker_thumbnail) //
@@ -74,8 +75,10 @@ public class MemberItemView extends RelativeLayout {
 		final String company = c.getString(MixItContract.Members.PROJ_LIST.COMPANY);
 		mSubTitle.setText(company);
 
-		final String imageUrl = c.getString(MixItContract.Members.PROJ_LIST.IMAGE_URL);
-		mImageLoader.displayImage(imageUrl, mImage, mOptions);
+		if (mImageLoader != null) {
+			final String imageUrl = c.getString(MixItContract.Members.PROJ_LIST.IMAGE_URL);
+			mImageLoader.displayImage(imageUrl, mImage, mOptions);
+		}
 	}
 
 }

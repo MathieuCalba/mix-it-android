@@ -10,12 +10,14 @@ import android.util.Log;
 
 import com.actionbarsherlock.app.SherlockDialogFragment;
 
+import fr.mixit.android.MixItApplication;
 import fr.mixit.android_2012.R;
 
 
 public class WarningStarSessionDialogFragment extends SherlockDialogFragment {
 
 	public static final String TAG = WarningStarSessionDialogFragment.class.getSimpleName();
+	protected static final boolean DEBUG_MODE = MixItApplication.DEBUG_MODE;
 
 	public static final int WARNING_NO_SYNC_STAR_SESSION = 1304141822;
 
@@ -88,7 +90,7 @@ public class WarningStarSessionDialogFragment extends SherlockDialogFragment {
 	protected void starSession() {
 		final Fragment f = getTargetFragment();
 		if (f == null) {
-			if (SessionDetailsFragment.DEBUG_MODE) {
+			if (DEBUG_MODE) {
 				Log.e(TAG, "No target fragment configured ! Requiered to get back the action of OK click");
 			}
 
@@ -96,7 +98,7 @@ public class WarningStarSessionDialogFragment extends SherlockDialogFragment {
 		}
 
 		if (!(f instanceof WarningStarSessionDialogContract)) {
-			if (SessionDetailsFragment.DEBUG_MODE) {
+			if (DEBUG_MODE) {
 				Log.e(TAG, "The target fragment ( " + f.getClass().getName() + ") does not implement " + WarningStarSessionDialogContract.class.getName());
 			}
 
