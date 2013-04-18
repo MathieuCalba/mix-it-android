@@ -12,7 +12,6 @@ public class Planning {
 	public static final long FORTY_FIVE_MINUTES = 2700000L;
 	public static final long ONE_HOUR = 3600000L;
 	public static final long ONE_HOUR_AND_HALF = 5400000L;
-	public static final long TWO_HOUR = 7200000L;
 
 	public static final long EIGHT_AM = 28800000L;
 	public static final long NINE_AM = EIGHT_AM + ONE_HOUR;
@@ -30,8 +29,6 @@ public class Planning {
 	public static final long BREAKFAST_START = EIGHT_AM;
 	public static final long WELCOME_START = EIGHT_AM + FORTY_FIVE_MINUTES;
 	public static final long KEYNOTE_MORNING_START = NINE_AM;
-	public static final long KEYNOTE_SLOT_LENGTH = TWENTY_MINUTES;
-	public static final long KEYNOTE_LONG_SLOT_LENGTH = THIRTY_MINUTES;
 	public static final long PITCH_START = NINE_AM + TWENTY_MINUTES;
 	public static final long TALKS_MORNING_START = NINE_AM + FORTY_FIVE_MINUTES;
 	public static final long TALKS_SLOT_LENGTH = ONE_HOUR + THIRTY_MINUTES;
@@ -39,21 +36,4 @@ public class Planning {
 	public static final long LIGTHNING_TALKS_SLOT_LENGTH = THIRTY_MINUTES;
 	public static final long BREAK_SLOT_LENGTH = THIRTY_MINUTES;
 	public static final long TALKS_AFTERNOON_START = ONE_PM;
-
-	public static final long[] SLOTS_LENGTH = { //
-		ONE_HOUR + FORTY_FIVE_MINUTES, //
-		ONE_HOUR + THIRTY_MINUTES, //
-		ONE_HOUR + FORTY_FIVE_MINUTES, //
-		ONE_HOUR + THIRTY_MINUTES, //
-		ONE_HOUR + THIRTY_MINUTES, //
-		ONE_HOUR + THIRTY_MINUTES, //
-		ONE_HOUR + THIRTY_MINUTES, //
-		ONE_HOUR + FORTY_FIVE_MINUTES, //
-		ONE_HOUR + THIRTY_MINUTES, //
-		ONE_HOUR + FORTY_FIVE_MINUTES, //
-		ONE_HOUR + THIRTY_MINUTES, //
-		ONE_HOUR + THIRTY_MINUTES, //
-		TWO_HOUR, //
-		THIRTY_MINUTES //
-	};
 }

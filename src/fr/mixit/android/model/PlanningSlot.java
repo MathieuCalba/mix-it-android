@@ -59,25 +59,17 @@ public abstract class PlanningSlot {
 		mSlotType = slotType;
 	}
 
-	public void addSession(Context ctx, PlanningSlot planningSlot, long minSlotStart, long maxSlotEnd) {
-		final long start = planningSlot.getStart();
-		final long end = planningSlot.getEnd();
-
-		if (start < mStart) {
-			// if (start < minSlotStart) {
-			// mStart = minSlotStart;
-			// } else {
-			mStart = start;
-			// }
-		}
-		if (end > mEnd) {
-			// if (end > maxSlotEnd) {
-			// mEnd = maxSlotEnd;
-			// } else {
-			mEnd = end;
-			// }
-		}
-
+	public void addSession(Context ctx, PlanningSlot planningSlot) {
+		// final long start = session.getStart();
+		// final long end = session.getEnd();
+		//
+		// if (start < mStart) {
+		// mStart = start;
+		// }
+		// if (end > mEnd) {
+		// mEnd = end;
+		// }
+		// TODO : check if changing the end and start timestamp of my session is valid
 		mTitle = ctx.getResources().getString(R.string.planning_multiple_session);
 		mRoomId = ctx.getResources().getString(R.string.planning_every_room);
 
