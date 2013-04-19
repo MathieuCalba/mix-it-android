@@ -17,6 +17,7 @@ import com.actionbarsherlock.app.ActionBar;
 import com.actionbarsherlock.view.Menu;
 import com.actionbarsherlock.view.MenuItem;
 
+import de.keyboardsurfer.android.widget.crouton.Crouton;
 import fr.mixit.android.services.MixItService;
 import fr.mixit.android.ui.adapters.ActionBarTabsAdapter;
 import fr.mixit.android.ui.fragments.AboutFragment;
@@ -244,6 +245,13 @@ public class HomeActivity extends GenericMixItActivity implements BoundServiceFr
 	@Override
 	protected int getActivityLevel() {
 		return 0;
+	}
+
+	@Override
+	protected void onDestroy() {
+		// Workaround until there's a way to detach the Activity from Crouton while there are still some in the Queue.
+		Crouton.clearCroutonsForActivity(this);
+		super.onDestroy();
 	}
 
 }
