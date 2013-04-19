@@ -1,5 +1,6 @@
 package fr.mixit.android.ui.fragments;
 
+import android.content.ContentResolver;
 import android.content.Intent;
 import android.database.Cursor;
 import android.net.Uri;
@@ -17,15 +18,20 @@ import android.widget.AdapterView.OnItemClickListener;
 import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.ViewAnimator;
+import de.keyboardsurfer.android.widget.crouton.Style;
 import fr.mixit.android.provider.MixItContract;
 import fr.mixit.android.services.MixItService;
+import fr.mixit.android.tasks.SessionAsyncTaskLoader;
 import fr.mixit.android.ui.SessionsActivity;
 import fr.mixit.android.ui.adapters.SessionsAdapter;
+import fr.mixit.android.ui.widgets.TalkItemView;
+import fr.mixit.android.utils.PrefUtils;
 import fr.mixit.android.utils.UIUtils;
 import fr.mixit.android_2012.R;
 
 
-public class SessionsListFragment extends BoundServiceFragment implements LoaderManager.LoaderCallbacks<Cursor>, OnItemClickListener {
+public class SessionsListFragment extends BoundServiceFragment implements LoaderManager.LoaderCallbacks<Cursor>, OnItemClickListener,
+WarningStarSessionDialogFragment.WarningStarSessionDialogContract, SessionAsyncTaskLoader.StarSessionListener {
 
 	public static final String TAG = SessionsListFragment.class.getSimpleName();
 
@@ -73,6 +79,13 @@ public class SessionsListFragment extends BoundServiceFragment implements Loader
 
 		mAdapter = new SessionsAdapter(getActivity(),
 				!(mMode == SessionsActivity.DISPLAY_MODE_SESSIONS_STARRED || mMode == SessionsActivity.DISPLAY_MODE_LIGHTNING_TALKS));
+		mAdapter.setStarListener(new TalkItemView.StarListener() {
+
+			@Override
+			public void onStarTouched(String idTalk, String titleTalk, boolean state) {
+				favoriteSessionWithDialog(idTalk, titleTalk, state);
+			}
+		});
 		mListView.setAdapter(mAdapter);
 		mListView.setOnItemClickListener(this);
 	}
@@ -262,6 +275,41 @@ public class SessionsListFragment extends BoundServiceFragment implements Loader
 		mIsFirstLoad = true;
 
 		clearCheckedPosition();
+	}
+
+	protected void favoriteSessionWithDialog(String sessionId, String sessionTitle, boolean addFavorite) {
+		final boolean isWarningStarSessionShouldBeShown = PrefUtils.isWarningStarSessionShouldBeShown(getActivity());
+		if (isWarningStarSessionShouldBeShown) {
+			final WarningStarSessionDialogFragment frag = WarningStarSessionDialogFragment.newInstance(sessionId, sessionTitle, addFavorite);
+			frag.setTargetFragment(this, WarningStarSessionDialogFragment.WARNING_NO_SYNC_STAR_SESSION);
+			frag.show(getFragmentManager(), WarningStarSessionDialogFragment.TAG);
+		} else {
+			favoriteSession(sessionId, sessionTitle, addFavorite);
+		}
+	}
+
+	protected void favoriteSession(String sessionId, String sessionTitle, boolean addFavorite) {
+		if (getActivity() != null && !isDetached()) {
+			final ContentResolver cr = getActivity().getContentResolver();
+			new SessionAsyncTaskLoader(cr).starSession(sessionId, sessionTitle, addFavorite, this);
+		}
+	}
+
+	@Override
+	public void onWarningClickOk(String sessionId, String sessionTitle, boolean vote) {
+		PrefUtils.setWarningStarSessionShouldBeShown(getActivity(), false);
+
+		favoriteSession(sessionId, sessionTitle, vote);
+	}
+
+	@Override
+	public void onStarSessionSuccessfull(String sessionId, String sessionTitle, boolean vote) {
+		showCrouton(getString(vote ? R.string.star_session_success : R.string.unstar_session_success, sessionTitle), Style.CONFIRM);
+	}
+
+	@Override
+	public void onStarSessionFailed(String sessionId, String sessionTitle, boolean vote, String error) {
+		showCrouton(getString(vote ? R.string.star_session_failed : R.string.unstar_session_failed, sessionTitle), Style.ALERT);
 	}
 
 }
