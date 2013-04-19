@@ -3,6 +3,5 @@
     android:id="@android:id/list"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:layout_marginLeft="@dimen/outside_margin"
-    android:layout_marginRight="@dimen/outside_margin" />
-
+    android:paddingLeft="@dimen/outside_margin"
+    android:paddingRight="@dimen/outside_margin" />
