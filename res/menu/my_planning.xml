@@ -4,6 +4,7 @@
     <item
         android:id="@+id/menu_item_import_starred_session"
         android:icon="@drawable/ic_import_starred_session"
+        android:orderInCategory="1"
         android:showAsAction="always"
         android:title="@string/action_bar_import_starred_session"/>
 

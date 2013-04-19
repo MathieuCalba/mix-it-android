@@ -18,6 +18,8 @@ import android.util.Log;
 
 import com.actionbarsherlock.app.SherlockFragment;
 
+import de.keyboardsurfer.android.widget.crouton.Crouton;
+import de.keyboardsurfer.android.widget.crouton.Style;
 import fr.mixit.android.MixItApplication;
 import fr.mixit.android.services.MixItService;
 
@@ -97,6 +99,8 @@ public abstract class BoundServiceFragment extends SherlockFragment {
 			mService = null;
 		}
 	};
+
+	protected Crouton crouton;
 
 	@Override
 	public void onAttach(Activity activity) {
@@ -201,6 +205,11 @@ public abstract class BoundServiceFragment extends SherlockFragment {
 			return;
 		}
 		getLoaderManager().restartLoader(id, args, callback);
+	}
+
+	protected void showCrouton(String croutonText, Style croutonStyle) {
+		crouton = Crouton.makeText(getActivity(), croutonText, croutonStyle);
+		crouton.show();
 	}
 
 }

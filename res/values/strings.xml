@@ -115,7 +115,8 @@ Nous vous convions à privilégier les transports en commun, les vélos ou la ma
     <string name="about_text5">Uses some useful libraries :\n
         - ActionBarSherlock - http://actionbarsherlock.com/\n
         - Universal Image Loader - https://github.com/nostra13/Android-Universal-Image-Loader\n
-        - View Pager Indicator - https://github.com/JakeWharton/Android-ViewPagerIndicator\n</string>
+        - View Pager Indicator - https://github.com/JakeWharton/Android-ViewPagerIndicator\n
+        - Crouton - https://github.com/keyboardsurfer/Crouton\n</string>
     <!-- - Sticky List Headers - https://github.com/emilsjolander/StickyListHeaders -->
 
 </resources>
