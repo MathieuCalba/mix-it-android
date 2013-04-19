@@ -130,19 +130,10 @@ public abstract class PlanningSlot {
 				+ ", mFormat=" + mFormat + ", mLevel=" + mLevel + ", mLang=" + mLang + ", mNbConcurrent=" + mNbConcurrent + "]";
 	}
 
-	public static class KeynoteSlot extends PlanningSlot {
-
-		public KeynoteSlot(Context ctx, long start, long end) {
-			super(TYPE_KEYNOTE, start, end, ctx.getResources().getString(R.string.planning_keynote), ctx.getResources().getString(R.string.planning_every_room));
-		}
-
-	}
-
 	public static class NoSessionSlot extends PlanningSlot {
 
 		public NoSessionSlot(Context ctx, long start, long end) {
-			super(TYPE_NO_SESSION, start, end, ctx.getResources().getString(R.string.planning_no_session), ctx.getResources().getString(
-					R.string.planning_no_room));
+			super(TYPE_NO_SESSION, start, end, ctx.getResources().getString(R.string.planning_no_session), null);
 		}
 
 	}
@@ -158,7 +149,7 @@ public abstract class PlanningSlot {
 	public static class BreakfastSlot extends PlanningSlot {
 
 		public BreakfastSlot(Context ctx, long start, long end) {
-			super(TYPE_BREAKFAST, start, end, ctx.getResources().getString(R.string.planning_breakfast), ctx.getResources().getString(R.string.planning_no_room));
+			super(TYPE_BREAKFAST, start, end, ctx.getResources().getString(R.string.planning_breakfast), null);
 		}
 
 	}
@@ -166,7 +157,7 @@ public abstract class PlanningSlot {
 	public static class WelcomeSlot extends PlanningSlot {
 
 		public WelcomeSlot(Context ctx, long start, long end) {
-			super(TYPE_WELCOME, start, end, ctx.getResources().getString(R.string.planning_welcome), ctx.getResources().getString(R.string.planning_no_room));
+			super(TYPE_WELCOME, start, end, ctx.getResources().getString(R.string.planning_welcome), null);
 		}
 
 	}
@@ -183,7 +174,7 @@ public abstract class PlanningSlot {
 	public static class LunchSlot extends PlanningSlot {
 
 		public LunchSlot(Context ctx, long start, long end) {
-			super(TYPE_LUNCH, start, end, ctx.getResources().getString(R.string.planning_lunch), ctx.getResources().getString(R.string.planning_no_room));
+			super(TYPE_LUNCH, start, end, ctx.getResources().getString(R.string.planning_lunch), null);
 		}
 
 	}
@@ -191,7 +182,7 @@ public abstract class PlanningSlot {
 	public static class BreakSlot extends PlanningSlot {
 
 		public BreakSlot(Context ctx, long start, long end) {
-			super(TYPE_BREAK, start, end, ctx.getResources().getString(R.string.planning_break), ctx.getResources().getString(R.string.planning_no_room));
+			super(TYPE_BREAK, start, end, ctx.getResources().getString(R.string.planning_break), null);
 		}
 
 	}
