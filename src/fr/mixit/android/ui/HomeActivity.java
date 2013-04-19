@@ -182,6 +182,10 @@ public class HomeActivity extends GenericMixItActivity implements BoundServiceFr
 			try {
 				mService.send(msg);
 				setRefreshMode(true);
+				if (!mIsFirstInitDone) {
+					showProgress();
+				}
+
 			} catch (final RemoteException e) {
 				e.printStackTrace();
 			}
