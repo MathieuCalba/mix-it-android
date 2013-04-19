@@ -18,6 +18,7 @@ import android.support.v4.content.CursorLoader;
 import android.support.v4.content.Loader;
 import android.text.Html;
 import android.text.Spanned;
+import android.text.TextUtils;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -482,6 +483,10 @@ WarningStarSessionDialogFragment.WarningStarSessionDialogContract, SessionAsyncT
 	}
 
 	protected String createLinkFromTitle(String idSession, String title) {
+		if (TextUtils.isEmpty(title)) {
+			return null;
+		}
+
 		String link = title.replace('\'', '-');
 		link = link.replace(" - ", "-");
 		link = link.replace('.', '-');
@@ -586,15 +591,11 @@ WarningStarSessionDialogFragment.WarningStarSessionDialogContract, SessionAsyncT
 
 	@Override
 	public void onStarSessionSuccessfull(String sessionId, String sessionTitle, boolean vote) {
-		// Toast.makeText(getActivity(), getActivity().getString(vote ? R.string.star_session_success : R.string.unstar_session_success, sessionTitle),
-		// Toast.LENGTH_LONG).show();
 		showCrouton(getString(vote ? R.string.star_session_success : R.string.unstar_session_success, sessionTitle), Style.CONFIRM);
 	}
 
 	@Override
 	public void onStarSessionFailed(String sessionId, String sessionTitle, boolean vote, String error) {
-		// Toast.makeText(getActivity(), getActivity().getString(vote ? R.string.star_session_failed : R.string.unstar_session_failed, sessionTitle),
-		// Toast.LENGTH_LONG).show();
 		showCrouton(getString(vote ? R.string.star_session_failed : R.string.unstar_session_failed, sessionTitle), Style.ALERT);
 	}
 
