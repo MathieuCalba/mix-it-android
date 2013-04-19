@@ -261,6 +261,15 @@ WarningImportStarredSessionDialogFragment.WarningImportStarredSessionDialogContr
 				intent = new Intent(getActivity(), SessionsActivity.class);
 				intent.putExtra(SessionsActivity.EXTRA_MODE, SessionsActivity.DISPLAY_MODE_LIGHTNING_TALKS);
 
+			case PlanningSlot.TYPE_NO_SESSION:
+				final long slotStart = cursor.getLong(MixItContract.Sessions.PROJ_PLANNING.START);
+				final long slotEnd = cursor.getLong(MixItContract.Sessions.PROJ_PLANNING.END);
+
+				intent = new Intent(getActivity(), SessionsActivity.class);
+				intent.putExtra(SessionsActivity.EXTRA_MODE, SessionsActivity.DISPLAY_MODE_SESSIONS_DUPLICATE);
+				intent.putExtra(SessionsActivity.EXTRA_SLOT_START, slotStart);
+				intent.putExtra(SessionsActivity.EXTRA_SLOT_END, slotEnd);
+
 			default:
 				break;
 		}
