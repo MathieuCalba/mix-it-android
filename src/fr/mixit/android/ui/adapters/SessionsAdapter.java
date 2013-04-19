@@ -13,6 +13,7 @@ public class SessionsAdapter extends CursorAdapter {
 
 	protected LayoutInflater mInflater;
 	protected boolean mDisplayStar = true;
+	protected TalkItemView.StarListener mStarListener;
 
 	public SessionsAdapter(Context ctx) {
 		this(ctx, true);
@@ -29,9 +30,14 @@ public class SessionsAdapter extends CursorAdapter {
 		mDisplayStar = displayStar;
 	}
 
+	public void setStarListener(TalkItemView.StarListener starListener) {
+		mStarListener = starListener;
+	}
+
 	@Override
 	public View newView(Context context, Cursor cursor, ViewGroup parent) {
 		final TalkItemView v = new TalkItemView(context);
+		v.setStarListener(mStarListener);
 		v.setShouldDisplayStar(mDisplayStar);
 		return v;
 	}
