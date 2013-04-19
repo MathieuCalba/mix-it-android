@@ -4,6 +4,7 @@ import android.content.Context;
 import android.database.Cursor;
 import android.graphics.LightingColorFilter;
 import android.graphics.drawable.Drawable;
+import android.text.TextUtils;
 import android.util.AttributeSet;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -77,7 +78,11 @@ public class TalkItemView extends RelativeLayout {
 			final long start = c.getLong(MixItContract.Sessions.PROJ_LIST.START);
 			final long end = c.getLong(MixItContract.Sessions.PROJ_LIST.END);
 
-			mSubTitle.setText(DateUtils.formatSessionTime(getContext(), start, end, room));// "On DDD, from HH:MM to HH:MM, in " + room
+			if (TextUtils.isEmpty(room)) {
+				mSubTitle.setText(DateUtils.formatSessionTime(getContext(), start, end));// "On DDD, from HH:MM to HH:MM"
+			} else {
+				mSubTitle.setText(DateUtils.formatSessionTime(getContext(), start, end, room));// "On DDD, from HH:MM to HH:MM, in " + room
+			}
 			mSubTitle.setVisibility(View.VISIBLE);
 		}
 
@@ -115,7 +120,11 @@ public class TalkItemView extends RelativeLayout {
 				} else {
 					mTitle.setText(title);
 				}
-				mSubTitle.setText(DateUtils.formatPlanningSessionTime(getContext(), start, end, room));// "On DDD, from HH:MM to HH:MM, in " + room
+				if (TextUtils.isEmpty(room)) {
+					mSubTitle.setText(DateUtils.formatPlanningSessionTime(getContext(), start, end));// "On DDD, from HH:MM to HH:MM"
+				} else {
+					mSubTitle.setText(DateUtils.formatPlanningSessionTime(getContext(), start, end, room));// "On DDD, from HH:MM to HH:MM, in " + room
+				}
 				mSubTitle.setVisibility(View.VISIBLE);
 
 				break;
