@@ -1,5 +1,7 @@
 package fr.mixit.android.ui.fragments;
 
+import java.util.Locale;
+
 import android.annotation.TargetApi;
 import android.app.Activity;
 import android.content.ContentResolver;
@@ -28,6 +30,7 @@ import android.widget.ViewAnimator;
 import com.actionbarsherlock.view.Menu;
 import com.actionbarsherlock.view.MenuInflater;
 import com.actionbarsherlock.view.MenuItem;
+import com.actionbarsherlock.widget.ShareActionProvider;
 import com.petebevin.markdown.MarkdownProcessor;
 
 import de.keyboardsurfer.android.widget.crouton.Style;
@@ -268,19 +271,19 @@ WarningStarSessionDialogFragment.WarningStarSessionDialogContract, SessionAsyncT
 		super.onCreateOptionsMenu(menu, mInflater);
 
 		mInflater.inflate(R.menu.session_details, menu);
-		final MenuItem actionItem = menu.findItem(R.id.menu_item_vote_favorite);
+		MenuItem actionItem = menu.findItem(R.id.menu_item_vote_favorite);
 		actionItem.setVisible(false);
 
-		// final MenuItem actionItem = menu.findItem(R.id.menu_item_share_action_provider_action_bar);
-		// final ShareActionProvider actionProvider = (ShareActionProvider) actionItem.getActionProvider();
-		// actionProvider.setShareHistoryFileName(ShareActionProvider.DEFAULT_SHARE_HISTORY_FILE_NAME);
+		actionItem = menu.findItem(R.id.menu_item_share_action_provider_action_bar);
+		final ShareActionProvider actionProvider = (ShareActionProvider) actionItem.getActionProvider();
+		actionProvider.setShareHistoryFileName(ShareActionProvider.DEFAULT_SHARE_HISTORY_FILE_NAME);
 	}
 
 	@Override
 	public void onPrepareOptionsMenu(Menu menu) {
 		super.onPrepareOptionsMenu(menu);
 
-		final MenuItem actionItem = menu.findItem(R.id.menu_item_vote_favorite);
+		MenuItem actionItem = menu.findItem(R.id.menu_item_vote_favorite);
 		if (mSessionFormat == null || mSessionFormat.equalsIgnoreCase(MixItContract.Sessions.FORMAT_LIGHTNING_TALK)) {
 			actionItem.setVisible(false);
 			// if (mIsVoted) {
@@ -301,22 +304,20 @@ WarningStarSessionDialogFragment.WarningStarSessionDialogContract, SessionAsyncT
 			}
 		}
 
+		actionItem = menu.findItem(R.id.menu_item_share_action_provider_action_bar);
+		final ShareActionProvider actionProvider = (ShareActionProvider) actionItem.getActionProvider();
+		actionProvider.setShareIntent(createShareIntent());
 	}
-
-	// actionItem = menu.findItem(R.id.menu_item_share_action_provider_action_bar);
-	// final ShareActionProvider actionProvider = (ShareActionProvider) actionItem.getActionProvider();
-	// actionProvider.setShareIntent(createShareIntent());
-	// }
 
 	@Override
 	public boolean onOptionsItemSelected(MenuItem item) {
 		final int id = item.getItemId();
 		if (id == R.id.menu_item_vote_favorite) {
-			// if (!mIsSession) {
-			// voteForLightning(!mIsVoted);
-			// } else {
-			favoriteSessionWithDialog(String.valueOf(mSessionId), mTitleStr, !mIsVoted);
-			// }
+			if (mSessionFormat == null || mSessionFormat.equalsIgnoreCase(MixItContract.Sessions.FORMAT_LIGHTNING_TALK)) {
+				// voteForLightning(!mIsVoted);
+			} else {
+				favoriteSessionWithDialog(String.valueOf(mSessionId), mTitleStr, !mIsVoted);
+			}
 		}
 		return super.onOptionsItemSelected(item);
 	}
@@ -475,8 +476,24 @@ WarningStarSessionDialogFragment.WarningStarSessionDialogContract, SessionAsyncT
 		shareIntent.setType("text/plain");
 		shareIntent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_WHEN_TASK_RESET);
 		shareIntent.putExtra(Intent.EXTRA_SUBJECT, getString(R.string.share_session_subject));
-		shareIntent.putExtra(Intent.EXTRA_TEXT, getString(R.string.share_session_text, mTitleStr, "http://www.mix-it.fr/sessions"));
+		shareIntent.putExtra(Intent.EXTRA_TEXT, getString(R.string.share_session_text, mTitleStr, createLinkFromTitle(String.valueOf(mSessionId), mTitleStr)));
+		// shareIntent.putExtra(Intent.EXTRA_TEXT, getString(R.string.share_session_text, mTitleStr, "http://www.mix-it.fr/sessions"));
 		return shareIntent;
+	}
+
+	protected String createLinkFromTitle(String idSession, String title) {
+		String link = title.replace('\'', '-');
+		link = link.replace(" - ", "-");
+		link = link.replace('.', '-');
+		link = link.replace(':', '-');
+		link = link.replace("!", "");
+		link = link.replace(", ", "-");
+		link = link.replace(',', '-');
+		link = link.replace(' ', '-');
+		link = link.toLowerCase(Locale.getDefault());
+		link = "http://www.mix-it.fr/session/" + idSession + "/" + link;
+
+		return link;
 	}
 
 	@Override
