@@ -23,7 +23,6 @@ import android.view.View.OnClickListener;
 import android.view.ViewGroup;
 import android.widget.LinearLayout;
 import android.widget.TextView;
-import android.widget.Toast;
 import android.widget.ViewAnimator;
 
 import com.actionbarsherlock.view.Menu;
@@ -31,6 +30,7 @@ import com.actionbarsherlock.view.MenuInflater;
 import com.actionbarsherlock.view.MenuItem;
 import com.petebevin.markdown.MarkdownProcessor;
 
+import de.keyboardsurfer.android.widget.crouton.Style;
 import fr.mixit.android.provider.MixItContract;
 import fr.mixit.android.services.MixItService;
 import fr.mixit.android.tasks.SessionAsyncTaskLoader;
@@ -569,16 +569,16 @@ WarningStarSessionDialogFragment.WarningStarSessionDialogContract, SessionAsyncT
 
 	@Override
 	public void onStarSessionSuccessfull(String sessionId, String sessionTitle, boolean vote) {
-		// TODO : show a crouton instead
-		Toast.makeText(getActivity(), getActivity().getString(vote ? R.string.star_session_success : R.string.unstar_session_success, sessionTitle),
-				Toast.LENGTH_LONG).show();
+		// Toast.makeText(getActivity(), getActivity().getString(vote ? R.string.star_session_success : R.string.unstar_session_success, sessionTitle),
+		// Toast.LENGTH_LONG).show();
+		showCrouton(getString(vote ? R.string.star_session_success : R.string.unstar_session_success, sessionTitle), Style.CONFIRM);
 	}
 
 	@Override
 	public void onStarSessionFailed(String sessionId, String sessionTitle, boolean vote, String error) {
-		// TODO : show a crouton instead
-		Toast.makeText(getActivity(), getActivity().getString(vote ? R.string.star_session_failed : R.string.unstar_session_failed, sessionTitle),
-				Toast.LENGTH_LONG).show();
+		// Toast.makeText(getActivity(), getActivity().getString(vote ? R.string.star_session_failed : R.string.unstar_session_failed, sessionTitle),
+		// Toast.LENGTH_LONG).show();
+		showCrouton(getString(vote ? R.string.star_session_failed : R.string.unstar_session_failed, sessionTitle), Style.ALERT);
 	}
 
 	@Override
