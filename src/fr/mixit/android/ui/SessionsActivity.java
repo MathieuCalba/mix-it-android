@@ -91,6 +91,7 @@ BoundServiceFragment.BoundServiceContract {
 					break;
 			}
 			getSupportActionBar().setSelectedNavigationItem(itemSelected);
+			getSupportActionBar().setDisplayShowTitleEnabled(false);
 		} else if (mMode == DISPLAY_MODE_SESSIONS_DUPLICATE) {
 			final ActionBar sab = getSupportActionBar();
 
@@ -100,6 +101,8 @@ BoundServiceFragment.BoundServiceContract {
 			final String title = DateUtils.formatDayTime(this, slotStart, slotEnd);
 			sab.setTitle(title);
 			getSupportActionBar().setDisplayShowTitleEnabled(true);
+		} else {
+			getSupportActionBar().setDisplayShowTitleEnabled(false);
 		}
 		mSessionsListFrag.setDisplayMode(mMode);
 
@@ -115,12 +118,6 @@ BoundServiceFragment.BoundServiceContract {
 	@Override
 	protected int getContentLayoutId() {
 		return R.layout.activity_sessions;
-	}
-
-	@Override
-	protected void initActionBar() {
-		super.initActionBar();
-		getSupportActionBar().setDisplayShowTitleEnabled(false);
 	}
 
 	@Override
