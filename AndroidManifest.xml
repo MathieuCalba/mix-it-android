@@ -1,8 +1,8 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="fr.mixit.android_2012"
     android:installLocation="auto"
-    android:versionCode="300"
-    android:versionName="3.0Beta" >
+    android:versionCode="301"
+    android:versionName="3.0" >
 
     <uses-sdk
         android:minSdkVersion="7"
@@ -23,6 +23,7 @@
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
+    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
 
     <application
         android:name="fr.mixit.android.MixItApplication"

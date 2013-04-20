@@ -2,17 +2,20 @@
 <merge xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
+    android:descendantFocusability="blocksDescendants"
     android:padding="@dimen/margin_small" >
 
-    <ImageView
+    <fr.mixit.android.ui.widgets.DontPressWithParentCheckBox
         android:id="@+id/talk_star_button"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignParentRight="true"
-        android:layout_gravity="center_vertical"
-        android:layout_marginLeft="@dimen/margin_small"
+        android:layout_alignParentTop="true"
+        android:layout_centerVertical="true"
+        android:button="@drawable/btn_star"
         android:contentDescription="@string/star_session_button"
-        android:src="@drawable/ic_starred" />
+        android:gravity="center_vertical"
+        android:paddingLeft="@dimen/margin_small" />
 
     <TextView
         android:id="@+id/talk_title"

@@ -18,13 +18,13 @@ import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
 import android.widget.ListView;
 import android.widget.TextView;
-import android.widget.Toast;
 import android.widget.ViewAnimator;
 
 import com.actionbarsherlock.view.Menu;
 import com.actionbarsherlock.view.MenuInflater;
 import com.actionbarsherlock.view.MenuItem;
 
+import de.keyboardsurfer.android.widget.crouton.Style;
 import fr.mixit.android.model.PlanningSlot;
 import fr.mixit.android.provider.MixItContract;
 import fr.mixit.android.services.MixItService;
@@ -191,23 +191,32 @@ WarningImportStarredSessionDialogFragment.WarningImportStarredSessionDialogContr
 				break;
 
 			case MixItService.MSG_GET_STARRED_SESSION:
+				Style croutonStyle = null;
+				String croutonText = null;
 				if (getActivity() != null && !isDetached()) {
 					switch (msg.arg1) {
 						case MixItService.Response.STATUS_OK:
-							Toast.makeText(getActivity(), R.string.import_starred_state_success, Toast.LENGTH_LONG).show();
+							croutonStyle = Style.CONFIRM;
+							croutonText = getString(R.string.import_starred_state_success);
 							break;
 
 						case MixItService.Response.STATUS_ERROR:
-							Toast.makeText(getActivity(), R.string.import_starred_state_error, Toast.LENGTH_LONG).show();
+							croutonStyle = Style.ALERT;
+							croutonText = getString(R.string.import_starred_state_error);
 							break;
 
 						case MixItService.Response.STATUS_NO_CONNECTIVITY:
-							Toast.makeText(getActivity(), R.string.import_starred_state_error, Toast.LENGTH_LONG).show();
+							croutonStyle = Style.ALERT;
+							croutonText = getString(R.string.import_starred_state_error);
 							break;
 
 						default:
 							break;
 					}
+				}
+
+				if (croutonStyle != null && croutonText != null) {
+					showCrouton(croutonText, croutonStyle);
 				}
 
 				setRefreshMode(false);
@@ -251,6 +260,15 @@ WarningImportStarredSessionDialogFragment.WarningImportStarredSessionDialogContr
 			case PlanningSlot.TYPE_LIGHTNING_TALK:
 				intent = new Intent(getActivity(), SessionsActivity.class);
 				intent.putExtra(SessionsActivity.EXTRA_MODE, SessionsActivity.DISPLAY_MODE_LIGHTNING_TALKS);
+
+			case PlanningSlot.TYPE_NO_SESSION:
+				final long slotStart = cursor.getLong(MixItContract.Sessions.PROJ_PLANNING.START);
+				final long slotEnd = cursor.getLong(MixItContract.Sessions.PROJ_PLANNING.END);
+
+				intent = new Intent(getActivity(), SessionsActivity.class);
+				intent.putExtra(SessionsActivity.EXTRA_MODE, SessionsActivity.DISPLAY_MODE_SESSIONS_DUPLICATE);
+				intent.putExtra(SessionsActivity.EXTRA_SLOT_START, slotStart);
+				intent.putExtra(SessionsActivity.EXTRA_SLOT_END, slotEnd);
 
 			default:
 				break;

@@ -9,6 +9,7 @@ import java.util.GregorianCalendar;
 import java.util.Locale;
 
 import android.content.Context;
+import android.text.TextUtils;
 import android.util.Log;
 import fr.mixit.android_2012.R;
 
@@ -38,6 +39,10 @@ public class DateUtils {
 	private static final DateFormat sDateFormatSdf = SimpleDateFormat.getDateInstance(SimpleDateFormat.MEDIUM);
 	private static final DateFormat sTimeFormatSdf = SimpleDateFormat.getTimeInstance(SimpleDateFormat.SHORT);
 
+	public static String formatSessionTime(Context ctx, long start, long end) {
+		return formatSessionTime(ctx, start, end, null);
+	}
+
 	public static String formatSessionTime(Context ctx, long start, long end, String room) {
 		if (ctx == null) {
 			return null;
@@ -52,11 +57,19 @@ public class DateUtils {
 			final String timeEnd = sTimeFormatSdf.format(new Date(end));
 
 			// if (dayEnd.equalsIgnoreCase(dayStart)) {
-			return ctx.getResources().getString(R.string.session_day_time_room, dayStart, timeStart, timeEnd, room);
+			if (TextUtils.isEmpty(room)) {
+				return ctx.getResources().getString(R.string.session_day_time, dayStart, timeStart, timeEnd);
+			} else {
+				return ctx.getResources().getString(R.string.session_day_time_room, dayStart, timeStart, timeEnd, room);
+			}
 			// } else {
 			// return ctx.getResources().getString(R.string.session_day_time_room, dayStart + " & " + dayEnd, timeStart, timeEnd, room);
 			// }
 		}
+	}
+
+	public static String formatPlanningSessionTime(Context ctx, long start, long end) {
+		return formatPlanningSessionTime(ctx, start, end, null);
 	}
 
 	public static String formatPlanningSessionTime(Context ctx, long start, long end, String room) {
@@ -71,7 +84,11 @@ public class DateUtils {
 			final String timeEnd = sTimeFormatSdf.format(new Date(end));
 
 			// if (dayEnd.equalsIgnoreCase(dayStart)) {
-			return ctx.getResources().getString(R.string.session_time_room, timeStart, timeEnd, room);
+			if (TextUtils.isEmpty(room)) {
+				return ctx.getResources().getString(R.string.session_time, timeStart, timeEnd);
+			} else {
+				return ctx.getResources().getString(R.string.session_time_room, timeStart, timeEnd, room);
+			}
 			// } else {
 			// return ctx.getResources().getString(R.string.session_day_time_room, dayStart + " & " + dayEnd, timeStart, timeEnd, room);
 			// }

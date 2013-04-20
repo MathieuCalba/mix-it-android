@@ -1,6 +1,125 @@
 <resources>
 
     <!-- Generic -->
-    <string name="permission_write">Modifier les données de Mix-IT</string>
+    <string name="permission_write">"Modifier les données de Mix-IT"</string>
+    <string name="functionnality_need_connectivity">"Cette fonctionnalité nécessite une connectivité internet"</string>
+    <!-- Home -->
+    <string name="my_planning_tab">"Mon Planning"</string>
+    <string name="explore_tab">"Explorer"</string>
+    <string name="first_initialization">"Veuillez attendre pendant cette première initialisation de l'application Mix-IT"</string>
+    <string name="first_initialization_error">"Une erreur est survenue pendant la première initilisation de l'application.\nAppuyez ici pour réessayer."</string>
+    <!-- Planning -->
+    <string name="action_bar_import_starred_session">"Importer mes sessions favorites"</string>
+    <string name="warning_import_starred_session_not_sync_with_site">"Comme, il n'y a pour l'instant pas de possibilité de vous connecter à Mix-IT via une API, vous pouvez seulement importer vos sessions favorites dans l'application en choisissant votre nom.\nNotez que cet import n'écrasera pas vos sessions favorites actuellement enregistrées dans l'application, cela ajoutera seulement ceux du site."</string>
+    <string name="pick_your_name">"Choisissez votre nom"</string>
+    <string name="import_starred_state_success">"Vos sessions favorites ont été importées avec succès"</string>
+    <string name="import_starred_state_error">"Une erreur est survenue pendant l'importation de vos sessions favorites"</string>
+    <string name="first_day">"Jeudi"</string>
+    <string name="second_day">"Vendredi"</string>
+    <string name="planning_duplicate_session_title">"Le %1$s, de %2$s à %3$s"</string>
+    <string name="planning_slot_pager_header">"De %1$s à %2$s"</string>
+    <string name="planning_slot_pager_header_default">"De 9h à 19h"</string>
+    <string name="planning_breakfast">"Accueil &amp; petit déjeuner"</string>
+    <string name="planning_welcome">"Discours de bienvenue du Staff"</string>
+    <string name="planning_talks_presentation">"Présentation des pitchs des sessions du jour par leur présentateur"</string>
+    <string name="planning_lunch">"Déjeuner"</string>
+    <string name="planning_break">"Pause"</string>
+    <string name="planning_lightning_talk">"Lightning Talks"</string>
+    <string name="planning_keynote">"Keynote"</string>
+    <string name="planning_multiple_session">"PLusieurs sessions sélectionnées"</string>
+    <string name="planning_multiple_room">"plusieurs salle"</string>
+    <string name="planning_no_session">"Pas de session sélectionnée"</string>
+    <string name="planning_no_room">"Pas de salle"</string>
+    <string name="planning_lightning_room">"Gosling"</string>
+    <string name="planning_every_room">"Toutes les salles"</string>
+    <string name="empty_my_planning">"Vous pouvez importer votre planning depuis le site en appuyant ici"</string>
+    <!-- Explore -->
+    <string name="map_bt">"Carte"</string>
+    <string name="planning_bt">"Planning"</string>
+    <string name="sessions_bt">"Sessions"</string>
+    <string name="speakers_bt">"Speakers"</string>
+    <!-- Sessions -->
+    <string name="all_sessions">"Sessions"</string>
+    <string name="all_lightning_talks">"Lightning Talks"</string>
+    <string name="empty_sessions">"Pas de session"</string>
+    <string name="star_session_button">"Star Session"</string>
+    <string name="session_summary">"Résumé"</string>
+    <string name="session_speakers">"Speakers"</string>
+    <string name="session_comments">"Commentaires"</string>
+    <string name="session_in_parallel">"En parallèle"</string>
+    <string name="session_activities">"Activités"</string>
+    <string name="session_interests">"Intérêts"</string>
+    <string name="no_session_summary">"Pas de résumé pour cette session"</string>
+    <string name="no_session_speakers">"Pas de speaker pour cette session"</string>
+    <string name="action_bar_share_with">"Partager avec..."</string>
+    <string name="share_session_subject">"Découvrez cette session à Mix-IT"</string>
+    <string name="share_session_text">"Découvrez la session \"%1$s\" à Mix-IT : %2$s"</string>
+    <string name="action_bar_vote_add">"+1"</string>
+    <string name="action_bar_vote_delete">"-1"</string>
+    <string name="action_bar_favorite_add">"Ajouter aux favoris"</string>
+    <string name="action_bar_favorite_delete">"Retirer des favoris"</string>
+    <string name="error_vote_lightning_talk">"Une erreur est survenue pendant l'envoi de votre vote/unvote au serveur"</string>
+    <string name="error_star_session">"Une erreur est survenue pendant l'envoi de votre star/unstar au serveur"</string>
+    <string name="no_session">"Pas de session sélectionnée"</string>
+    <string name="sessions_empty_speakers">"Pas de speakers pour cette session"</string>
+    <string name="sessions_empty_interests">"Pas d'intérêt enregistré pour cette session"</string>
+    <string name="session_day_time">"Le %1$s, de %2$s à %3$s"</string>
+    <string name="session_day_time_room">"Le %1$s, de %2$s à %3$s, dans la salle %4$s"</string>
+    <string name="session_time">"De %1$s à %2$s"</string>
+    <string name="session_time_room">"De %1$s à %2$s, dans la salle %3$s"</string>
+    <string name="session_day_time_room_full">"Le jeudi 25 et vendredi 26, dans la salle %1$s"</string>
+    <string name="warning_star_session_not_sync_with_site">"Vos sessions favorites ne sont pas synchronisé avec le site"</string>
+    <string name="star_session_success">"La session \"%1$s\" a été mise en favoris avec succès"</string>
+    <string name="unstar_session_success">"La session \"%1$s\" a été retiré de favoris avec succès"</string>
+    <string name="star_session_failed">"La session \"%1$s\" n'a pas été mise en favoris avec succès"</string>
+    <string name="unstar_session_failed">"La session \"%1$s\" n'a pas été retiré des favoris avec succès"</string>
+    <string name="talk_detail_title">"Talk"</string>
+    <string name="lightning_detail_title">"Lightning Talk"</string>
+    <string name="workshop_detail_title">"Workshop"</string>
+    <string name="keynote_detail_title">"Keynote"</string>
+    <!-- Members -->
+    <string name="all_staff">"Staff"</string>
+    <string name="all_members">"Membres"</string>
+    <string name="all_speakers">"Speakers"</string>
+    <string name="no_member">"Pas de membre séléctionné"</string>
+    <string name="member_detail_title">"Membre"</string>
+    <string name="speaker_detail_title">"Speaker"</string>
+    <string name="sponsor_detail_title">"Sponsor"</string>
+    <string name="staff_detail_title">"Staff"</string>
+    <string name="empty_members">"Pas de membres"</string>
+    <string name="nb_consult">"%d vue(s)"</string>
+    <string name="member_bio">"Biographie"</string>
+    <string name="member_shared_links">"Liens partagés"</string>
+    <string name="member_talks">"Talks"</string>
+    <string name="member_interests">"Intérêts"</string>
+    <string name="member_nb_links">"%d link(s)"</string>
+    <string name="member_nb_linkers">"%d linker(s)"</string>
+    <string name="member_picture">"Image du membre"</string>
+    <string name="member_bio_empty">"Pas de biographie"</string>
+    <string name="member_empty_interests">"Pas d'intérêt enregistré pour ce membre"</string>
+    <!-- Map -->
+    <string name="action_bar_map">"Map"</string>
+    <string name="map_title">"Comment accéder au site ?"</string>
+    <string name="access_title">"Lieu :"</string>
+    <string name="access_content">"SUPINFO LYON
+Les Jardins d\'Osaka
+16 Rue Jean Desparmet
+69008 LYON
+
+Nous vous convions à privilégier les transports en commun, les vélos ou la marche pour venir à la conférence. C'est plus écologique et sachez aussi que les places de parking aux alentours de SUPINFO ne sont pas nombreuses !"</string>
+    <string name="mixit_map_url">http://www.mix-it.fr/infos/acces</string>
+    <!-- About -->
+    <string name="action_bar_about">"A propos"</string>
+    <string name="about_text1">"Le code source de cette application a été créé pour la conférence Mix-IT pas :"</string>
+    <string name="about_text2">"Mathieu Calba\nmathieu.calba@gmail.com"</string>
+    <string name="about_text3">"Code source disponible à https://github.com/MathieuCalba/mix-it-android"</string>
+    <string name="about_text4">"Version %s"</string>
+    <string name="about_text5">"Quelques libraries ont permis la réalisation de cette application :
+        
+        - ActionBarSherlock - http://actionbarsherlock.com/
+        - Universal Image Loader - https://github.com/nostra13/Android-Universal-Image-Loader
+        - View Pager Indicator - https://github.com/JakeWharton/Android-ViewPagerIndicator
+        - Crouton - https://github.com/keyboardsurfer/Crouton"</string>
+    <!-- - Sticky List Headers - https://github.com/emilsjolander/StickyListHeaders -->
 
 </resources>

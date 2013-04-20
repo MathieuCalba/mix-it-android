@@ -4,10 +4,13 @@ import android.content.Context;
 import android.database.Cursor;
 import android.graphics.LightingColorFilter;
 import android.graphics.drawable.Drawable;
+import android.text.TextUtils;
 import android.util.AttributeSet;
 import android.view.LayoutInflater;
 import android.view.View;
-import android.widget.ImageView;
+import android.widget.CheckBox;
+import android.widget.CompoundButton;
+import android.widget.CompoundButton.OnCheckedChangeListener;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 import fr.mixit.android.model.PlanningSlot;
@@ -16,13 +19,23 @@ import fr.mixit.android.utils.DateUtils;
 import fr.mixit.android_2012.R;
 
 
-public class TalkItemView extends RelativeLayout {
+public class TalkItemView extends RelativeLayout implements OnCheckedChangeListener {
 
 	protected TextView mTitle;
 	protected TextView mSubTitle;
-	protected ImageView mStar;
+	// protected ImageView mStar;
+	protected CheckBox mStar;
 
 	protected boolean mDisplayStar = true;
+
+	protected String mIdTalk;
+	protected String mTalkTitle;
+
+	public interface StarListener {
+		void onStarTouched(String idTalk, String titleTalk, boolean state);
+	}
+
+	protected StarListener mStarListener;
 
 	public TalkItemView(Context context) {
 		super(context);
@@ -49,13 +62,22 @@ public class TalkItemView extends RelativeLayout {
 		final int padding = context.getResources().getDimensionPixelSize(R.dimen.margin_small);
 		setPadding(padding, padding, padding, padding);
 
-		// setBackgroundColor(context.getResources().getColor(R.color.light_gray));
+		setDescendantFocusability(FOCUS_BLOCK_DESCENDANTS);
 
 		mTitle = (TextView) findViewById(R.id.talk_title);
 		mSubTitle = (TextView) findViewById(R.id.talk_subtitle);
-		mStar = (ImageView) findViewById(R.id.talk_star_button);
-		final Drawable drawable = mStar.getDrawable();
+		// mStar = (ImageView) findViewById(R.id.talk_star_button);
+		// final Drawable drawable = mStar.getDrawable();
+		// drawable.setColorFilter(new LightingColorFilter(context.getResources().getColor(R.color.star_color), 1));
+		mStar = (CheckBox) findViewById(R.id.talk_star_button);
+		final Drawable drawable = context.getResources().getDrawable(R.drawable.btn_star);
 		drawable.setColorFilter(new LightingColorFilter(context.getResources().getColor(R.color.star_color), 1));
+		mStar.setButtonDrawable(drawable);
+		mStar.setOnCheckedChangeListener(this);
+	}
+
+	public void setStarListener(StarListener starListener) {
+		mStarListener = starListener;
 	}
 
 	public void setShouldDisplayStar(boolean displayStar) {
@@ -67,7 +89,9 @@ public class TalkItemView extends RelativeLayout {
 			return;
 		}
 
-		final String title = c.getString(MixItContract.Sessions.PROJ_LIST.TITLE);
+		mIdTalk = c.getString(MixItContract.Sessions.PROJ_LIST.SESSION_ID);
+
+		mTalkTitle = c.getString(MixItContract.Sessions.PROJ_LIST.TITLE);
 		final String format = c.getString(MixItContract.Sessions.PROJ_LIST.FORMAT);
 
 		if (format == null || format.equalsIgnoreCase(MixItContract.Sessions.FORMAT_LIGHTNING_TALK)) {
@@ -77,17 +101,25 @@ public class TalkItemView extends RelativeLayout {
 			final long start = c.getLong(MixItContract.Sessions.PROJ_LIST.START);
 			final long end = c.getLong(MixItContract.Sessions.PROJ_LIST.END);
 
-			mSubTitle.setText(DateUtils.formatSessionTime(getContext(), start, end, room));// "On DDD, from HH:MM to HH:MM, in " + room
+			if (TextUtils.isEmpty(room)) {
+				mSubTitle.setText(DateUtils.formatSessionTime(getContext(), start, end));// "On DDD, from HH:MM to HH:MM"
+			} else {
+				mSubTitle.setText(DateUtils.formatSessionTime(getContext(), start, end, room));// "On DDD, from HH:MM to HH:MM, in " + room
+			}
 			mSubTitle.setVisibility(View.VISIBLE);
 		}
 
-		mTitle.setText(title + " [" + format + "]");
+		mTitle.setText(mTalkTitle + " [" + format + "]");
 
-		final Drawable drawable = mStar.getDrawable();
-		drawable.setColorFilter(new LightingColorFilter(getContext().getResources().getColor(R.color.star_color), 1));
+		// final Drawable drawable = mStar.getDrawable();
+		// drawable.setColorFilter(new LightingColorFilter(getContext().getResources().getColor(R.color.star_color), 1));
 
 		final boolean starred = c.getInt(MixItContract.Sessions.PROJ_LIST.IS_FAVORITE) != 0;
-		mStar.setVisibility(mDisplayStar ? starred ? View.VISIBLE : View.INVISIBLE : View.GONE);
+		mStar.setOnCheckedChangeListener(null);
+		mStar.setChecked(starred);
+		mStar.setOnCheckedChangeListener(this);
+		mStar.setVisibility(mDisplayStar && !MixItContract.Sessions.FORMAT_LIGHTNING_TALK.equalsIgnoreCase(format) ? View.VISIBLE : View.GONE);
+		// mStar.setVisibility(mDisplayStar ? starred ? View.VISIBLE : View.INVISIBLE : View.GONE);
 	}
 
 	public void setContentPlanning(Cursor c) {
@@ -115,7 +147,11 @@ public class TalkItemView extends RelativeLayout {
 				} else {
 					mTitle.setText(title);
 				}
-				mSubTitle.setText(DateUtils.formatPlanningSessionTime(getContext(), start, end, room));// "On DDD, from HH:MM to HH:MM, in " + room
+				if (TextUtils.isEmpty(room)) {
+					mSubTitle.setText(DateUtils.formatPlanningSessionTime(getContext(), start, end));// "On DDD, from HH:MM to HH:MM"
+				} else {
+					mSubTitle.setText(DateUtils.formatPlanningSessionTime(getContext(), start, end, room));// "On DDD, from HH:MM to HH:MM, in " + room
+				}
 				mSubTitle.setVisibility(View.VISIBLE);
 
 				break;
@@ -142,6 +178,13 @@ public class TalkItemView extends RelativeLayout {
 		}
 
 		mStar.setVisibility(View.GONE);
+	}
+
+	@Override
+	public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+		if (mStarListener != null) {
+			mStarListener.onStarTouched(mIdTalk, mTalkTitle, isChecked);
+		}
 	}
 
 }
