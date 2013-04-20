@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ViewAnimator xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/session_detail_animator"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:inAnimation="@android:anim/fade_in"
+    android:outAnimation="@android:anim/fade_out" >
+
+    <ProgressBar
+        android:id="@+id/list_progress"
+        style="?android:attr/progressBarStyleLarge"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center" />
+
+    <LinearLayout
+        android:id="@+id/session"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical" >
+
+        <include
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="@dimen/outside_margin"
+            android:layout_marginRight="@dimen/outside_margin"
+            android:layout_marginTop="@dimen/outside_margin"
+            layout="@layout/session_header" />
+
+        <ScrollView
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="1"
+            android:fillViewport="true"
+            android:paddingLeft="@dimen/outside_margin"
+            android:paddingRight="@dimen/outside_margin" >
+
+            <include
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                layout="@layout/session_content" />
+        </ScrollView>
+    </LinearLayout>
+
+    <TextView
+        android:id="@+id/session_no_session"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_gravity="center"
+        android:layout_margin="@dimen/outside_margin_big"
+        android:gravity="center"
+        android:text="@string/no_session" />
+
+</ViewAnimator>

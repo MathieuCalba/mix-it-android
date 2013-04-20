@@ -1,0 +1,121 @@
+<resources>
+
+    <!-- Generic -->
+    <string name="app_name">Mix-IT 2013</string>
+    <string name="permission_write">Modify Mix-IT schedule data</string>
+    <string name="functionnality_need_connectivity">This functionnality need a connection</string>
+    <!-- Home -->
+    <string name="my_planning_tab">My Planning</string>
+    <string name="explore_tab">Explore</string>
+    <string name="first_initialization">Please wait during this first initialization of the Mix-IT data</string>
+    <string name="first_initialization_error">An error occurred while doing the first initialization of the app.\nTouch here to retry.</string>
+    <!-- Planning -->
+    <string name="action_bar_import_starred_session">Import Starred Session</string>
+    <string name="warning_import_starred_session_not_sync_with_site">"As there is no possibility to login with an API into Mix-IT, currently, you can only choose a member and import its starred sessions into the application.\nNote that this import will not override your current starred sessions from within the app, it will only add these starred sessions to your's."</string>
+    <string name="pick_your_name">"Pick your name"</string>
+    <string name="import_starred_state_success">"Your starred sessions have been imported successfully"</string>
+    <string name="import_starred_state_error">"An error occurred while importing your starred sessions"</string>
+    <string name="first_day">Thursday</string>
+    <string name="second_day">Friday</string>
+    <string name="planning_duplicate_session_title">On %1$s, from %2$s to %3$s</string>
+    <string name="planning_slot_pager_header">From %1$s to %2$s</string>
+    <string name="planning_slot_pager_header_default">From 9am to 7pm</string>
+    <string name="planning_breakfast">"Welcome &amp; Breakfast"</string>
+    <string name="planning_welcome">"Staff welcome speech"</string>
+    <string name="planning_talks_presentation">"Pitch of the sessions of the day by their speaker"</string>
+    <string name="planning_lunch">"Lunch"</string>
+    <string name="planning_break">"Break"</string>
+    <string name="planning_lightning_talk">"Lightning Talks"</string>
+    <string name="planning_keynote">"Keynote"</string>
+    <string name="planning_multiple_session">"Multiple session selected"</string>
+    <string name="planning_multiple_room">"Multiple room"</string>
+    <string name="planning_no_session">"No session selected"</string>
+    <string name="planning_no_room">"No room"</string>
+    <string name="planning_lightning_room">"Gosling"</string>
+    <string name="planning_every_room">"Every room"</string>
+    <string name="empty_my_planning">"You can import your planning from the server by touching here"</string>
+    <!-- Explore -->
+    <string name="map_bt">Map</string>
+    <string name="planning_bt">Planning</string>
+    <string name="sessions_bt">Sessions</string>
+    <string name="speakers_bt">Speakers</string>
+    <!-- Sessions -->
+    <string name="all_sessions">Sessions</string>
+    <string name="all_lightning_talks">Lightning Talks</string>
+    <string name="empty_sessions">No Session</string>
+    <string name="star_session_button">Star Session</string>
+    <string name="session_summary">Summary</string>
+    <string name="session_speakers">Speakers</string>
+    <string name="session_comments">Comments</string>
+    <string name="session_in_parallel">In Parallels</string>
+    <string name="session_activities">Activities</string>
+    <string name="session_interests">Interests</string>
+    <string name="no_session_summary">No Summary for this Sessions</string>
+    <string name="no_session_speakers">No Speaker for this Session</string>
+    <string name="action_bar_share_with">Share with...</string>
+    <string name="share_session_subject">Discover this talk at Mix-IT</string>
+    <string name="share_session_text">Discover the talk \"%1$s\" at Mix-IT : %2$s</string>
+    <string name="action_bar_vote_add">+1</string>
+    <string name="action_bar_vote_delete">-1</string>
+    <string name="action_bar_favorite_add">Add to favorite</string>
+    <string name="action_bar_favorite_delete">Remove from favorite</string>
+    <string name="error_vote_lightning_talk">Error while sending your vote/unvote request</string>
+    <string name="error_star_session">Error while sending your star/unstar request</string>
+    <string name="no_session">No Session Selected</string>
+    <string name="sessions_empty_speakers">No Speakers for this Session</string>
+    <string name="sessions_empty_interests">No Interests for this Session</string>
+    <string name="session_day_time_room">"On %1$s, from %2$s to %3$s, in room %4$s"</string>
+    <string name="session_time_room">"From %1$s to %2$s, in room %3$s"</string>
+    <string name="session_day_time_room_full">"On Thursday 25th and Friday 26th, in room %1$s"</string>
+    <string name="warning_star_session_not_sync_with_site">"Your starred sessions will not be synchronized with the website"</string>
+    <string name="star_session_success">"The session \"%1$s\" was successfully starred"</string>
+    <string name="unstar_session_success">"The session \"%1$s\" was successfully unstarred"</string>
+    <string name="star_session_failed">"The session \"%1$s\" was not successfully starred"</string>
+    <string name="unstar_session_failed">"The session \"%1$s\" was not successfully unstarred"</string>
+    <string name="talk_detail_title">"Talk"</string>
+    <string name="lightning_detail_title">"Lightning Talk"</string>
+    <string name="workshop_detail_title">"Workshop"</string>
+    <string name="keynote_detail_title">"Keynote"</string>
+    <!-- Members -->
+    <string name="all_staff">Staff</string>
+    <string name="all_members">Members</string>
+    <string name="all_speakers">Speakers</string>
+    <string name="no_member">No Member Selected</string>
+    <string name="member_detail_title">Member</string>
+    <string name="speaker_detail_title">Speaker</string>
+    <string name="sponsor_detail_title">Sponsor</string>
+    <string name="staff_detail_title">Staff</string>
+    <string name="empty_members">No Members</string>
+    <string name="nb_consult">%d view(s)</string>
+    <string name="member_bio">Biography</string>
+    <string name="member_shared_links">Shared Links</string>
+    <string name="member_talks">Talks</string>
+    <string name="member_interests">Interests</string>
+    <string name="member_nb_links">%d link(s)</string>
+    <string name="member_nb_linkers">%d linker(s)</string>
+    <string name="member_picture">"Member's picture"</string>
+    <string name="member_bio_empty">"No Biography"</string>
+    <string name="member_empty_interests">No Interests for this Member</string>
+    <!-- Map -->
+    <string name="action_bar_map">Map</string>
+    <string name="map_title">Comment accéder au site ?</string>
+    <string name="access_title">Lieu :</string>
+    <string name="access_content">SUPINFO LYON\n
+Les Jardins d\'Osaka\n
+16 Rue Jean Desparmet\n
+69008 LYON\n
+Nous vous convions à privilégier les transports en commun, les vélos ou la marche pour venir à la conférence. C\'est plus écologique et sachez aussi que les places de parking aux alentours de SUPINFO ne sont pas nombreuses!</string>
+    <string name="mixit_map_url">http://www.mix-it.fr/infos/acces</string>
+    <!-- About -->
+    <string name="action_bar_about">About</string>
+    <string name="about_text1">Source code created for the MixIt Conference by:</string>
+    <string name="about_text2">Mathieu Calba\nmathieu.calba@gmail.com</string>
+    <string name="about_text3">Source code available at https://github.com/MathieuCalba/mix-it-android</string>
+    <string name="about_text4">Version %s</string>
+    <string name="about_text5">Uses some useful libraries :\n
+        - ActionBarSherlock - http://actionbarsherlock.com/\n
+        - Universal Image Loader - https://github.com/nostra13/Android-Universal-Image-Loader\n
+        - View Pager Indicator - https://github.com/JakeWharton/Android-ViewPagerIndicator\n</string>
+    <!-- - Sticky List Headers - https://github.com/emilsjolander/StickyListHeaders -->
+
+</resources>

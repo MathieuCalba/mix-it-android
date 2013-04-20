@@ -1,0 +1,72 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/member_content"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:layout_margin="@dimen/margin_small"
+    android:orientation="vertical" >
+
+    <fr.mixit.android.ui.widgets.UnderlinedTextView
+        android:id="@+id/member_bio_title"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="@string/member_bio"
+        android:textColor="@color/dark_blue_mixit"
+        android:textIsSelectable="false" />
+
+    <TextView
+        android:id="@+id/member_bio_value"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/margin_small"
+        android:textIsSelectable="false" />
+
+    <fr.mixit.android.ui.widgets.UnderlinedTextView
+        android:id="@+id/member_shared_links_title"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/margin_normal"
+        android:text="@string/member_shared_links"
+        android:textColor="@color/dark_blue_mixit"
+        android:textIsSelectable="false" />
+
+    <LinearLayout
+        android:id="@+id/member_shared_links_value"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical" >
+    </LinearLayout>
+
+    <fr.mixit.android.ui.widgets.UnderlinedTextView
+        android:id="@+id/member_talks_title"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/margin_normal"
+        android:text="@string/member_talks"
+        android:textColor="@color/dark_blue_mixit"
+        android:textIsSelectable="false" />
+
+    <LinearLayout
+        android:id="@+id/member_talks_value"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical" >
+    </LinearLayout>
+
+    <fr.mixit.android.ui.widgets.UnderlinedTextView
+        android:id="@+id/member_interests_title"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/margin_normal"
+        android:text="@string/member_interests"
+        android:textColor="@color/dark_blue_mixit"
+        android:textIsSelectable="false" />
+
+    <LinearLayout
+        android:id="@+id/member_interests_value"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical" >
+    </LinearLayout>
+
+</LinearLayout>
