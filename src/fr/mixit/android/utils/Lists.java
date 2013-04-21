@@ -56,8 +56,8 @@ public class Lists {
      * @return a newly-created {@code ArrayList} containing those elements
      */
     public static <E> ArrayList<E> newArrayList(E... elements) {
-        int capacity = (elements.length * 110) / 100 + 5;
-        ArrayList<E> list = new ArrayList<E>(capacity);
+        final int capacity = elements.length * 110 / 100 + 5;
+        final ArrayList<E> list = new ArrayList<E>(capacity);
         Collections.addAll(list, elements);
         return list;
     }
