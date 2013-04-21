@@ -40,5 +40,8 @@
     <color name="blue_mixit">#05AEE8</color>
     <color name="light_blue_mixit">#1F0064CD</color>
     <color name="light_gray">#FFF4F4F4</color>
+    <color name="gray">#BFDEDEDE</color>
+    <color name="light_body_text_1">#FF818181</color>
+    <color name="light_body_text_2">#99818181</color>
 
 </resources>

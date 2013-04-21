@@ -621,7 +621,7 @@ WarningStarSessionDialogFragment.WarningStarSessionDialogContract, SessionAsyncT
 					}
 				});
 				talkView.setBackgroundResource(R.drawable.item_detail_state_list_bkg);
-				talkView.setContent(c);
+				talkView.setContent(c, false);
 				talkView.setOnClickListener(new OnClickListener() {
 
 					@Override

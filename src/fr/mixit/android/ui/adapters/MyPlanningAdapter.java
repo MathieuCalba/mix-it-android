@@ -32,6 +32,7 @@ import fr.mixit.android_2012.R;
 public class MyPlanningAdapter extends CursorAdapter {
 
 	protected LayoutInflater mInflater;
+	protected boolean mDisplayPastSessionsInGrey = true;
 
 	class PlanningViewHolder {
 		UnderlinedTextView mHeader;
@@ -42,6 +43,10 @@ public class MyPlanningAdapter extends CursorAdapter {
 		super(context, null, 0);
 
 		mInflater = LayoutInflater.from(context);
+	}
+
+	public void setDisplayPastSessionsInGrey(boolean displayPastSessionsInGrey) {
+		mDisplayPastSessionsInGrey = displayPastSessionsInGrey;
 	}
 
 	@Override
@@ -81,7 +86,7 @@ public class MyPlanningAdapter extends CursorAdapter {
 			cursor.moveToPosition(oldPosition);
 		}
 
-		holder.mTalk.setContentPlanning(cursor);
+		holder.mTalk.setContentPlanning(cursor, mDisplayPastSessionsInGrey);
 	}
 
 }
