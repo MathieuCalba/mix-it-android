@@ -127,16 +127,41 @@ Nous vous convions à privilégier les transports en commun, les vélos ou la ma
     <string name="mixit_map_url">http://www.mix-it.fr/infos/acces</string>
     <!-- About -->
     <string name="action_bar_about">"A propos"</string>
-    <string name="about_text1">"Le code source de cette application a été créé pour la conférence Mix-IT pas :"</string>
-    <string name="about_text2">"Mathieu Calba\nmathieu.calba@gmail.com"</string>
-    <string name="about_text3">"Code source disponible à https://github.com/MathieuCalba/mix-it-android"</string>
-    <string name="about_text4">"Version %s"</string>
-    <string name="about_text5">"Quelques libraries ont permis la réalisation de cette application :
+    <string name="about_text">"Le code source de cette application a été créé pour la conférence Mix-IT par :
+	Mathieu Calba - mathieu.calba@gmail.com
+
+Code source disponible à  https://github.com/MathieuCalba/mix-it-android
+
+Version %1$s
         
-        - ActionBarSherlock - http://actionbarsherlock.com/
-        - Universal Image Loader - https://github.com/nostra13/Android-Universal-Image-Loader
-        - View Pager Indicator - https://github.com/JakeWharton/Android-ViewPagerIndicator
-        - Crouton - https://github.com/keyboardsurfer/Crouton"</string>
+Quelques libraries ont permis la réalisation de cette application :
+
+	- ActionBarSherlock - http://actionbarsherlock.com/
+	License :
+%2$s
+
+	- Universal Image Loader - https://github.com/nostra13/Android-Universal-Image-Loader
+	License :
+%3$s
+
+	- View Pager Indicator - https://github.com/JakeWharton/Android-ViewPagerIndicator
+	License :
+%4$s
+
+	- Crouton - https://github.com/keyboardsurfer/Crouton
+	License :
+%5$s"</string>
+    <!-- <string name="about_text1">"Le code source de cette application a été créé pour la conférence Mix-IT par :"</string> -->
+    <!-- <string name="about_text2">"Mathieu Calba\nmathieu.calba@gmail.com"</string> -->
+    <!-- <string name="about_text3">"Code source disponible à https://github.com/MathieuCalba/mix-it-android"</string> -->
+    <!-- <string name="about_text4">"Version %s"</string> -->
+    <!-- <string name="about_text5">"Quelques libraries ont permis la réalisation de cette application : -->
+
+
+    <!-- - ActionBarSherlock - http://actionbarsherlock.com/ -->
+    <!-- - Universal Image Loader - https://github.com/nostra13/Android-Universal-Image-Loader -->
+    <!-- - View Pager Indicator - https://github.com/JakeWharton/Android-ViewPagerIndicator -->
+    <!-- - Crouton - https://github.com/keyboardsurfer/Crouton"</string> -->
     <!-- - Sticky List Headers - https://github.com/emilsjolander/StickyListHeaders -->
 
 </resources>

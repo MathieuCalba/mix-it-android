@@ -28,6 +28,7 @@ import com.actionbarsherlock.app.SherlockDialogFragment;
 import fr.mixit.android.utils.UIUtils;
 import fr.mixit.android_2012.R;
 
+
 public class AboutFragment extends SherlockDialogFragment {
 
 	public static final String TAG = AboutFragment.class.getSimpleName();
@@ -42,14 +43,19 @@ public class AboutFragment extends SherlockDialogFragment {
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 
-		//		setStyle(DialogFragment.STYLE_NORMAL, android.R.style.Theme_Dialog);
+		// setStyle(DialogFragment.STYLE_NORMAL, android.R.style.Theme_Dialog);
 	}
 
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
 		final View v = inflater.inflate(R.layout.fragment_about, container, false);
-		final TextView version = (TextView) v.findViewById(R.id.about_version);
-		version.setText(getString(R.string.about_text4, UIUtils.getAppVersionName(getActivity(), getActivity().getPackageName())));
+		final TextView version = (TextView) v.findViewById(R.id.about);
+		version.setText(getString(R.string.about_text, //
+				UIUtils.getAppVersionName(getActivity(), getActivity().getPackageName()), //
+				getString(R.string.license_action_bar_sherlock), //
+				getString(R.string.license_universal_image_loader), //
+				getString(R.string.license_view_pager_indicator), //
+				getString(R.string.license_crouton)));
 		return v;
 	}
 
