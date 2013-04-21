@@ -1,9 +1,29 @@
+/*
+ * Copyright 2011 - 2013 Mathieu Calba
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+
 package fr.mixit.android.ui.widgets;
 
+import java.util.Calendar;
+
+import android.annotation.TargetApi;
 import android.content.Context;
 import android.database.Cursor;
 import android.graphics.LightingColorFilter;
 import android.graphics.drawable.Drawable;
+import android.os.Build;
 import android.text.TextUtils;
 import android.util.AttributeSet;
 import android.view.LayoutInflater;
@@ -84,7 +104,26 @@ public class TalkItemView extends RelativeLayout implements OnCheckedChangeListe
 		mDisplayStar = displayStar;
 	}
 
-	public void setContent(Cursor c) {
+	@TargetApi(Build.VERSION_CODES.JELLY_BEAN)
+	@SuppressWarnings("deprecation")
+	public void setDisplayPastSessionInGrey(boolean displayPastSessionsInGrey, long sessionEnd) {
+		final long now = Calendar.getInstance().getTimeInMillis();
+		if (displayPastSessionsInGrey && now > sessionEnd) {
+			setBackgroundColor(getContext().getResources().getColor(R.color.gray));
+			mTitle.setTextColor(getContext().getResources().getColor(R.color.light_body_text_1));
+			mSubTitle.setTextColor(getContext().getResources().getColor(R.color.light_body_text_2));
+		} else {
+			if (Build.VERSION.SDK_INT > Build.VERSION_CODES.JELLY_BEAN) {
+				setBackground(null);
+			} else {
+				setBackgroundDrawable(null);
+			}
+			mTitle.setTextColor(getContext().getResources().getColor(R.color.body_text_1));
+			mSubTitle.setTextColor(getContext().getResources().getColor(R.color.body_text_2));
+		}
+	}
+
+	public void setContent(Cursor c, boolean displayPastSessionsInGrey) {
 		if (c == null) {
 			return;
 		}
@@ -96,10 +135,12 @@ public class TalkItemView extends RelativeLayout implements OnCheckedChangeListe
 
 		if (format == null || format.equalsIgnoreCase(MixItContract.Sessions.FORMAT_LIGHTNING_TALK)) {
 			mSubTitle.setVisibility(View.GONE);
+			setDisplayPastSessionInGrey(false, 0);
 		} else {
 			final String room = c.getString(MixItContract.Sessions.PROJ_LIST.ROOM_ID);
 			final long start = c.getLong(MixItContract.Sessions.PROJ_LIST.START);
 			final long end = c.getLong(MixItContract.Sessions.PROJ_LIST.END);
+			setDisplayPastSessionInGrey(displayPastSessionsInGrey, end);
 
 			if (TextUtils.isEmpty(room)) {
 				mSubTitle.setText(DateUtils.formatSessionTime(getContext(), start, end));// "On DDD, from HH:MM to HH:MM"
@@ -122,7 +163,7 @@ public class TalkItemView extends RelativeLayout implements OnCheckedChangeListe
 		// mStar.setVisibility(mDisplayStar ? starred ? View.VISIBLE : View.INVISIBLE : View.GONE);
 	}
 
-	public void setContentPlanning(Cursor c) {
+	public void setContentPlanning(Cursor c, boolean displayPastSessionsInGrey) {
 		if (c == null) {
 			return;
 		}
@@ -139,6 +180,7 @@ public class TalkItemView extends RelativeLayout implements OnCheckedChangeListe
 				final String room = c.getString(MixItContract.Sessions.PROJ_PLANNING.ROOM_ID);
 				final long start = c.getLong(MixItContract.Sessions.PROJ_PLANNING.START);
 				final long end = c.getLong(MixItContract.Sessions.PROJ_PLANNING.END);
+				setDisplayPastSessionInGrey(displayPastSessionsInGrey, end);
 
 				if (nbConcurrentTalk == 1) {
 					final String format = c.getString(MixItContract.Sessions.PROJ_PLANNING.FORMAT);
@@ -167,12 +209,17 @@ public class TalkItemView extends RelativeLayout implements OnCheckedChangeListe
 				mTitle.setText(title);
 				mSubTitle.setVisibility(View.GONE);
 
+				final long end = c.getLong(MixItContract.Sessions.PROJ_PLANNING.END);
+				setDisplayPastSessionInGrey(displayPastSessionsInGrey, end);
+
 				break;
 			}
 
 			default:
 				mTitle.setText("Missing Slot type management");
 				mSubTitle.setVisibility(View.GONE);
+
+				setDisplayPastSessionInGrey(false, 0);
 
 				break;
 		}

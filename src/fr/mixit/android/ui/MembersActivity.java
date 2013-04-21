@@ -1,3 +1,19 @@
+/*
+ * Copyright 2011 - 2013 Mathieu Calba
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+
 package fr.mixit.android.ui;
 
 import android.content.Context;
@@ -34,9 +50,11 @@ public class MembersActivity extends GenericMixItActivity implements OnNavigatio
 	public static final int DISPLAY_MODE_STAFF = 1204101931;
 	public static final int DISPLAY_MODE_LINKS = 1204101932;
 	public static final int DISPLAY_MODE_LINKERS = 1204101933;
+	public static final int DISPLAY_MODE_SPONSORS = 1204101934;
 
 	public static final String EXTRA_DISPLAY_MODE = "fr.mixit.android.EXTRA_DISPLAY_MODE";
 	public static final String EXTRA_MEMBER_ID = "fr.mixit.android.EXTRA_MEMBER_ID";
+	public static final String EXTRA_MEMBER_NAME = "fr.mixit.android.EXTRA_MEMBER_NAME";
 
 	protected static final String STATE_DISPLAY_MODE = "fr.mixit.android.STATE_DISPLAY_MODE";
 
@@ -57,13 +75,38 @@ public class MembersActivity extends GenericMixItActivity implements OnNavigatio
 			mMode = savedStateInstance.getInt(STATE_DISPLAY_MODE, DISPLAY_MODE_SPEAKERS);
 		}
 
-		if (mMode != DISPLAY_MODE_LINKS && mMode != DISPLAY_MODE_LINKERS) {
-			final Context context = getSupportActionBar().getThemedContext();
-			final ArrayAdapter<CharSequence> listAdapter = ArrayAdapter.createFromResource(context, R.array.members, R.layout.sherlock_spinner_item);
-			listAdapter.setDropDownViewResource(R.layout.sherlock_spinner_dropdown_item);
+		final String memberName = getIntent().getStringExtra(EXTRA_MEMBER_NAME);
 
-			getSupportActionBar().setListNavigationCallbacks(listAdapter, this);
-			getSupportActionBar().setNavigationMode(ActionBar.NAVIGATION_MODE_LIST);
+		switch (mMode) {
+			case DISPLAY_MODE_SPONSORS:
+				getSupportActionBar().setTitle(R.string.sponsors);
+				getSupportActionBar().setDisplayShowTitleEnabled(true);
+				break;
+
+			case DISPLAY_MODE_LINKS:
+				getSupportActionBar().setTitle(getString(R.string.members_links, memberName));
+				getSupportActionBar().setDisplayShowTitleEnabled(true);
+				break;
+
+			case DISPLAY_MODE_LINKERS:
+				getSupportActionBar().setTitle(getString(R.string.members_linkers, memberName));
+				getSupportActionBar().setDisplayShowTitleEnabled(true);
+				break;
+
+			case DISPLAY_MODE_ALL_MEMBERS:
+			case DISPLAY_MODE_SPEAKERS:
+			case DISPLAY_MODE_STAFF:
+				final Context context = getSupportActionBar().getThemedContext();
+				final ArrayAdapter<CharSequence> listAdapter = ArrayAdapter.createFromResource(context, R.array.members, R.layout.sherlock_spinner_item);
+				listAdapter.setDropDownViewResource(R.layout.sherlock_spinner_dropdown_item);
+
+				getSupportActionBar().setListNavigationCallbacks(listAdapter, this);
+				getSupportActionBar().setNavigationMode(ActionBar.NAVIGATION_MODE_LIST);
+				getSupportActionBar().setDisplayShowTitleEnabled(false);
+				break;
+
+			default:
+				break;
 		}
 
 		final FragmentManager fm = getSupportFragmentManager();
@@ -73,7 +116,7 @@ public class MembersActivity extends GenericMixItActivity implements OnNavigatio
 			fm.beginTransaction().add(R.id.content_members_list, mMembersListFrag, MembersListFragment.TAG).commit();
 		}
 
-		if (mMode != DISPLAY_MODE_LINKS && mMode != DISPLAY_MODE_LINKERS) {
+		if (mMode != DISPLAY_MODE_LINKS && mMode != DISPLAY_MODE_LINKERS && mMode != DISPLAY_MODE_SPONSORS) {
 			int itemSelected = 0;
 			switch (mMode) {
 				case DISPLAY_MODE_ALL_MEMBERS:
@@ -105,12 +148,6 @@ public class MembersActivity extends GenericMixItActivity implements OnNavigatio
 	@Override
 	protected int getContentLayoutId() {
 		return R.layout.activity_members;
-	}
-
-	@Override
-	protected void initActionBar() {
-		super.initActionBar();
-		getSupportActionBar().setDisplayShowTitleEnabled(false);
 	}
 
 	@Override

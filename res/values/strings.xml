@@ -1,3 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+     Copyright (C) 2011-2013 Mathieu Calba
+
+     Licensed under the Apache License, Version 2.0 (the "License");
+     you may not use this file except in compliance with the License.
+     You may obtain a copy of the License at
+
+          http://www.apache.org/licenses/LICENSE-2.0
+
+     Unless required by applicable law or agreed to in writing, software
+     distributed under the License is distributed on an "AS IS" BASIS,
+     WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+     See the License for the specific language governing permissions and
+     limitations under the License.
+-->
+
 <resources>
 
     <!-- Generic -->
@@ -79,6 +96,13 @@
     <string name="workshop_detail_title">"Workshop"</string>
     <string name="keynote_detail_title">"Keynote"</string>
     <!-- Members -->
+    <string name="sponsors_company_member_detail">"%1$s
+Sponsor %2$s"</string>
+    <string name="staff_company_member_detail">"%1$s
+Staff member"</string>
+    <string name="members_links">"%1$s's links"</string>
+    <string name="members_linkers">"%1$s's linkers"</string>
+    <string name="sponsors">"Sponsors"</string>
     <string name="all_staff">"Staff"</string>
     <string name="all_members">"Members"</string>
     <string name="all_speakers">"Speakers"</string>
@@ -110,17 +134,97 @@ Les Jardins d\'Osaka
 Nous vous convions à privilégier les transports en commun, les vélos ou la marche pour venir à la conférence. C'est plus écologique et sachez aussi que les places de parking aux alentours de SUPINFO ne sont pas nombreuses !"</string>
     <string name="mixit_map_url">http://www.mix-it.fr/infos/acces</string>
     <!-- About -->
+    <string name="sponsors_access">"Sponsors"</string>
     <string name="action_bar_about">"About"</string>
-    <string name="about_text1">"Source code created for the Mix-IT Conference by:"</string>
-    <string name="about_text2">"Mathieu Calba\nmathieu.calba@gmail.com"</string>
-    <string name="about_text3">"Source code available at https://github.com/MathieuCalba/mix-it-android"</string>
-    <string name="about_text4">"Version %s"</string>
-    <string name="about_text5">"Some useful libraries have been used to create this application :
+    <string name="about_text">"Source code created for the Mix-IT Conference by:
+	Mathieu Calba - mathieu.calba@gmail.com
+
+Source code available at https://github.com/MathieuCalba/mix-it-android
+
+Version %1$s
         
-        - ActionBarSherlock - http://actionbarsherlock.com/
-        - Universal Image Loader - https://github.com/nostra13/Android-Universal-Image-Loader
-        - View Pager Indicator - https://github.com/JakeWharton/Android-ViewPagerIndicator
-        - Crouton - https://github.com/keyboardsurfer/Crouton"</string>
+Some useful libraries have been used to create this application:
+
+	- ActionBarSherlock - http://actionbarsherlock.com
+	License :
+%2$s
+
+	- Universal Image Loader - https://github.com/nostra13/Android-Universal-Image-Loader
+	License :
+%3$s
+
+	- View Pager Indicator - http://viewpagerindicator.com/
+	License :
+%4$s
+
+	- Crouton - https://github.com/keyboardsurfer/Crouton
+	License :
+%5$s"</string>
+    <string name="license_action_bar_sherlock">"		Copyright 2012 Jake Wharton
+		
+		Licensed under the Apache License, Version 2.0 (the "License");
+		you may not use this file except in compliance with the License.
+		You may obtain a copy of the License at
+		
+		    http://www.apache.org/licenses/LICENSE-2.0
+		
+		Unless required by applicable law or agreed to in writing, software
+		distributed under the License is distributed on an "AS IS" BASIS,
+		WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+		See the License for the specific language governing permissions and
+		limitations under the License."</string>
+    <string name="license_universal_image_loader">"		Copyright 2011-2013 Sergey Tarasevich
+		
+		Licensed under the Apache License, Version 2.0 (the "License");
+		you may not use this file except in compliance with the License.
+		You may obtain a copy of the License at
+		
+		    http://www.apache.org/licenses/LICENSE-2.0
+		
+		Unless required by applicable law or agreed to in writing, software
+		distributed under the License is distributed on an "AS IS" BASIS,
+		WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+		See the License for the specific language governing permissions and
+		limitations under the License."</string>
+    <string name="license_view_pager_indicator">"		Copyright 2012 Jake Wharton
+		Copyright 2011 Patrik Åkerfeldt
+		Copyright 2011 Francisco Figueiredo Jr.
+		
+		Licensed under the Apache License, Version 2.0 (the "License");
+		you may not use this file except in compliance with the License.
+		You may obtain a copy of the License at
+		
+		    http://www.apache.org/licenses/LICENSE-2.0
+		
+		Unless required by applicable law or agreed to in writing, software
+		distributed under the License is distributed on an "AS IS" BASIS,
+		WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+		See the License for the specific language governing permissions and
+		limitations under the License."</string>
+    <string name="license_crouton">"		Copyright 2012 - 2013 Benjamin Weiss
+		Copyright 2012 Neofonie Mobile GmbH
+		
+		Licensed under the Apache License, Version 2.0 (the "License");
+		you may not use this file except in compliance with the License.
+		You may obtain a copy of the License at
+		
+			http://www.apache.org/licenses/LICENSE-2.0
+		 
+		Unless required by applicable law or agreed to in writing, software
+		distributed under the License is distributed on an "AS IS" BASIS,
+		WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+		See the License for the specific language governing permissions and
+		limitations under the License."</string>
+
+    <!-- <string name="about_text1">"Source code created for the Mix-IT Conference by:"</string> -->
+    <!-- <string name="about_text2">"Mathieu Calba\nmathieu.calba@gmail.com"</string> -->
+    <!-- <string name="about_text3">"Source code available at https://github.com/MathieuCalba/mix-it-android"</string> -->
+    <!-- <string name="about_text4">"Version %s"</string> -->
+    <!-- <string name="about_text5">"Some useful libraries have been used to create this application : -->
+    <!-- - ActionBarSherlock - http://actionbarsherlock.com/ -->
+    <!-- - Universal Image Loader - https://github.com/nostra13/Android-Universal-Image-Loader -->
+    <!-- - View Pager Indicator - https://github.com/JakeWharton/Android-ViewPagerIndicator -->
+    <!-- - Crouton - https://github.com/keyboardsurfer/Crouton"</string> -->
     <!-- - Sticky List Headers - https://github.com/emilsjolander/StickyListHeaders -->
 
 </resources>

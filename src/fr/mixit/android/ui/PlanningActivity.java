@@ -1,6 +1,22 @@
+/*
+ * Copyright 2011 - 2013 Mathieu Calba
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+
 package fr.mixit.android.ui;
 
-import java.util.Date;
+import java.util.Calendar;
 
 import android.content.Intent;
 import android.database.Cursor;
@@ -51,8 +67,8 @@ MemberDetailsContract, BoundServiceFragment.BoundServiceContract {
 
 	protected int mTopFragCommitId = -1;
 
-	protected int mCurrentRoomPosition;
-	protected int mCurrentSlotPosition;
+	protected int mCurrentRoomPosition = 0;
+	protected int mCurrentSlotPosition = -1;
 
 	@Override
 	protected void onCreate(Bundle savedStateInstance) {
@@ -60,11 +76,11 @@ MemberDetailsContract, BoundServiceFragment.BoundServiceContract {
 
 		if (savedStateInstance != null) {
 			mCurrentRoomPosition = savedStateInstance.getInt(STATE_ROOM, 0);
-			mCurrentSlotPosition = savedStateInstance.getInt(STATE_SLOT, 0);
+			mCurrentSlotPosition = savedStateInstance.getInt(STATE_SLOT, -1);
 		}
 
-		if (mCurrentSlotPosition == 0) {
-			mCurrentSlotPosition = PlanningSlotPagerAdapter.getPositionForTimestamp(new Date().getTime());
+		if (mCurrentSlotPosition == -1) {
+			mCurrentSlotPosition = PlanningSlotPagerAdapter.getPositionForTimestamp(Calendar.getInstance().getTimeInMillis());
 		}
 
 		mViewPager = (ViewPager) findViewById(R.id.pager);
@@ -136,6 +152,9 @@ MemberDetailsContract, BoundServiceFragment.BoundServiceContract {
 			if (mSlotAdapter != null) {
 				mSlotAdapter.setDay(day);
 			}
+			if (mViewPager != null) {
+				mViewPager.setCurrentItem(mCurrentSlotPosition);
+			}
 		} else {
 			final Bundle b = new Bundle();
 			b.putInt(STATE_FILTER, day);
@@ -191,8 +210,12 @@ MemberDetailsContract, BoundServiceFragment.BoundServiceContract {
 		switch (id) {
 			case LOADER_ID_ROOMS:
 				if (!mIsPlanningDisplayedBySlot) {
-					mRoomAdapter.swapCursor(mFilter, cursor);
-					mViewPager.setCurrentItem(mCurrentRoomPosition);
+					if (mRoomAdapter != null) {
+						mRoomAdapter.swapCursor(mFilter, cursor);
+					}
+					if (mViewPager != null) {
+						mViewPager.setCurrentItem(mCurrentRoomPosition);
+					}
 				}
 
 			default:

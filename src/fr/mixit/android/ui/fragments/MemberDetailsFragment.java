@@ -1,3 +1,19 @@
+/*
+ * Copyright 2011 - 2013 Mathieu Calba
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+
 package fr.mixit.android.ui.fragments;
 
 import android.annotation.TargetApi;
@@ -66,6 +82,7 @@ WarningStarSessionDialogFragment.WarningStarSessionDialogContract, SessionAsyncT
 	boolean mIsFirstLoad = true;
 
 	protected int mMemberId;
+	protected String mMemberName;
 
 	protected ViewAnimator mViewAnimator;
 	protected TextView mName;
@@ -132,6 +149,7 @@ WarningStarSessionDialogFragment.WarningStarSessionDialogContract, SessionAsyncT
 				if (getActivity() != null && !isDetached()) {
 					final Intent intent = new Intent(getActivity(), MembersActivity.class);
 					intent.putExtra(MembersActivity.EXTRA_DISPLAY_MODE, MembersActivity.DISPLAY_MODE_LINKS);
+					intent.putExtra(MembersActivity.EXTRA_MEMBER_NAME, mMemberName);
 					intent.putExtra(MembersActivity.EXTRA_MEMBER_ID, mMemberId);
 					startActivity(intent);
 				}
@@ -145,6 +163,7 @@ WarningStarSessionDialogFragment.WarningStarSessionDialogContract, SessionAsyncT
 				if (getActivity() != null && !isDetached()) {
 					final Intent intent = new Intent(getActivity(), MembersActivity.class);
 					intent.putExtra(MembersActivity.EXTRA_DISPLAY_MODE, MembersActivity.DISPLAY_MODE_LINKERS);
+					intent.putExtra(MembersActivity.EXTRA_MEMBER_NAME, mMemberName);
 					intent.putExtra(MembersActivity.EXTRA_MEMBER_ID, mMemberId);
 					startActivity(intent);
 				}
@@ -448,6 +467,7 @@ WarningStarSessionDialogFragment.WarningStarSessionDialogContract, SessionAsyncT
 		int nbConsults = 0;
 		String bio = null;
 		Spanned bioSpanned = null;
+		String level = null;
 		int memberType = MixItContract.Members.TYPE_MEMBER;
 
 		if (c != null && c.moveToFirst()) {
@@ -464,12 +484,13 @@ WarningStarSessionDialogFragment.WarningStarSessionDialogContract, SessionAsyncT
 			bio = c.getString(MixItContract.Members.PROJ_DETAIL.LONG_DESC);
 			imageUrl = c.getString(MixItContract.Members.PROJ_DETAIL.IMAGE_URL);
 			memberType = c.getInt(MixItContract.Members.PROJ_DETAIL.TYPE);
+			level = c.getString(MixItContract.Members.PROJ_DETAIL.LEVEL);
 		} else {
 			showNoMemberSelected();
 			mImage.setImageDrawable(null);
 		}
 
-		fillHeader(firstName, lastName, company, shortDesc, imageUrl, nbConsults);
+		fillHeader(firstName, lastName, company, shortDesc, imageUrl, nbConsults, memberType, level);
 
 		if (TextUtils.isEmpty(bio) && getActivity() != null && !isDetached()) {
 			bio = getActivity().getString(R.string.member_bio_empty);
@@ -505,16 +526,32 @@ WarningStarSessionDialogFragment.WarningStarSessionDialogContract, SessionAsyncT
 		}
 	}
 
-	protected void fillHeader(String firstName, String lastName, String company, Spanned shortDesc, String imageUrl, int nbConsults) {
+	protected void fillHeader(String firstName, String lastName, String company, Spanned shortDesc, String imageUrl, int nbConsults, int memberType,
+			String level) {
 		final StringBuilder nameStr = new StringBuilder();
 		if (!TextUtils.isEmpty(firstName)) {
 			nameStr.append(firstName);
 			nameStr.append(' ');
 		}
 		nameStr.append(lastName);
+		mMemberName = nameStr.toString();
 
-		mName.setText(nameStr.toString());
-		mCompany.setText(company);
+		mName.setText(mMemberName);
+		switch (memberType) {
+			case MixItContract.Members.TYPE_SPONSOR:
+				mCompany.setText(getString(R.string.sponsors_company_member_detail, company, level));
+				break;
+
+			case MixItContract.Members.TYPE_STAFF:
+				mCompany.setText(getString(R.string.staff_company_member_detail, company));
+				break;
+
+			case MixItContract.Members.TYPE_SPEAKER:
+			case MixItContract.Members.TYPE_MEMBER:
+			default:
+				mCompany.setText(company);
+				break;
+		}
 		mShortDesc.setText(shortDesc);
 		mImageLoader.displayImage(imageUrl, mImage, mOptions);
 		mNbConsult.setText(getString(R.string.nb_consult, nbConsults));
@@ -605,7 +642,7 @@ WarningStarSessionDialogFragment.WarningStarSessionDialogContract, SessionAsyncT
 					}
 				});
 				talkView.setBackgroundResource(R.drawable.item_detail_state_list_bkg);
-				talkView.setContent(c);
+				talkView.setContent(c, false);
 				talkView.setOnClickListener(new OnClickListener() {
 
 					@Override
