@@ -24,7 +24,7 @@ import com.nostra13.universalimageloader.core.ImageLoaderConfiguration;
 
 public class MixItApplication extends Application {
 
-	public static final boolean DEBUG_MODE = true;
+	public static final boolean DEBUG_MODE = false;
 
 	@Override
 	public void onCreate() {
