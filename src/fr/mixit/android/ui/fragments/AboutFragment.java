@@ -20,11 +20,14 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.view.View.OnClickListener;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.TextView;
 
 import com.actionbarsherlock.app.SherlockDialogFragment;
 
+import fr.mixit.android.ui.MembersActivity;
 import fr.mixit.android.utils.UIUtils;
 import fr.mixit.android_2012.R;
 
@@ -49,6 +52,7 @@ public class AboutFragment extends SherlockDialogFragment {
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
 		final View v = inflater.inflate(R.layout.fragment_about, container, false);
+
 		final TextView version = (TextView) v.findViewById(R.id.about);
 		version.setText(getString(R.string.about_text, //
 				UIUtils.getAppVersionName(getActivity(), getActivity().getPackageName()), //
@@ -56,6 +60,20 @@ public class AboutFragment extends SherlockDialogFragment {
 				getString(R.string.license_universal_image_loader), //
 				getString(R.string.license_view_pager_indicator), //
 				getString(R.string.license_crouton)));
+
+		final Button sponsors = (Button) v.findViewById(R.id.bt_sponsors);
+		sponsors.setOnClickListener(new OnClickListener() {
+
+			@Override
+			public void onClick(View v) {
+				if (getActivity() != null && !isDetached()) {
+					final Intent i = new Intent(getActivity(), MembersActivity.class);
+					i.putExtra(MembersActivity.EXTRA_DISPLAY_MODE, MembersActivity.DISPLAY_MODE_SPONSORS);
+					startActivity(i);
+				}
+			}
+		});
+
 		return v;
 	}
 
