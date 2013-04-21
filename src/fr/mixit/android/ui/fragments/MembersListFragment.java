@@ -128,6 +128,8 @@ public class MembersListFragment extends BoundServiceFragment implements LoaderM
 		if (id == CURSOR_MEMBERS) {
 			final Intent i = UIUtils.fragmentArgumentsToIntent(args);
 			Uri membersUri = i.getData();
+			String selection = null;
+			String sortOrder = MixItContract.Members.DEFAULT_SORT;
 			if (membersUri == null) {
 				switch (mMode) {
 					case MembersActivity.DISPLAY_MODE_ALL_MEMBERS:
@@ -168,11 +170,23 @@ public class MembersListFragment extends BoundServiceFragment implements LoaderM
 						break;
 					}
 
+					case MembersActivity.DISPLAY_MODE_SPONSORS: {
+						membersUri = MixItContract.Members.CONTENT_URI;
+						final StringBuilder sb = new StringBuilder(MixItContract.Members.TYPE);
+						sb.append(" = ");
+						sb.append(MixItContract.Members.TYPE_SPONSOR);
+						selection = sb.toString();
+
+						sortOrder = MixItContract.Members.SPONSORS_SORT;
+
+						break;
+					}
+
 					default:
 						break;
 				}
 			}
-			return new CursorLoader(getActivity(), membersUri, MixItContract.Members.PROJ_LIST.PROJECTION, null, null, MixItContract.Members.DEFAULT_SORT);
+			return new CursorLoader(getActivity(), membersUri, MixItContract.Members.PROJ_LIST.PROJECTION, selection, null, sortOrder);
 		}
 		return null;
 	}

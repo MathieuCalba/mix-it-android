@@ -96,6 +96,13 @@
     <string name="workshop_detail_title">"Workshop"</string>
     <string name="keynote_detail_title">"Keynote"</string>
     <!-- Members -->
+    <string name="sponsors_company_member_detail">"%1$s
+Sponsor %2$s"</string>
+    <string name="staff_company_member_detail">"%1$s
+Staff member"</string>
+    <string name="members_links">"%1$s's links"</string>
+    <string name="members_linkers">"%1$s's linkers"</string>
+    <string name="sponsors">"Sponsors"</string>
     <string name="all_staff">"Staff"</string>
     <string name="all_members">"Members"</string>
     <string name="all_speakers">"Speakers"</string>
@@ -127,6 +134,7 @@ Les Jardins d\'Osaka
 Nous vous convions à privilégier les transports en commun, les vélos ou la marche pour venir à la conférence. C'est plus écologique et sachez aussi que les places de parking aux alentours de SUPINFO ne sont pas nombreuses !"</string>
     <string name="mixit_map_url">http://www.mix-it.fr/infos/acces</string>
     <!-- About -->
+    <string name="sponsors_access">"Sponsors"</string>
     <string name="action_bar_about">"About"</string>
     <string name="about_text">"Source code created for the Mix-IT Conference by:
 	Mathieu Calba - mathieu.calba@gmail.com

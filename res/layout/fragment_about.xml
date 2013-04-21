@@ -31,6 +31,13 @@
             android:paddingBottom="@dimen/margin_small"
             android:src="@drawable/logo_rgb" />
 
+        <Button
+            android:id="@+id/bt_sponsors"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:paddingBottom="@dimen/margin_small"
+            android:text="@string/sponsors_access" />
+
         <TextView
             android:id="@+id/about"
             style="@style/AboutText"
