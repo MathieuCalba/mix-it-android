@@ -16,6 +16,8 @@
 
 package fr.mixit.android.ui;
 
+import java.util.Calendar;
+
 import android.content.Context;
 import android.os.Bundle;
 import android.widget.ArrayAdapter;
@@ -23,6 +25,7 @@ import android.widget.ArrayAdapter;
 import com.actionbarsherlock.app.ActionBar;
 import com.actionbarsherlock.app.ActionBar.OnNavigationListener;
 
+import fr.mixit.android.model.Planning;
 import fr.mixit.android_2012.R;
 
 
@@ -45,6 +48,14 @@ public abstract class PlanningGenericActivity extends GenericMixItActivity imple
 
 		getSupportActionBar().setListNavigationCallbacks(listAdapter, this);
 		getSupportActionBar().setNavigationMode(ActionBar.NAVIGATION_MODE_LIST);
+
+		final Calendar cal = Calendar.getInstance();
+		final long timestamp = cal.getTimeInMillis();
+		if (timestamp < Planning.TIMESTAMP_OFFSET_DAY_ONE + Planning.SEVEN_PM + Planning.THIRTY_MINUTES) {
+			mFilter = FILTER_DAY_ONE;
+		} else {
+			mFilter = FILTER_DAY_TWO;
+		}
 
 		if (savedStateInstance != null) {
 			mFilter = savedStateInstance.getInt(STATE_FILTER, FILTER_DAY_ONE);
