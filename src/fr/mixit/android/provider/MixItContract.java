@@ -133,6 +133,10 @@ public class MixItContract {
 		public static final String DEFAULT_SORT = "UPPER(" + MixItDatabase.Tables.MEMBERS + "." + MembersColumns.LASTNAME + ") ASC, " + //
 				MixItDatabase.Tables.MEMBERS + "." + MembersColumns.FIRSTNAME + " ASC";
 
+		public static final String SPONSORS_SORT = "UPPER(" + MixItDatabase.Tables.MEMBERS + "." + MembersColumns.LEVEL + ") DESC, " + //
+				MixItDatabase.Tables.MEMBERS + "." + MembersColumns.LASTNAME + " ASC, " + //
+				MixItDatabase.Tables.MEMBERS + "." + MembersColumns.FIRSTNAME + " ASC";
+
 		public static final int TYPE_MEMBER = 0;
 		public static final int TYPE_STAFF = 1;
 		public static final int TYPE_SPEAKER = 2;
