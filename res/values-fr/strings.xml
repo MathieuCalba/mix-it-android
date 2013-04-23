@@ -27,7 +27,7 @@
     <string name="first_initialization_error">"Une erreur est survenue pendant la première initilisation de l'application.\nAppuyez ici pour réessayer."</string>
     <!-- Planning -->
     <string name="action_bar_import_starred_session">"Importer mes sessions favorites"</string>
-    <string name="warning_import_starred_session_not_sync_with_site">"Comme, il n'y a pour l'instant pas de possibilité de vous connecter à Mix-IT via une API, vous pouvez seulement importer vos sessions favorites dans l'application en choisissant votre nom.\nNotez que cet import n'écrasera pas vos sessions favorites actuellement enregistrées dans l'application, cela ajoutera seulement ceux du site."</string>
+    <string name="warning_import_starred_session_not_sync_with_site">"Comme il n'y a pour l'instant pas de possibilité de vous connecter à Mix-IT via une API, vous pouvez seulement importer vos sessions favorites dans l'application en choisissant votre nom.\nNotez que cet import n'écrasera pas vos sessions favorites actuellement enregistrées dans l'application, cela ajoutera seulement ceux du site."</string>
     <string name="pick_your_name">"Choisissez votre nom"</string>
     <string name="import_starred_state_success">"Vos sessions favorites ont été importées avec succès"</string>
     <string name="import_starred_state_error">"Une erreur est survenue pendant l'importation de vos sessions favorites"</string>
@@ -43,7 +43,7 @@
     <string name="planning_break">"Pause"</string>
     <string name="planning_lightning_talk">"Lightning Talks"</string>
     <string name="planning_keynote">"Keynote"</string>
-    <string name="planning_multiple_session">"PLusieurs sessions sélectionnées"</string>
+    <string name="planning_multiple_session">"Plusieurs sessions sélectionnées"</string>
     <string name="planning_multiple_room">"plusieurs salle"</string>
     <string name="planning_no_session">"Pas de session sélectionnée"</string>
     <string name="planning_no_room">"Pas de salle"</string>
@@ -68,7 +68,7 @@
     <string name="session_interests">"Intérêts"</string>
     <string name="no_session_summary">"Pas de résumé pour cette session"</string>
     <string name="no_session_speakers">"Pas de speaker pour cette session"</string>
-    <string name="action_bar_share_with">"Partager avec..."</string>
+    <string name="action_bar_share_with">"Partager avec&#8230;"</string>
     <string name="share_session_subject">"Découvrez cette session à Mix-IT"</string>
     <string name="share_session_text">"Découvrez la session \"%1$s\" à Mix-IT : %2$s"</string>
     <string name="action_bar_vote_add">"+1"</string>
